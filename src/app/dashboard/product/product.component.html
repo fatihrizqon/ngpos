@@ -1,0 +1,178 @@
+<div class="mat-elevation-z1 mt-3 mb-3 table-responsive">
+  <div class="row align-items-center m-1" align="center">
+    <div class="col-12">
+      <mat-form-field appearance="standard">
+        <mat-label>Filter</mat-label>
+        <input
+          matInput
+          (keyup)="applyFilter($event)"
+          placeholder="Input"
+          #input
+        />
+      </mat-form-field>
+      <button
+        mat-icon-button
+        (click)="create()"
+        matTooltip="Create a New Product"
+      >
+        <i class="bx bxs-message-square-add bx-sm text-success"></i>
+      </button>
+    </div>
+  </div>
+
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="announceSortChange($event)"
+  >
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by ID"
+      >
+        No.
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by Name"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Code Column -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef class="text-center">Code</th>
+      <td mat-cell *matCellDef="let element" class="text-center">
+        <div
+          class="align-items-center"
+          (click)="printQR(element.id)"
+          matTooltip="Click to Print QR Code"
+          matTooltipPosition="right"
+        >
+          <div id="qrcode">
+            <qrcode
+              [qrdata]="element.code"
+              [width]="64"
+              [errorCorrectionLevel]="'M'"
+            >
+            </qrcode>
+            <p class="fw-bold text-dark">
+              {{ element.code }}
+            </p>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Purchase Price Column -->
+    <ng-container matColumnDef="purchase">
+      <th
+        id="purchase"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by Purchase"
+        class="text-center"
+      >
+        Purchase Price
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.purchase }}
+      </td>
+    </ng-container>
+
+    <!-- Sell Price Column -->
+    <ng-container matColumnDef="sell">
+      <th
+        id="sell"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by Purchase"
+        class="text-center"
+      >
+        Sell Price
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.sell }}
+      </td>
+    </ng-container>
+
+    <!-- Stocks Column -->
+    <ng-container matColumnDef="stocks">
+      <th
+        id="stocks"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by Stocks"
+        class="text-center"
+      >
+        Stocks
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.stocks }}
+      </td>
+    </ng-container>
+
+    <!-- Supplier Column -->
+    <ng-container matColumnDef="supplier">
+      <th
+        id="supplier"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by Supplier"
+        class="text-center"
+      >
+        Supplier
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.supplier }}
+      </td>
+    </ng-container>
+
+    <!-- Option Column -->
+    <ng-container matColumnDef="option">
+      <th mat-header-cell *matHeaderCellDef class="text-center">Option</th>
+      <td mat-cell *matCellDef="let element" class="text-center">
+        {{ element.option }}
+
+        <button
+          mat-icon-button
+          (click)="update(element.id)"
+          matTooltip="Update Selected Product"
+        >
+          <i class="bx bx-message-square-edit bx-sm text-info"></i>
+        </button>
+
+        <button
+          mat-icon-button
+          (click)="delete(element.id)"
+          matTooltip="Delete Selected Product"
+        >
+          <i class="bx bx-message-square-x bx-sm text-danger"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+  </mat-paginator>
+</div>

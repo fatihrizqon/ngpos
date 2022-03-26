@@ -46,7 +46,7 @@
         <span class="sidenav_link" *ngIf="isOpen">Product Categories</span>
       </mat-list-item>
       <mat-list-item routerLink="dashboard/products">
-        <i class="bx bxl-product-hunt bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-component bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Product</span>
       </mat-list-item>
       <mat-list-item routerLink="dashboard/purchases">
@@ -60,12 +60,24 @@
         <i class="bx bx-cart-alt bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Sales</span>
       </mat-list-item>
+
+      <!-- Cash Flow -->
+      <mat-list-item>
+        <i class="bx bx-transfer bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Cash Flow</span>
+      </mat-list-item>
+      <!-- Log Activity -->
+      <mat-list-item>
+        <i class="bx bx-history bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Log Activity</span>
+      </mat-list-item>
+
       <mat-list-item routerLink="dashboard/reports">
-        <i class="bx bxs-report bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-file-pdf bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Reports</span>
       </mat-list-item>
       <mat-list-item routerLink="dashboard/users">
-        <i class="bx bxs-user-account bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-user-badge bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Users</span>
       </mat-list-item>
     </mat-nav-list>

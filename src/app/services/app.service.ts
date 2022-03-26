@@ -21,4 +21,8 @@ export class AppService {
   public getProducts(): Observable<any> {
     return this.http.get<any>(this.baseURI + 'api/products');
   }
+
+  public getPurchases(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/purchases');
+  }
 }

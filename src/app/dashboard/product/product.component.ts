@@ -12,16 +12,15 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 })
 export class ProductComponent implements OnInit {
   products: any;
-
-  // Generate Barcode/Product Code
   displayedColumns: string[] = [
     'id',
     'name',
-    'code',
+    'category',
     'purchase',
     'sell',
     'stocks',
     'supplier',
+    'code',
     'option',
   ];
   dataSource: any;

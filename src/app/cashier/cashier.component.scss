@@ -1,0 +1,22 @@
+::ng-deep .receipt-container {
+  font-family: "Courier Prime", monospace !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: transparent;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+.input-form {
+  width: 100%;
+}
+
+.payment {
+  width: 100%;
+}
+
+ul {
+  list-style-type: none;
+}

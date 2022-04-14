@@ -19,6 +19,8 @@ export class PurchasesComponent implements OnInit {
     'supplier',
     'stocker',
     'total',
+    'date',
+    'update',
     'option',
   ];
   dataSource: any;

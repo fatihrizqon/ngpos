@@ -35,10 +35,9 @@ $ngpos-theme: mat.define-light-theme(
 @include mat.all-component-themes($ngpos-theme);
 
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@500&display=swap");
 
 * {
-  font-family: "Titillium Web", sans-serif !important;
+  font-family: "Titillium Web", sans-serif;
 }
 
 html,
@@ -51,4 +50,43 @@ body {
 
 .spacer {
   flex: 1 1 auto;
+}
+
+mat-toolbar {
+  height: 55px;
+}
+mat-drawer-container {
+  min-height: 100vh;
+  max-height: auto;
+}
+.strike {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.strike > span {
+  position: relative;
+  display: inline-block;
+}
+
+.strike > span:before,
+.strike > span:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 9999px;
+  height: 1px;
+  background: #212121;
+}
+
+.strike > span:before {
+  right: 100%;
+  margin-right: 15px;
+}
+
+.strike > span:after {
+  left: 100%;
+  margin-left: 15px;
 }

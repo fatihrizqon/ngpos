@@ -1,40 +1,89 @@
-<section class="animate__animated animate__fadeIn">
-  <div class="row mt-3">
-    <div
-      class="col-lg-3 col-md-6 col-sm-12 mb-3 animate__animated animate__bounceIn"
-    >
-      <mat-card>Total Orders | Active Orders</mat-card>
-    </div>
-    <div
-      class="col-lg-3 col-md-6 col-sm-12 mb-3 animate__animated animate__bounceIn"
-    >
-      <mat-card>Total Sold Products | Remaining Stocks</mat-card>
-    </div>
-    <div
-      class="col-lg-3 col-md-6 col-sm-12 mb-3 animate__animated animate__bounceIn"
-    >
-      <mat-card>Today Revenue | Revenue last 7 days</mat-card>
-    </div>
-    <div
-      class="col-lg-3 col-md-6 col-sm-12 mb-3 animate__animated animate__bounceIn"
-    >
-      <mat-card> Remaining Account </mat-card>
-    </div>
-  </div>
+<mat-toolbar color="warn">
+  <button
+    mat-icon-button
+    (click)="drawer.toggle()"
+    matTooltip="Click to Show/Hide The Navigation"
+  >
+    <i class="bx bx-menu bx-sm"></i>
+  </button>
+  <span routerLink="/">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/3028/3028956.png"
+      alt=""
+      width="40"
+    />
+  </span>
+  <span class="spacer"></span>
+  <mat-slide-toggle
+    (click)="changeMode()"
+    color="dark"
+    matTooltip="Turn On/Off the Dark Mode"
+  ></mat-slide-toggle>
+  <button mat-icon-button>
+    <i class="bx bxs-user-circle bx-sm"></i>
+  </button>
+</mat-toolbar>
 
-  <div class="row mb-3">
-    <div class="col-12 mb-3">
-      <h4 class="mb-3 text-center">Sales Chart</h4>
-      <mat-card>
-        <canvas id="saleschart"> </canvas>
-      </mat-card>
-    </div>
+<mat-drawer-container class="example-container mat-typography" autosize>
+  <mat-drawer #drawer mode="side" disableClose="true" opened="true">
+    <button
+      mat-icon-button
+      (click)="toggle($event)"
+      color="warn"
+      style="margin: 10px"
+      matTooltip="Click to Expand/Collapse The Navigation"
+    >
+      <i class="bx bx-chevron-right bx-sm sidenav_icon text-danger"></i>
+    </button>
 
-    <div class="col-12 mb-3">
-      <h4 class="mb-3 text-center">Cashflow Chart</h4>
-      <mat-card>
-        <canvas id="cashchart"> </canvas>
-      </mat-card>
-    </div>
+    <mat-nav-list>
+      <mat-list-item routerLink="/dashboard">
+        <i class="bx bxs-dashboard bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Dashboard</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/dashboard/categories">
+        <i class="bx bx-category-alt bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Product Categories</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/dashboard/products">
+        <i class="bx bxs-component bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Product</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/dashboard/purchases">
+        <i
+          class="bx bx-purchase-tag-alt bx-sm sidenav_icon text-danger"
+          color="primary"
+        ></i>
+        <span class="sidenav_link" *ngIf="isOpen">Purchases</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/dashboard/sales">
+        <i class="bx bx-cart-alt bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Sales</span>
+      </mat-list-item>
+
+      <!-- Cash Flow -->
+      <mat-list-item>
+        <i class="bx bx-transfer bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Cash Flow</span>
+      </mat-list-item>
+      <!-- Log Activity -->
+      <mat-list-item>
+        <i class="bx bx-history bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Log Activity</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="/dashboard/reports">
+        <i class="bx bxs-file-pdf bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Reports</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/dashboard/users">
+        <i class="bx bxs-user-badge bx-sm sidenav_icon text-danger"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Users</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-drawer>
+
+  <div class="container-fluid">
+    <router-outlet></router-outlet>
   </div>
-</section>
+</mat-drawer-container>

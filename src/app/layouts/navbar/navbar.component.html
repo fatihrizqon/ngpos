@@ -6,7 +6,7 @@
   >
     <i class="bx bx-menu bx-sm"></i>
   </button>
-  <span>
+  <span routerLink="/">
     <img
       src="https://cdn-icons-png.flaticon.com/512/3028/3028956.png"
       alt=""
@@ -41,11 +41,11 @@
         <i class="bx bxs-dashboard bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Dashboard</span>
       </mat-list-item>
-      <mat-list-item routerLink="dashboard/categories">
+      <mat-list-item [routerLink]="['./CategoryComponent']">
         <i class="bx bx-category-alt bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Product Categories</span>
       </mat-list-item>
-      <mat-list-item routerLink="dashboard/products">
+      <mat-list-item [routerLink]="['./ProductComponent']">
         <i class="bx bxs-component bx-sm sidenav_icon text-danger"></i>
         <span class="sidenav_link" *ngIf="isOpen">Product</span>
       </mat-list-item>
@@ -84,6 +84,6 @@
   </mat-drawer>
 
   <div class="container-fluid">
-    <router-outlet></router-outlet>
+    <!-- <router-outlet name="route1"></router-outlet> -->
   </div>
 </mat-drawer-container>

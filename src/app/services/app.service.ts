@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Order } from '../interfaces/Order';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +25,17 @@ export class AppService {
 
   public getPurchases(): Observable<any> {
     return this.http.get<any>(this.baseURI + 'api/purchases');
+  }
+
+  public getOrders(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/orders');
+  }
+
+  public getTransactions(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/transactions');
+  }
+
+  public addItem(order: any) {
+    console.log(order);
   }
 }

@@ -1,0 +1,76 @@
+<div>
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content>
+    <form [formGroup]="dialogForm">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Product Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field
+        class="full-width"
+        appearance="fill"
+        appearance="outline"
+        floatLabel="always"
+      >
+        <mat-label>Purchase Price</mat-label>
+        <input
+          matInput
+          formControlName="purchase"
+          type="number"
+          class="right-align"
+          placeholder="0"
+        />
+        <span matPrefix>Rp&nbsp;</span>
+        <span matSuffix>,-</span>
+      </mat-form-field>
+
+      <mat-form-field
+        class="full-width"
+        appearance="fill"
+        appearance="outline"
+        floatLabel="always"
+      >
+        <mat-label>Sell Price</mat-label>
+        <input
+          matInput
+          formControlName="sell"
+          type="number"
+          class="right-align"
+          placeholder="0"
+        />
+        <span matPrefix>Rp&nbsp;</span>
+        <span matSuffix>,-</span>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Product Category</mat-label>
+        <mat-select formControlName="category_id">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+  <div mat-dialog-actions [align]="'end'" *ngIf="!progress">
+    <button
+      mat-stroked-button
+      (click)="onNoClick()"
+      mat-dialog-close
+      color="warn"
+    >
+      {{ data.action_no }}
+    </button>
+    <button
+      mat-stroked-button
+      (click)="submit()"
+      color="primary"
+      [disabled]="!dialogForm.valid"
+    >
+      {{ data.action_yes }}
+    </button>
+  </div>
+</div>

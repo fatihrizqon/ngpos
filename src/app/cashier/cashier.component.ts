@@ -31,6 +31,7 @@ export class CashierComponent implements OnInit {
   query: any;
   disableProducts = true;
   clicked = false;
+  spinner = false;
   currentDate!: String;
   return: number = 0;
   pay: number = 0;
@@ -70,17 +71,7 @@ export class CashierComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.appService.getProducts().subscribe(
-      (response) => {
-        this.products = response.data;
-        this.options = this.products.map((product: any) => product.code);
-      },
-      (err) => {
-        if (err.error.message) {
-          alert(err.error.message);
-        }
-      }
-    );
+    this.getProducts();
 
     this.filteredOptions = this.searchForm.valueChanges.pipe(
       startWith(''),
@@ -100,9 +91,24 @@ export class CashierComponent implements OnInit {
   }
 
   newOrder() {
+    this.getProducts();
     this.order = [];
     this.createOrder = !this.createOrder;
     this.order_code = this.generateCode();
+  }
+
+  getProducts() {
+    this.appService.getProducts().subscribe(
+      (response) => {
+        this.products = response.data;
+        this.options = this.products.map((product: any) => product.code);
+      },
+      (err) => {
+        if (err.error.message) {
+          alert(err.error.message);
+        }
+      }
+    );
   }
 
   addItem() {
@@ -110,11 +116,15 @@ export class CashierComponent implements OnInit {
     var code = this.order_code;
     var quantity = 1;
     var keyword = this.searchForm.value;
-    var result = this.products.find((product) => product.code === keyword);
+    var product = this.products.find((product) => product.code === keyword);
 
     const check = this.order.find(
       (x) => x.product_code == this.searchForm.value
     );
+
+    if (product!.stocks === 0) {
+      return this.openSnackBar('Selected product is out of stock!', 'Got It!');
+    }
 
     if (check) {
       var i = this.order.indexOf(check);
@@ -123,12 +133,13 @@ export class CashierComponent implements OnInit {
       return this.refresh();
     } else {
       var item = {
-        code: code,
-        product_name: result?.name,
-        product_code: result?.code,
+        product_id: product?.id,
+        product_name: product?.name,
+        product_code: product?.code,
         quantity: quantity,
-        price: result!.sell * quantity,
+        price: product!.sell * quantity,
         created_at: this.currentDate,
+        code: code,
       };
 
       const newItem = JSON.parse(JSON.stringify(item));
@@ -140,7 +151,14 @@ export class CashierComponent implements OnInit {
 
   addQty(i: number) {
     this.clicked = false;
+    var product_id = this.order[i].product_id;
+    var product = this.products.find((product) => product.id === product_id);
     this.order[i].quantity = this.order[i].quantity + 1;
+
+    if (this.order[i].quantity > product!.stocks) {
+      this.order[i].quantity = product!.stocks;
+      return this.openSnackBar('Insufficient stock!', 'Got It!');
+    }
     return this.refresh();
   }
 
@@ -181,11 +199,9 @@ export class CashierComponent implements OnInit {
       return this.openSnackBar('Cannot save an empty order.', 'Got It!');
     }
     if (this.index !== undefined) {
-      console.log('Loaded from lists');
       localStorage.setItem('orders', JSON.stringify(this.orders));
       return this.openSnackBar('Order Saved.', 'Got It!');
     } else {
-      console.log('A new order.');
       var check = this.savedOrders.find((order) => order === this.order_code);
       if (check === undefined) {
         this.savedOrders.push(this.order_code);
@@ -200,14 +216,16 @@ export class CashierComponent implements OnInit {
     }
   }
 
-  clearOrder() {
+  clearOrder(message?: string) {
     this.order = [];
     this.refresh();
+    if (message) {
+      return this.openSnackBar(message, 'Got It!');
+    }
     return this.openSnackBar('Order list has been cleared.', 'Got It!');
   }
 
   removeOrder(i: number) {
-    alert('Are you sure to delete this order?');
     this.savedOrders.splice(i, 1);
     this.orders.splice(i, 1);
     localStorage.setItem('savedOrders', JSON.stringify(this.savedOrders));
@@ -217,7 +235,6 @@ export class CashierComponent implements OnInit {
 
   refresh() {
     if (this.index !== undefined) {
-      console.log('Refresh Saved Orders.');
       if (this.orders[this.index].length < 1) {
         this.total_items = 0;
         this.total_quantity = 0;
@@ -233,7 +250,6 @@ export class CashierComponent implements OnInit {
         0
       );
     } else {
-      console.log('Refresh New Order.');
       if (this.order.length < 1) {
         this.total_items = 0;
         this.total_price = 0;
@@ -288,26 +304,48 @@ export class CashierComponent implements OnInit {
         },
       })
       .afterClosed()
-      .subscribe((res) => {
-        var transaction = {
-          code: this.order_code,
-          total_price: this.total_price,
-          pay: this.pay,
-          return: this.return,
-          user_id: this.user.id,
-        };
-        console.log(transaction);
-        console.log(this.order);
-      });
-  }
+      .subscribe(
+        (response) => {
+          var transaction = {
+            code: this.order_code,
+            total_price: this.total_price,
+            pay: this.pay,
+            return: this.return,
+            user_id: this.user.id,
+          };
 
-  open() {
-    this.openSnackBar('Snackbar Works!', 'Got It!');
+          for (let i = 0; i < this.order.length; i++) {
+            this.spinner = true;
+            this.appService.newOrder(this.order[i]).subscribe(
+              (response) => {},
+              (err) => {
+                this.openSnackBar(err.error.message, 'Got It!');
+              }
+            );
+            if (i === this.order.length - 1) {
+              this.appService.newTransaction(transaction).subscribe(
+                (response) => {
+                  this.spinner = false;
+                  this.removeOrder(this.index);
+                  this.clearOrder(response.message);
+                  this.createOrder = true;
+                },
+                (err) => {
+                  this.openSnackBar(err.error.message, 'Got It!');
+                }
+              );
+            }
+          }
+        },
+        (err) => {
+          this.openSnackBar(err.error.message, 'Got It!');
+        }
+      );
   }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2500,
+      duration: 5000,
     });
   }
 }

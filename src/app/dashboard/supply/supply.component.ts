@@ -4,28 +4,28 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { SupplyDialogComponent } from './dialog/dialog.component';
 import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
-import { ProductDialogComponent } from './dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss'],
+  selector: 'app-supply',
+  templateUrl: './supply.component.html',
+  styleUrls: ['./supply.component.scss'],
 })
-export class ProductComponent implements OnInit {
+export class SupplyComponent implements OnInit {
+  supplies: any;
   products: any;
-  categories: any;
   displayedColumns: string[] = [
     'id',
-    'name',
-    'category',
-    'purchase',
-    'sell',
-    'stocks',
+    'product',
+    'quantity',
     'supplier',
-    'code',
+    'stocker',
+    'total',
+    'date',
+    'update',
     'option',
   ];
   dataSource: any;
@@ -42,8 +42,8 @@ export class ProductComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   ngOnInit(): void {
-    this.getAllProducts();
-    this.getCategories();
+    this.getSupplies();
+    this.getProducts();
   }
 
   applyFilter(event: Event) {
@@ -59,27 +59,10 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  view(id: number) {
-    alert('View QR ' + id);
-  }
-
-  getCategories() {
-    this.appService.getCategories().subscribe(
+  getSupplies() {
+    this.appService.getSupplies().subscribe(
       (response) => {
-        this.categories = response.data;
-      },
-      (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
-      }
-    );
-  }
-
-  getAllProducts() {
-    this.appService.getAllProducts().subscribe(
-      (response) => {
-        this.products = response.data;
+        this.supplies = response.data;
         this.dataSource = new MatTableDataSource(response.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -92,15 +75,24 @@ export class ProductComponent implements OnInit {
     );
   }
 
-  printQR(id: number) {
-    alert('Print QR Code ' + id);
+  getProducts() {
+    this.appService.getProducts().subscribe(
+      (response) => {
+        this.products = response.data;
+      },
+      (err) => {
+        if (err.error.message) {
+          console.log(err.error.message);
+        }
+      }
+    );
   }
 
   create() {
     const dialogRef = this.dialog
-      .open(ProductDialogComponent, {
+      .open(SupplyDialogComponent, {
         data: {
-          title: 'Create a New Product',
+          title: 'Create a New Supply',
           action: 'create',
           action_no: 'Cancel',
           action_yes: 'Submit',
@@ -112,7 +104,7 @@ export class ProductComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response !== false) {
-            this.getAllProducts();
+            this.getSupplies();
             this.openSnackBar(response.message, 'Got It!');
           }
         },
@@ -124,9 +116,9 @@ export class ProductComponent implements OnInit {
 
   update(row: any) {
     const dialogRef = this.dialog
-      .open(ProductDialogComponent, {
+      .open(SupplyDialogComponent, {
         data: {
-          title: 'Update Product',
+          title: 'Update Supply',
           row: row,
           action: 'update',
           action_no: 'Cancel',
@@ -139,7 +131,7 @@ export class ProductComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response !== false) {
-            this.getAllProducts();
+            this.getSupplies();
             this.openSnackBar(response.message, 'Got It!');
           }
         },
@@ -154,8 +146,8 @@ export class ProductComponent implements OnInit {
       .open(DialogComponent, {
         width: '550px',
         data: {
-          title: 'Delete Product',
-          message: 'Do you want to Delete this Product?',
+          title: 'Delete Supply',
+          message: 'Do you want to Delete this Supply?',
           action_yes: 'Yes',
           action_no: 'No',
         },
@@ -165,9 +157,9 @@ export class ProductComponent implements OnInit {
       .subscribe((response) => {
         if (response === true) {
           this.progress = true;
-          this.appService.deleteProduct(id).subscribe(
+          this.appService.deleteSupply(id).subscribe(
             (response) => {
-              this.getAllProducts();
+              this.getSupplies();
               this.progress = false;
               this.openSnackBar(response.message, 'Got It!');
             },

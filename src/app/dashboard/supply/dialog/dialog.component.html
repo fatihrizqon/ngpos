@@ -1,0 +1,49 @@
+<div>
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content>
+    <form [formGroup]="dialogForm">
+      <mat-form-field class="full-width" appearance="fill" *ngIf="!data.row">
+        <mat-label>Select Product</mat-label>
+        <mat-select formControlName="product_id">
+          <mat-option *ngFor="let product of products" [value]="product.id">
+            {{ product.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Quantity</mat-label>
+        <input matInput type="number" formControlName="quantity" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Supplier</mat-label>
+        <mat-select formControlName="supplier_id">
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+            {{ supplier.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+  <div mat-dialog-actions [align]="'end'" *ngIf="!progress">
+    <button
+      mat-stroked-button
+      (click)="onNoClick()"
+      mat-dialog-close
+      color="warn"
+    >
+      {{ data.action_no }}
+    </button>
+    <button
+      mat-stroked-button
+      (click)="submit()"
+      color="primary"
+      [disabled]="!dialogForm.valid"
+    >
+      {{ data.action_yes }}
+    </button>
+  </div>
+</div>

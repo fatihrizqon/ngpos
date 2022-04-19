@@ -4,10 +4,10 @@ import { IndexComponent } from './index/index.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { DashboardIndexComponent } from './dashboard/index/dashboard.component';
-import { DashboardSalesComponent } from './dashboard/sales/sales.component';
+import { SalesComponent } from './dashboard/sales/sales.component';
 import { CategoryComponent } from './dashboard/category/category.component';
 import { ProductComponent } from './dashboard/product/product.component';
-import { PurchasesComponent } from './dashboard/purchases/purchases.component';
+import { SupplyComponent } from './dashboard/supply/supply.component';
 import { ReportsComponent } from './dashboard/reports/reports.component';
 import { UsersComponent } from './dashboard/users/users.component';
 import { CashierComponent } from './cashier/cashier.component';
@@ -37,12 +37,12 @@ const routes: Routes = [
       },
 
       {
-        path: 'purchases',
-        component: PurchasesComponent,
+        path: 'supply',
+        component: SupplyComponent,
       },
       {
         path: 'sales',
-        component: DashboardSalesComponent,
+        component: SalesComponent,
       },
       {
         path: 'reports',

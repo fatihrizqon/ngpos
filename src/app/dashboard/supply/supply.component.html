@@ -1,190 +1,383 @@
-<section class="animate__animated animate__fadeIn">
-  <div class="mat-elevation-z1 mt-3 table-responsive" *ngIf="!progress">
-    <div class="row align-items-center m-1" align="center">
-      <div class="col-12">
-        <mat-form-field appearance="standard">
-          <mat-label>Filter</mat-label>
-          <input
-            matInput
-            (keyup)="applyFilter($event)"
-            placeholder="Input"
-            #input
-          />
-        </mat-form-field>
-        <button
-          mat-icon-button
-          (click)="create()"
-          matTooltip="Create a New Purchase"
+<section class="animate__animated animate__slideInRight">
+  <mat-tab-group class="mat-elevation-z1 mt-3 mb-3" *ngIf="!progress">
+    <mat-tab label="Supplies">
+      <div class="mat-elevation-z1 mt-3 table-responsive">
+        <div class="row align-items-center m-1" align="center">
+          <div class="col-12" align="end">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input
+                matInput
+                (keyup)="applyFilter($event)"
+                placeholder="Input"
+                #input
+              />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              (click)="createSupply()"
+              matTooltip="Create a New Purchase"
+            >
+              <i class="bx bx-message-square-add bx-sm text-primary"></i>
+            </button>
+          </div>
+        </div>
+        <table
+          *ngIf="suppliesDataSource"
+          mat-table
+          [dataSource]="suppliesDataSource"
+          matSort
+          (matSortChange)="announceSortChange($event)"
         >
-          <i class="bx bx-message-square-add bx-sm text-primary"></i>
-        </button>
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by ID"
+            >
+              No.
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+
+          <!-- Product Name Column -->
+          <ng-container matColumnDef="product">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Product Name"
+            >
+              Product Name
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.product }}</td>
+          </ng-container>
+
+          <!-- Quantity Column -->
+          <ng-container matColumnDef="quantity">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Quantity"
+            >
+              Quantity
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+          </ng-container>
+
+          <!-- Supplier Column -->
+          <ng-container matColumnDef="supplier">
+            <th
+              id="supplier"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Supplier"
+              class="text-center"
+            >
+              Supplier
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.supplier }}
+            </td>
+          </ng-container>
+
+          <!-- Stocker Column -->
+          <ng-container matColumnDef="stocker">
+            <th
+              id="stocker"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Stocker"
+              class="text-center"
+            >
+              Stocker
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.stocker }}
+            </td>
+          </ng-container>
+
+          <!-- Total Price Column -->
+          <ng-container matColumnDef="total">
+            <th
+              id="total"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Total Price"
+              class="text-center"
+            >
+              Total Price
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.purchase * element.quantity }}
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th
+              id="date"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Date"
+              class="text-center"
+            >
+              Date
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.date | date: "dd/MM/YYYY hh:mm a" }}
+            </td>
+          </ng-container>
+
+          <!-- Update Column -->
+          <ng-container matColumnDef="update">
+            <th
+              id="update"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Update"
+              class="text-center"
+            >
+              Last Update
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.update | date: "dd/MM/YYYY hh:mm a" }}
+            </td>
+          </ng-container>
+
+          <!-- Option Column -->
+          <ng-container matColumnDef="option">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Option
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <button
+                mat-icon-button
+                (click)="updateSupply(element)"
+                matTooltip="Update Selected Purchase"
+              >
+                <i class="bx bx-message-square-edit bx-sm text-info"></i>
+              </button>
+
+              <button
+                mat-icon-button
+                (click)="deleteSupply(element.id)"
+                matTooltip="Delete Selected Purchase"
+              >
+                <i class="bx bx-message-square-x bx-sm text-danger"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedSupplies"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedSupplies"></tr>
+        </table>
+
+        <div class="row align-items-center" *ngIf="!suppliesDataSource">
+          <div class="col">
+            <mat-spinner
+              color="primary"
+              [diameter]="50"
+              [strokeWidth]="3"
+              mode="indeterminate"
+              style="margin: 0 auto"
+            ></mat-spinner>
+          </div>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+        </mat-paginator>
       </div>
-    </div>
+    </mat-tab>
 
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      matSort
-      (matSortChange)="announceSortChange($event)"
-    >
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by ID"
+    <mat-tab label="Suppliers">
+      <div class="mat-elevation-z1 mt-3 table-responsive">
+        <div class="row align-items-center m-1" align="center">
+          <div class="col-12" align="end">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input
+                matInput
+                (keyup)="applyFilter($event)"
+                placeholder="Input"
+                #input
+              />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              (click)="createSupplier()"
+              matTooltip="Create a New Purchase"
+            >
+              <i class="bx bx-message-square-add bx-sm text-primary"></i>
+            </button>
+          </div>
+        </div>
+        <table
+          *ngIf="suppliersDataSource"
+          mat-table
+          [dataSource]="suppliersDataSource"
+          matSort
+          (matSortChange)="announceSortChange($event)"
         >
-          No.
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by ID"
+            >
+              No.
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
 
-      <!-- Product Name Column -->
-      <ng-container matColumnDef="product">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Product Name"
-        >
-          Product Name
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.product }}</td>
-      </ng-container>
+          <!-- Supplier Name Column -->
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Supplier Name"
+            >
+              Supplier Name
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
 
-      <!-- Quantity Column -->
-      <ng-container matColumnDef="quantity">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Quantity"
-        >
-          Quantity
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
-      </ng-container>
+          <!-- Address Column -->
+          <ng-container matColumnDef="address">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Address"
+            >
+              Address
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+          </ng-container>
 
-      <!-- Supplier Column -->
-      <ng-container matColumnDef="supplier">
-        <th
-          id="supplier"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Supplier"
-          class="text-center"
-        >
-          Supplier
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.supplier }}
-        </td>
-      </ng-container>
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Email"
+            >
+              Email
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          </ng-container>
 
-      <!-- Stocker Column -->
-      <ng-container matColumnDef="stocker">
-        <th
-          id="stocker"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Stocker"
-          class="text-center"
-        >
-          Stocker
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.stocker }}
-        </td>
-      </ng-container>
+          <!-- Contact Column -->
+          <ng-container matColumnDef="contact">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Contact"
+            >
+              Contact
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.contact }}</td>
+          </ng-container>
 
-      <!-- Total Price Column -->
-      <ng-container matColumnDef="total">
-        <th
-          id="total"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Total Price"
-          class="text-center"
-        >
-          Total Price
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.purchase * element.quantity }}
-        </td>
-      </ng-container>
+          <!-- Date Column -->
+          <ng-container matColumnDef="created_at">
+            <th
+              id="created_at"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Date"
+              class="text-center"
+            >
+              Date
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.created_at | date: "dd/MM/YYYY hh:mm a" }}
+            </td>
+          </ng-container>
 
-      <!-- Date Column -->
-      <ng-container matColumnDef="date">
-        <th
-          id="date"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Date"
-          class="text-center"
-        >
-          Date
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.date }}
-        </td>
-      </ng-container>
+          <!-- Update Column -->
+          <ng-container matColumnDef="updated_at">
+            <th
+              id="updated_at"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Update"
+              class="text-center"
+            >
+              Last Update
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.updated_at | date: "dd/MM/YYYY hh:mm a" }}
+            </td>
+          </ng-container>
 
-      <!-- Update Column -->
-      <ng-container matColumnDef="update">
-        <th
-          id="update"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Update"
-          class="text-center"
-        >
-          Last Update
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.update }}
-        </td>
-      </ng-container>
+          <!-- Option Column -->
+          <ng-container matColumnDef="option">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Option
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <button
+                mat-icon-button
+                (click)="updateSupplier(element)"
+                matTooltip="Update Selected Purchase"
+              >
+                <i class="bx bx-message-square-edit bx-sm text-info"></i>
+              </button>
 
-      <!-- Option Column -->
-      <ng-container matColumnDef="option">
-        <th mat-header-cell *matHeaderCellDef class="text-center">Option</th>
-        <td mat-cell *matCellDef="let element" class="text-center">
-          <button
-            mat-icon-button
-            (click)="update(element)"
-            matTooltip="Update Selected Purchase"
-          >
-            <i class="bx bx-message-square-edit bx-sm text-info"></i>
-          </button>
+              <button
+                mat-icon-button
+                (click)="deleteSupplier(element.id)"
+                matTooltip="Delete Selected Purchase"
+              >
+                <i class="bx bx-message-square-x bx-sm text-danger"></i>
+              </button>
+            </td>
+          </ng-container>
 
-          <button
-            mat-icon-button
-            (click)="delete(element.id)"
-            matTooltip="Delete Selected Purchase"
-          >
-            <i class="bx bx-message-square-x bx-sm text-danger"></i>
-          </button>
-        </td>
-      </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedSuppliers"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedSuppliers"></tr>
+        </table>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
-    </mat-paginator>
-  </div>
+        <div class="row align-items-center" *ngIf="!suppliersDataSource">
+          <div class="col">
+            <mat-spinner
+              color="primary"
+              [diameter]="50"
+              [strokeWidth]="3"
+              mode="indeterminate"
+              style="margin: 0 auto"
+            ></mat-spinner>
+          </div>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 
   <div class="row align-items-center" *ngIf="progress" style="height: 100vh">
     <div class="col-12">
       <mat-spinner
-        color="warn"
+        color="primary"
         [diameter]="50"
         [strokeWidth]="3"
         mode="indeterminate"

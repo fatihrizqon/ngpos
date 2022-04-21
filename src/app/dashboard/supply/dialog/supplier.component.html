@@ -1,0 +1,46 @@
+<div>
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content>
+    <form [formGroup]="dialogForm">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Address</mat-label>
+        <input matInput type="text" formControlName="address" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="text" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Contact</mat-label>
+        <input matInput type="text" formControlName="contact" />
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+  <div mat-dialog-actions [align]="'end'" *ngIf="!progress">
+    <button
+      mat-stroked-button
+      (click)="onNoClick()"
+      mat-dialog-close
+      color="warn"
+    >
+      {{ data.action_no }}
+    </button>
+    <button
+      mat-stroked-button
+      (click)="submit()"
+      color="primary"
+      [disabled]="!dialogForm.valid"
+    >
+      {{ data.action_yes }}
+    </button>
+  </div>
+</div>

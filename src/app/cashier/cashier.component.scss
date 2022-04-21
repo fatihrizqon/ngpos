@@ -6,9 +6,6 @@
   background-color: transparent;
 }
 
-.table > tbody > tr > td {
-  vertical-align: middle;
-}
 .input-form {
   width: 100%;
 }
@@ -18,5 +15,24 @@
 }
 
 ul {
+  padding: 0;
   list-style-type: none;
+}
+
+table {
+  width: 100%;
+}
+td,
+th {
+  vertical-align: middle !important;
+}
+
+.receipt-column {
+  text-align: left;
+  padding: 1px;
+  border: none;
+}
+
+.mat-sort-header-container {
+  justify-content: center !important;
 }

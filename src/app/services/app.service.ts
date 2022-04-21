@@ -79,6 +79,28 @@ export class AppService {
     return this.http.get<any>(this.baseURI + 'api/suppliers');
   }
 
+  public newSupplier(supplier: any): Observable<any> {
+    return this.http.post<any>(this.baseURI + 'api/supplier/create', supplier, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  public updateSupplier(supplier: any, id: number): Observable<any> {
+    return this.http.put<any>(
+      this.baseURI + 'api/supplier/update/' + id,
+      supplier,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
+  public deleteSupplier(id: number): Observable<any> {
+    return this.http.delete<any>(this.baseURI + 'api/supplier/delete/' + id, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   public getSupplies(): Observable<any> {
     return this.http.get<any>(this.baseURI + 'api/supplies');
   }

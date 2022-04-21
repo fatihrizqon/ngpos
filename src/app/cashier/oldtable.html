@@ -1,0 +1,98 @@
+<!-- Saved Order Layout -->
+<div class="col-xl-2 col-lg-0 col-md-0">
+  <div class="col-12 mt-3 mat-elevation-z1 p-3">
+    <div class="strike">
+      <span>Active Order List(s)</span>
+    </div>
+    <mat-chip-list
+      aria-label="Saved Orders"
+      *ngFor="let order of savedOrders; index as i"
+    >
+      <mat-chip (click)="getOrder(i)"
+        >{{ order }}
+        <button (click)="removeOrder(i)" matChipRemove>
+          <i class="bx bx-trash"></i></button
+      ></mat-chip>
+    </mat-chip-list>
+  </div>
+
+  <mat-selection-list #shoes [multiple]="false">
+    <mat-list-option
+      *ngFor="let order of savedOrders; index as i"
+      [value]="order"
+    >
+      {{ order }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<!-- End of Saved Order Layout -->
+
+<table class="table">
+  <thead>
+    <!-- <tr>
+                <th class="text-center" colspan="6">
+                  <form (submit)="addItem()">
+                    <mat-form-field appearance="outline" class="input-form">
+                      <mat-label>Add a Product</mat-label>
+                      <input
+                        #keyword
+                        type="text"
+                        placeholder="Enter Keyword(s)"
+                        aria-label="Input Product"
+                        matInput
+                        [formControl]="searchForm"
+                        [matAutocomplete]="auto"
+                        [autofocus]="true"
+                      />
+                      <mat-autocomplete
+                        autoActiveFirstOption
+                        #auto="matAutocomplete"
+                      >
+                        <mat-option
+                          *ngFor="let option of filteredOptions | async"
+                          [value]="option"
+                          (click)="addItem()"
+                        >
+                          {{ option }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </form>
+                </th>
+              </tr> -->
+    <tr>
+      <th colspan="3" class="text-start">Order Code: {{ order_code }}</th>
+      <th colspan="3" class="text-end">Cashier: Misha</th>
+    </tr>
+    <tr>
+      <th>No.</th>
+      <th>Product</th>
+      <th>Code</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Option</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of order; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.product_name }}</td>
+      <td>{{ item.product_code }}</td>
+      <td>
+        <button mat-icon-button (click)="reduceQty(i)">
+          <i class="bx bx-minus-circle bx-sm text-warning"></i>
+        </button>
+        {{ item.quantity }}
+        <button mat-icon-button (click)="addQty(i)">
+          <i class="bx bx-plus-circle bx-sm text-primary"></i>
+        </button>
+      </td>
+      <td>{{ item.price * item.quantity }}</td>
+      <td>
+        <button mat-icon-button (click)="removeItem(i)">
+          <i class="bx bx-x-circle bx-sm text-danger"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

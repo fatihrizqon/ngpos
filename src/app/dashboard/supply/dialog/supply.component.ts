@@ -10,7 +10,7 @@ import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'supply-dialog',
-  templateUrl: './dialog.component.html',
+  templateUrl: './supply.component.html',
   styleUrls: ['./dialog.component.scss'],
 })
 export class SupplyDialogComponent implements OnInit {

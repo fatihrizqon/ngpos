@@ -105,7 +105,6 @@ export class ProductComponent implements OnInit {
           action_no: 'Cancel',
           action_yes: 'Submit',
         },
-        width: '33%',
         disableClose: true,
       })
       .afterClosed()
@@ -132,7 +131,6 @@ export class ProductComponent implements OnInit {
           action_no: 'Cancel',
           action_yes: 'Save',
         },
-        width: '33%',
         disableClose: true,
       })
       .afterClosed()

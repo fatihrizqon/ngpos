@@ -5,13 +5,18 @@
   </mat-dialog-content>
 
   <div mat-dialog-actions [align]="'end'">
-    <button mat-stroked-button color="warn" mat-dialog-close>
+    <button
+      mat-stroked-button
+      (click)="onNoClick()"
+      [mat-dialog-close]="false"
+      color="warn"
+    >
       {{ data.action_no }}
     </button>
     <button
       mat-stroked-button
-      color="primary"
       [mat-dialog-close]="true"
+      color="primary"
       cdkFocusInitial
     >
       {{ data.action_yes }}

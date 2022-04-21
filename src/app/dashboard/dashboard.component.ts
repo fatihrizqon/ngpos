@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'root-dashboard',
@@ -8,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
   isOpen = false;
   active = false;
+  lightMode = true;
 
   constructor() {}
 
@@ -17,12 +19,7 @@ export class DashboardComponent implements OnInit {
     this.isOpen = !this.isOpen;
   }
 
-  changeMode() {
-    alert('Change to Dark/Light Mode');
-  }
-
-  toggleActive() {
-    console.log('Toggle Active');
-    this.active = !this.active;
+  changeMode(event: MatSlideToggleChange): void {
+    document.body.classList.toggle('darkMode');
   }
 }

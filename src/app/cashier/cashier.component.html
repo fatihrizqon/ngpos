@@ -1,272 +1,309 @@
-<mat-toolbar color="warn">
-  <div class="spacer"></div>
-  <button routerLink="/cashier" mat-icon-button matTooltip="Cashier">
-    <i class="bx bx-cart-alt bx-sm"></i>
-  </button>
-  <span routerLink="/" matTooltip="Index" class="ms-3 me-3">
-    <img
-      src="https://cdn-icons-png.flaticon.com/512/3028/3028956.png"
-      alt=""
-      width="40"
-    />
-  </span>
-  <button routerLink="/dashboard" mat-icon-button matTooltip="Dashboard">
-    <i class="bx bxs-dashboard bx-sm"></i>
-  </button>
-  <div class="spacer"></div>
-</mat-toolbar>
-<div class="container-fluid">
-  <div class="row text-center" *ngIf="!spinner">
-    <!-- Saved Order Layout -->
-    <div class="col-2">
-      <div class="col-12 mt-3 mat-elevation-z1 p-3">
-        <div class="strike">
-          <span>Active Order List(s)</span>
-        </div>
-        <mat-chip-list
-          aria-label="Saved Orders"
-          *ngFor="let order of savedOrders; index as i"
-        >
-          <mat-chip (click)="getOrder(i)"
-            >{{ order }}
-            <button (click)="removeOrder(i)" matChipRemove>
-              <i class="bx bx-trash"></i></button
-          ></mat-chip>
-        </mat-chip-list>
-      </div>
-    </div>
-    <!-- End of Saved Order Layout -->
+<app-navbar></app-navbar>
 
-    <!-- Order Layout -->
-    <div class="col-7">
-      <!-- Create a New Order -->
-      <div class="col-12 mt-3" *ngIf="createOrder">
+<section class="container">
+  <div
+    class="row text-center animate__animated animate__slideInUp"
+    *ngIf="!spinner"
+  >
+    <!-- Create a New Order -->
+    <div
+      class="row align-items-center"
+      *ngIf="createOrder"
+      style="height: 100vh"
+    >
+      <div class="col-12">
         <button mat-stroked-button color="primary" (click)="newOrder()">
           Create a New Order
         </button>
       </div>
+    </div>
+
+    <!-- Order Layout -->
+    <div class="col-xl-8 col-lg-6 col-sm-12">
       <!-- Order List(s) -->
-      <div class="col-12 mt-3 mat-elevation-z1 p-3" *ngIf="!createOrder">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th class="text-center" colspan="6">
-                  <form (submit)="addItem()">
-                    <mat-form-field appearance="fill" class="input-form">
-                      <mat-label>Add a Product</mat-label>
-                      <input
-                        #keyword
-                        type="text"
-                        placeholder="Enter Keyword(s)"
-                        aria-label="Input Product"
-                        matInput
-                        [formControl]="searchForm"
-                        [matAutocomplete]="auto"
-                        [autofocus]="true"
-                      />
-                      <mat-autocomplete
-                        autoActiveFirstOption
-                        #auto="matAutocomplete"
-                      >
-                        <mat-option
-                          *ngFor="let option of filteredOptions | async"
-                          [value]="option"
-                          (click)="addItem()"
-                        >
-                          {{ option }}
-                        </mat-option>
-                      </mat-autocomplete>
-                    </mat-form-field>
-                  </form>
-                </th>
-              </tr>
-              <tr>
-                <th colspan="3" class="text-start">
-                  Order Code: {{ order_code }}
-                </th>
-                <th colspan="3" class="text-end">Cashier: Misha</th>
-              </tr>
-              <tr>
-                <th>No.</th>
-                <th>Product</th>
-                <th>Code</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Option</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of order; index as i">
-                <td>{{ i + 1 }}</td>
-                <td>{{ item.product_name }}</td>
-                <td>{{ item.product_code }}</td>
-                <td>
-                  <button mat-icon-button (click)="reduceQty(i)">
-                    <i class="bx bx-minus-circle bx-sm text-warning"></i>
-                  </button>
-                  {{ item.quantity }}
-                  <button mat-icon-button (click)="addQty(i)">
-                    <i class="bx bx-plus-circle bx-sm text-primary"></i>
-                  </button>
-                </td>
-                <td>{{ item.price * item.quantity }}</td>
-                <td>
-                  <button mat-icon-button (click)="removeItem(i)">
-                    <i class="bx bx-x-circle bx-sm text-danger"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <mat-card
+        class="col-12 mt-3 mat-elevation-z1 p-3 table-responsive animate__animated animate__slideInLeft"
+        *ngIf="!createOrder"
+      >
+        <form (submit)="addItem()">
+          <mat-form-field appearance="outline" class="input-form">
+            <mat-label>Add a Product</mat-label>
+            <input
+              #keyword
+              type="text"
+              placeholder="Enter Keyword(s)"
+              aria-label="Input Product"
+              matInput
+              [formControl]="searchForm"
+              [matAutocomplete]="auto"
+              [autofocus]="true"
+            />
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option
+                *ngFor="let option of filteredOptions | async"
+                [value]="option"
+                (click)="addItem()"
+              >
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+
+        <!-- MatTable -->
+        <table
+          *ngIf="orderDataSource"
+          mat-table
+          [dataSource]="orderDataSource"
+          class="mat-elevation-z1 mt-3"
+        >
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+
+          <!-- Product Column -->
+          <ng-container matColumnDef="product_name">
+            <th mat-header-cell *matHeaderCellDef>Product</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.product_name }}
+            </td>
+          </ng-container>
+
+          <!-- Product Code Column -->
+          <ng-container matColumnDef="product_code">
+            <th mat-header-cell *matHeaderCellDef>Product Code</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.product_code }}
+            </td>
+          </ng-container>
+
+          <!-- Quantity Column -->
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <button mat-icon-button (click)="reduceQty(i)">
+                <i class="bx bx-minus-circle bx-sm text-warning"></i>
+              </button>
+              {{ element.quantity }}
+              <button mat-icon-button (click)="addQty(i)">
+                <i class="bx bx-plus-circle bx-sm text-primary"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.price * element.quantity }}
+            </td>
+          </ng-container>
+
+          <!-- Options Column -->
+          <ng-container matColumnDef="option">
+            <th mat-header-cell *matHeaderCellDef>Options</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <button mat-icon-button (click)="removeItem(i)">
+                <i class="bx bx-x-circle bx-sm text-danger"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedItems"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedItems"></tr>
+        </table>
+        <!-- End of MatTable -->
+      </mat-card>
       <!-- End of Order List(s) -->
     </div>
     <!-- End of Order Layout -->
 
     <!-- Order Action(s) Layout -->
-    <div class="col-3">
-      <div
-        class="col-12 mt-3 mat-elevation-z1 p-3 receipt-container"
-        *ngIf="!createOrder"
-      >
-        <!-- Receipt Actions -->
-        <ul class="list-group mt-2">
-          <li class="list-group-item">
-            <div class="strike">
-              <span>Check Out</span>
-            </div>
-            <div class="mt-3 text-start">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td class="text-start">Total Price:</td>
-                    <td>Rp.{{ total_price }},-</td>
-                  </tr>
-                  <tr>
-                    <td class="text-start">Pay:</td>
-                    <td>Rp.{{ pay }},-</td>
-                  </tr>
-                  <tr>
-                    <td class="text-start">Return:</td>
-                    <td>Rp.{{ return }},-</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="mt-3">
-              <!-- ketika memasukkan PA, save & clear disable. Check out enable. -->
-              <mat-form-field
-                class="payment"
-                appearance="fill"
-                floatLabel="always"
-              >
-                <mat-label>Payment Amount</mat-label>
-                <input
-                  #payment
-                  matInput
-                  type="number"
-                  placeholder="0"
-                  matInput
-                  [formControl]="paymentForm"
-                  [autofocus]="false"
-                />
-                <span matPrefix>Rp.&nbsp;</span>
-                <span matSuffix>,-</span>
-              </mat-form-field>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="mt-1">
-              <button
-                mat-icon-button
-                matTooltip="Clear Order(s)"
-                (click)="clearOrder()"
-              >
-                <i class="bx bx-message-square-x bx-sm text-danger"></i>
-              </button>
-              <button
-                mat-icon-button
-                matTooltip="Save Order"
-                *ngIf="!clicked"
-                (click)="saveOrder()"
-              >
-                <i class="bx bx-save bx-sm text-info"></i>
-              </button>
-              <button
-                mat-icon-button
-                matTooltip="Check Out"
-                (click)="checkOut()"
-              >
-                <i class="bx bx-receipt bx-sm text-primary"></i>
-              </button>
-            </div>
-          </li>
-        </ul>
-        <!-- End of Receipt Actions -->
+    <div
+      class="col-xl-4 col-lg-6 col-md-0 animate__animated animate__slideInRight"
+      *ngIf="!createOrder"
+    >
+      <div class="mt-3 mb-3">
+        <mat-accordion class="headers-align" multi>
+          <!-- Saved Order(s) -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="p-3">
+              <mat-panel-title> Saved Orders </mat-panel-title>
+            </mat-expansion-panel-header>
 
-        <!-- Receipt -->
-        <ul class="list-group mt-2">
-          <li class="list-group-item">
-            <div class="strike">
-              <span>Resto SatSet</span>
+            <mat-chip-list *ngFor="let order of savedOrders; index as i">
+              <mat-chip
+                class="m-1"
+                color="primary"
+                selected
+                (click)="getOrder(i)"
+                >{{ order }}
+                <button (click)="removeOrder(i)" matChipRemove>
+                  <i class="bx bx-trash"></i></button
+              ></mat-chip>
+            </mat-chip-list>
+          </mat-expansion-panel>
+          <!-- End of Saved Order(s) -->
+
+          <!-- Invoice -->
+          <mat-expansion-panel [expanded]="orderDataSource">
+            <mat-expansion-panel-header class="p-3"
+              ><mat-panel-title
+                >Invoice</mat-panel-title
+              ></mat-expansion-panel-header
+            >
+            <div *ngIf="orderDataSource">
+              <!-- Receipt -->
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <div class="strike">
+                    <span>Resto SatSet</span>
+                  </div>
+                  Jl. TransJawa No.1, Surabaya. Telp: (0271) 7366 Instagram:
+                  @satsetresto.official
+                </li>
+                <li class="list-group-item">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <td class="receipt-column text-start" colspan="2">
+                          Tanggal:
+                        </td>
+                        <td class="receipt-column text-end" colspan="2">
+                          {{ currentDate }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="receipt-column text-start" colspan="2">
+                          Kasir:
+                        </td>
+                        <td class="receipt-column text-end" colspan="2">
+                          {{ user.fullname }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="receipt-column text-start" colspan="2">
+                          Receipt Code:
+                        </td>
+                        <td class="receipt-column text-end" colspan="2">
+                          {{ order_code }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-start">No.</td>
+                        <td class="text-start">Item</td>
+                        <td class="text-center">Qty</td>
+                        <td class="text-center">Price</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of order; index as i">
+                        <td class="receipt-column text-start">{{ i + 1 }}.</td>
+                        <td class="receipt-column text-start">
+                          {{ item.product_name }}
+                        </td>
+                        <td class="receipt-column text-center">
+                          {{ item.quantity }}
+                        </td>
+                        <td class="receipt-column text-center">
+                          Rp.{{ item.price * item.quantity }},-
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td class="receipt-column text-start">Total:</td>
+                        <td class="receipt-column text-start">
+                          {{ total_items }}
+                        </td>
+                        <td class="receipt-column text-center">
+                          {{ total_quantity }}
+                        </td>
+                        <td class="receipt-column text-center">
+                          Rp.{{ total_price }},-
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="receipt-column text-start" colspan="3">
+                          Pay:
+                        </td>
+                        <td class="receipt-column text-center">{{ pay }}</td>
+                      </tr>
+                      <tr>
+                        <td class="receipt-column text-start" colspan="3">
+                          Return:
+                        </td>
+                        <td class="receipt-column text-center">{{ return }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </li>
+                <li class="list-group-item">
+                  <p>
+                    Barang yang sudah dibeli tidak dapat dikembalikan. Terima
+                    Kasih telah berkunjung, selamat berbelanja kembali.
+                  </p>
+                </li>
+              </ul>
+              <!-- End of Receipt -->
+
+              <!-- Payment -->
+              <div class="col-12 mt-3">
+                <mat-form-field
+                  class="payment"
+                  appearance="outline"
+                  floatLabel="always"
+                >
+                  <mat-label>Payment Amount</mat-label>
+                  <input
+                    #payment
+                    matInput
+                    type="number"
+                    placeholder="0"
+                    matInput
+                    [formControl]="paymentForm"
+                    [autofocus]="false"
+                  />
+                  <span matPrefix>Rp.&nbsp;</span>
+                  <span matSuffix>,-</span>
+                </mat-form-field>
+              </div>
+              <!-- End of Payment -->
+
+              <!-- Actions -->
+              <div class="col-12">
+                <button
+                  mat-icon-button
+                  matTooltip="Clear Order(s)"
+                  (click)="clearOrder()"
+                >
+                  <i class="bx bx-message-square-x bx-sm text-danger"></i>
+                </button>
+                <button
+                  mat-icon-button
+                  matTooltip="Save Order"
+                  *ngIf="!clicked"
+                  (click)="saveOrder()"
+                >
+                  <i class="bx bx-save bx-sm text-info"></i>
+                </button>
+                <button
+                  mat-icon-button
+                  matTooltip="Check Out"
+                  (click)="checkOut()"
+                >
+                  <i class="bx bx-receipt bx-sm text-primary"></i>
+                </button>
+              </div>
+              <!-- End of Actions -->
             </div>
-            Jl. TransJawa No.1, Surabaya. Telp: (0271) 7366 Instagram:
-            @satsetresto.official
-          </li>
-          <li class="list-group-item">
-            <table class="table">
-              <thead>
-                <tr>
-                  <td class="text-start" colspan="2">Tanggal:</td>
-                  <td class="text-end" colspan="2">
-                    {{ currentDate }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-start" colspan="2">Kasir:</td>
-                  <td class="text-end" colspan="2">{{ user.fullname }}</td>
-                </tr>
-                <tr>
-                  <td class="text-start" colspan="2">Receipt Code:</td>
-                  <td class="text-end" colspan="2">{{ order_code }}</td>
-                </tr>
-                <tr>
-                  <td class="text-start">No.</td>
-                  <td class="text-start">Item</td>
-                  <td class="text-center">Qty</td>
-                  <td class="text-center">Price</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of order; index as i">
-                  <td class="text-start">{{ i + 1 }}.</td>
-                  <td class="text-start">{{ item.product_name }}</td>
-                  <td class="text-center">{{ item.quantity }}</td>
-                  <td class="text-center">
-                    Rp.{{ item.price * item.quantity }},-
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td class="text-start">Total:</td>
-                  <td class="text-center">{{ total_items }}</td>
-                  <td class="text-center">{{ total_quantity }}</td>
-                  <td class="text-center">Rp.{{ total_price }},-</td>
-                </tr>
-              </tfoot>
-            </table>
-          </li>
-          <li class="list-group-item">
-            <p>
-              Barang yang sudah dibeli tidak dapat dikembalikan. Terima Kasih
-              telah berkunjung, selamat berbelanja kembali.
-            </p>
-          </li>
-        </ul>
-        <!-- End of Receipt -->
+          </mat-expansion-panel>
+          <!-- End of Invoice -->
+        </mat-accordion>
       </div>
     </div>
     <!-- End of Order Action(s) Layout -->
@@ -275,7 +312,7 @@
   <div class="row align-items-center" *ngIf="spinner" style="height: 100vh">
     <div class="col-12">
       <mat-spinner
-        color="warn"
+        color="primary"
         [diameter]="50"
         [strokeWidth]="3"
         mode="indeterminate"
@@ -283,53 +320,4 @@
       ></mat-spinner>
     </div>
   </div>
-</div>
-
-<!-- 
-
-          <table class="table" *ngIf="!disableProducts">
-            <thead>
-              <tr>
-                <th class="text-center" colspan="6">Input Order</th>
-              </tr>
-              <tr>
-                <th>No.</th>
-                <th>Item Name</th>
-                <th>Item Code</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Option</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr colspan="3">
-                Order Code
-              </tr>
-              <tr *ngFor="let product of products; index as i">
-                <td class="align-middle">{{ i + 1 }}</td>
-                <td class="align-middle">{{ product.name }}</td>
-                <td class="align-middle">{{ product.code }}</td>
-                <td class="align-middle">
-                  <mat-form-field appearance="fill">
-                    <mat-label>Select</mat-label>
-        
-                    <mat-select>
-                        <mat-option
-                          (click)="onSelect(quantity, i)"
-                          *ngFor="let quantity of quantities"
-                          [value]="quantity"
-                        >
-                          {{ quantity }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </td>
-                  <td class="align-middle">Price * Quantity</td>
-                  <td class="align-middle" matTooltip="Delete Selected Product">
-                    <i class="bx bx-message-square-x bx-sm text-danger"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
- -->
+</section>

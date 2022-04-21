@@ -16,6 +16,8 @@ import { CategoryDialogComponent } from './dashboard/category/dialog/dialog.comp
 import { ProductComponent } from './dashboard/product/product.component';
 import { ProductDialogComponent } from './dashboard/product/dialog/dialog.component';
 import { SupplyComponent } from './dashboard/supply/supply.component';
+import { SupplyDialogComponent } from './dashboard/supply/dialog/supply.component';
+import { SupplierDialogComponent } from './dashboard/supply/dialog/supplier.component';
 import { SalesComponent } from './dashboard/sales/sales.component';
 import { ReportsComponent } from './dashboard/reports/reports.component';
 import { UsersComponent } from './dashboard/users/users.component';
@@ -23,9 +25,9 @@ import { UsersComponent } from './dashboard/users/users.component';
 import { AppService } from './services/app.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { QRCodeModule } from 'angularx-qrcode';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SupplyDialogComponent } from './dashboard/supply/dialog/dialog.component';
+import { NavbarComponent } from './layouts/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { SupplyDialogComponent } from './dashboard/supply/dialog/dialog.componen
     CategoryDialogComponent,
     ProductDialogComponent,
     SupplyDialogComponent,
+    SupplierDialogComponent,
+    NavbarComponent,
   ],
   imports: [
     CommonModule,

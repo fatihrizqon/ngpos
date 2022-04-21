@@ -4,10 +4,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { SupplyDialogComponent } from './dialog/dialog.component';
+import { SupplyDialogComponent } from './dialog/supply.component';
 import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SupplierDialogComponent } from './dialog/supplier.component';
 
 @Component({
   selector: 'app-supply',
@@ -16,8 +17,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class SupplyComponent implements OnInit {
   supplies: any;
+  suppliers: any;
   products: any;
-  displayedColumns: string[] = [
+  displayedSupplies: string[] = [
     'id',
     'product',
     'quantity',
@@ -28,7 +30,21 @@ export class SupplyComponent implements OnInit {
     'update',
     'option',
   ];
-  dataSource: any;
+
+  displayedSuppliers: string[] = [
+    'id',
+    'name',
+    'address',
+    'email',
+    'contact',
+    'created_at',
+    'updated_at',
+    'option',
+  ];
+
+  suppliesDataSource: any;
+  suppliersDataSource: any;
+
   progress = false;
 
   constructor(
@@ -38,17 +54,25 @@ export class SupplyComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  // @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  // @ViewChild(MatSort) sort: MatSort | undefined;
+
+  @ViewChild('suppliesPaginator') suppliesPaginator?: MatPaginator;
+  @ViewChild('suppliesSort') suppliesSort?: MatSort;
+
+  @ViewChild('suppliersPaginator') suppliersPaginator?: MatPaginator;
+  @ViewChild('suppliersSort') suppliersSort?: MatSort;
 
   ngOnInit(): void {
     this.getSupplies();
+    this.getSuppliers();
     this.getProducts();
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.suppliesDataSource.filter = filterValue.trim().toLowerCase();
+    this.suppliersDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   announceSortChange(sortState: Sort) {
@@ -63,9 +87,25 @@ export class SupplyComponent implements OnInit {
     this.appService.getSupplies().subscribe(
       (response) => {
         this.supplies = response.data;
-        this.dataSource = new MatTableDataSource(response.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.suppliesDataSource = new MatTableDataSource(response.data);
+        this.suppliesDataSource.paginator = this.suppliesPaginator;
+        this.suppliesDataSource.sort = this.suppliersSort;
+      },
+      (err) => {
+        if (err.error.message) {
+          console.log(err.error.message);
+        }
+      }
+    );
+  }
+
+  getSuppliers() {
+    this.appService.getSuppliers().subscribe(
+      (response) => {
+        this.suppliers = response.data;
+        this.suppliersDataSource = new MatTableDataSource(response.data);
+        this.suppliersDataSource.paginator = this.suppliersPaginator;
+        this.suppliersDataSource.sort = this.suppliersSort;
       },
       (err) => {
         if (err.error.message) {
@@ -88,7 +128,7 @@ export class SupplyComponent implements OnInit {
     );
   }
 
-  create() {
+  createSupply() {
     const dialogRef = this.dialog
       .open(SupplyDialogComponent, {
         data: {
@@ -97,7 +137,7 @@ export class SupplyComponent implements OnInit {
           action_no: 'Cancel',
           action_yes: 'Submit',
         },
-        width: '33%',
+
         disableClose: true,
       })
       .afterClosed()
@@ -114,7 +154,7 @@ export class SupplyComponent implements OnInit {
       );
   }
 
-  update(row: any) {
+  updateSupply(row: any) {
     const dialogRef = this.dialog
       .open(SupplyDialogComponent, {
         data: {
@@ -124,7 +164,7 @@ export class SupplyComponent implements OnInit {
           action_no: 'Cancel',
           action_yes: 'Save',
         },
-        width: '33%',
+
         disableClose: true,
       })
       .afterClosed()
@@ -141,7 +181,7 @@ export class SupplyComponent implements OnInit {
       );
   }
 
-  delete(id: number) {
+  deleteSupply(id: number) {
     const dialogRef = this.dialog
       .open(DialogComponent, {
         width: '550px',
@@ -160,6 +200,90 @@ export class SupplyComponent implements OnInit {
           this.appService.deleteSupply(id).subscribe(
             (response) => {
               this.getSupplies();
+              this.progress = false;
+              this.openSnackBar(response.message, 'Got It!');
+            },
+            (err) => {
+              this.progress = false;
+              this.openSnackBar(err.error.message, 'Got It!');
+            }
+          );
+        }
+      });
+  }
+
+  createSupplier() {
+    const dialogRef = this.dialog
+      .open(SupplierDialogComponent, {
+        data: {
+          title: 'Create a New Supplier',
+          action: 'create',
+          action_no: 'Cancel',
+          action_yes: 'Submit',
+        },
+
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.getSuppliers();
+            this.openSnackBar(response.message, 'Got It!');
+          }
+        },
+        (err) => {
+          alert(err.error.message);
+        }
+      );
+  }
+
+  updateSupplier(row: any) {
+    const dialogRef = this.dialog
+      .open(SupplierDialogComponent, {
+        data: {
+          title: 'Update Supplier',
+          row: row,
+          action: 'update',
+          action_no: 'Cancel',
+          action_yes: 'Save',
+        },
+
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.getSuppliers();
+            this.openSnackBar(response.message, 'Got It!');
+          }
+        },
+        (err) => {
+          this.openSnackBar(err.error.message, 'Got It!');
+        }
+      );
+  }
+
+  deleteSupplier(id: number) {
+    const dialogRef = this.dialog
+      .open(DialogComponent, {
+        width: '550px',
+        data: {
+          title: 'Delete Supplier',
+          message: 'Do you want to Delete this Supplier?',
+          action_yes: 'Yes',
+          action_no: 'No',
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((response) => {
+        if (response === true) {
+          this.progress = true;
+          this.appService.deleteSupplier(id).subscribe(
+            (response) => {
+              this.getSuppliers();
               this.progress = false;
               this.openSnackBar(response.message, 'Got It!');
             },

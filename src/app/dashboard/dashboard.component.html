@@ -1,4 +1,4 @@
-<mat-toolbar color="warn">
+<mat-toolbar color="primary">
   <button
     mat-icon-button
     (click)="drawer.toggle()"
@@ -6,84 +6,87 @@
   >
     <i class="bx bx-menu bx-sm"></i>
   </button>
-  <span routerLink="/">
-    <img
-      src="https://cdn-icons-png.flaticon.com/512/3028/3028956.png"
-      alt=""
-      width="40"
-    />
-  </span>
-  <span class="spacer"></span>
+  <div class="spacer"></div>
+  <button mat-button color="accent" routerLink="/">
+    <i class="navigation bx bx-home bx-sm"></i>
+  </button>
+  <button mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
+    <i class="navigation bx bxs-store bx-sm"></i>
+  </button>
+  <button mat-button color="accent" routerLink="/dashboard">
+    <i class="navigation bx bxs-dashboard bx-sm"></i>
+  </button>
+  <button mat-button color="accent">
+    <i class="bx bx-bell bx-sm"></i>
+  </button>
+  <div class="spacer"></div>
+
   <mat-slide-toggle
-    (click)="changeMode()"
-    color="dark"
+    color="accent"
+    (change)="changeMode($event)"
     matTooltip="Turn On/Off the Dark Mode"
   ></mat-slide-toggle>
-  <button mat-icon-button>
-    <i class="bx bxs-user-circle bx-sm"></i>
-  </button>
 </mat-toolbar>
 
-<mat-drawer-container class="example-container mat-typography" autosize>
+<mat-drawer-container class="mat-typography" autosize>
   <mat-drawer #drawer mode="side" disableClose="true" opened="true">
     <button
       mat-icon-button
       (click)="toggle($event)"
-      color="warn"
       style="margin: 10px"
       matTooltip="Click to Expand/Collapse The Navigation"
     >
-      <i class="bx bx-chevron-right bx-sm sidenav_icon text-danger"></i>
+      <i class="bx bx-chevron-right bx-sm sidenav_icon"></i>
     </button>
 
     <mat-nav-list>
       <mat-list-item routerLink="/dashboard">
-        <i class="bx bxs-dashboard bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-dashboard bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Dashboard</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/categories">
-        <i class="bx bx-category-alt bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bx-category-alt bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Product Categories</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/products">
-        <i class="bx bxs-component bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-component bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Product</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/supply">
         <i
-          class="bx bx-purchase-tag-alt bx-sm sidenav_icon text-danger"
+          class="bx bx-purchase-tag-alt bx-sm sidenav_icon"
           color="primary"
         ></i>
         <span class="sidenav_link" *ngIf="isOpen">Supplies</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/sales">
-        <i class="bx bx-cart-alt bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bx-cart-alt bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Sales</span>
       </mat-list-item>
 
       <!-- Ballance Flow -->
       <mat-list-item>
-        <i class="bx bxs-bank bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-bank bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Ballance</span>
       </mat-list-item>
       <!-- Log Activity -->
       <mat-list-item>
-        <i class="bx bx-history bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bx-history bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Log Activity</span>
       </mat-list-item>
 
       <mat-list-item routerLink="/dashboard/reports">
-        <i class="bx bxs-file-pdf bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-file-pdf bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Reports</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/users">
-        <i class="bx bxs-user-badge bx-sm sidenav_icon text-danger"></i>
+        <i class="bx bxs-user-badge bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Users</span>
       </mat-list-item>
     </mat-nav-list>
   </mat-drawer>
 
-  <div class="container-fluid">
+  <div class="container-fluid animate__animated animate__slideInRight">
     <router-outlet></router-outlet>
   </div>
 </mat-drawer-container>

@@ -1,298 +1,332 @@
-<mat-tab-group>
-  <mat-tab label="Transaction">
-    <div class="mat-elevation-z1 mt-3 table-responsive">
-      <div class="row align-items-center m-1" align="center">
-        <div class="col-12">
-          <mat-form-field appearance="standard">
-            <mat-label>Filter</mat-label>
-            <input
-              matInput
-              (keyup)="applyFilter($event)"
-              placeholder="Input"
-              #input
-            />
-          </mat-form-field>
+<section class="animate__animated animate__slideInRight">
+  <mat-tab-group class="mat-elevation-z1 mt-3 mb-3">
+    <mat-tab label="Transaction">
+      <div class="mat-elevation-z1 mt-3 table-responsive">
+        <div class="row align-items-center m-1" align="center">
+          <div class="col-12" align="end">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input
+                matInput
+                (keyup)="applyFilter($event)"
+                placeholder="Input"
+                #input
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <table
+          *ngIf="transactionsDataSource"
+          #transactionsSort="matSort"
+          mat-table
+          [dataSource]="transactionsDataSource"
+          matSort
+          (matSortChange)="announceSortChange($event)"
+        >
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by ID"
+            >
+              No.
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+
+          <!-- Order Code Column -->
+          <ng-container matColumnDef="order_code">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Order Code"
+            >
+              Order Code
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.order_code }}
+            </td>
+          </ng-container>
+
+          <!-- Total Price Column -->
+          <ng-container matColumnDef="total_price">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Total Price"
+            >
+              Total Price
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.total_price }}
+            </td>
+          </ng-container>
+
+          <!-- Pay Column -->
+          <ng-container matColumnDef="pay">
+            <th
+              id="pay"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Pay"
+              class="text-center"
+            >
+              Pay
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.pay }}
+            </td>
+          </ng-container>
+
+          <!-- Return Column -->
+          <ng-container matColumnDef="return">
+            <th
+              id="return"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Return"
+              class="text-center"
+            >
+              Return
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.return }}
+            </td>
+          </ng-container>
+
+          <!-- User Column -->
+          <ng-container matColumnDef="user_id">
+            <th
+              id="user_id"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by User"
+              class="text-center"
+            >
+              User
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.user_id }}
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="created_at">
+            <th
+              id="created_at"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Date"
+              class="text-center"
+            >
+              Date
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.created_at }}
+            </td>
+          </ng-container>
+
+          <!-- Update Column -->
+          <ng-container matColumnDef="updated_at">
+            <th
+              id="updated_at"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Update"
+              class="text-center"
+            >
+              Update
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.updated_at }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedTransactions"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedTransactions"></tr>
+        </table>
+
+        <div class="row align-items-center" *ngIf="!transactionsDataSource">
+          <div class="col">
+            <mat-spinner
+              color="primary"
+              [diameter]="50"
+              [strokeWidth]="3"
+              mode="indeterminate"
+              style="margin: 0 auto"
+            ></mat-spinner>
+          </div>
+        </div>
+        <mat-paginator
+          #transactionsPaginator
+          [pageSizeOptions]="[10, 20, 50]"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Orders">
+      <div class="mat-elevation-z1 mt-3 table-responsive">
+        <div class="row align-items-center m-1" align="center">
+          <div class="col-12" align="end">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input
+                matInput
+                (keyup)="applyFilter($event)"
+                placeholder="Input"
+                #input
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <table
+          *ngIf="ordersDataSource"
+          #ordersSort="matSort"
+          mat-table
+          [dataSource]="ordersDataSource"
+          matSort
+          (matSortChange)="announceSortChange($event)"
+        >
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by ID"
+            >
+              No.
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+
+          <!-- Product Column -->
+          <ng-container matColumnDef="product_name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Product "
+            >
+              Product
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.product_name }}
+            </td>
+          </ng-container>
+
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Price "
+            >
+              Price
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+          </ng-container>
+
+          <!-- Quantity Column -->
+          <ng-container matColumnDef="quantity">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Quantity "
+            >
+              Quantity
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+          </ng-container>
+
+          <!-- Code Column -->
+          <ng-container matColumnDef="code">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Code"
+            >
+              Code
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.code }}
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="created_at">
+            <th
+              id="created_at"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Date"
+              class="text-center"
+            >
+              Date
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.created_at }}
+            </td>
+          </ng-container>
+
+          <!-- Update Column -->
+          <ng-container matColumnDef="updated_at">
+            <th
+              id="updated_at"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by Update"
+              class="text-center"
+            >
+              Update
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.updated_at }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedOrders"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedOrders"></tr>
+        </table>
+
+        <div class="row align-items-center" *ngIf="!ordersDataSource">
+          <div class="col">
+            <mat-spinner
+              color="primary"
+              [diameter]="50"
+              [strokeWidth]="3"
+              mode="indeterminate"
+              style="margin: 0 auto"
+            ></mat-spinner>
+          </div>
         </div>
       </div>
-      <table
-        #transactionsSort="matSort"
-        mat-table
-        [dataSource]="transactionsDataSource"
-        matSort
-        (matSortChange)="announceSortChange($event)"
-      >
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by ID"
-          >
-            No.
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-        </ng-container>
-
-        <!-- Order Code Column -->
-        <ng-container matColumnDef="order_code">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Order Code"
-          >
-            Order Code
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.order_code }}
-          </td>
-        </ng-container>
-
-        <!-- Total Price Column -->
-        <ng-container matColumnDef="total_price">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Total Price"
-          >
-            Total Price
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.total_price }}
-          </td>
-        </ng-container>
-
-        <!-- Pay Column -->
-        <ng-container matColumnDef="pay">
-          <th
-            id="pay"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Pay"
-            class="text-center"
-          >
-            Pay
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.pay }}
-          </td>
-        </ng-container>
-
-        <!-- Return Column -->
-        <ng-container matColumnDef="return">
-          <th
-            id="return"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Return"
-            class="text-center"
-          >
-            Return
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.return }}
-          </td>
-        </ng-container>
-
-        <!-- User Column -->
-        <ng-container matColumnDef="user_id">
-          <th
-            id="user_id"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by User"
-            class="text-center"
-          >
-            User
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.user_id }}
-          </td>
-        </ng-container>
-
-        <!-- Date Column -->
-        <ng-container matColumnDef="created_at">
-          <th
-            id="created_at"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Date"
-            class="text-center"
-          >
-            Date
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.created_at }}
-          </td>
-        </ng-container>
-
-        <!-- Update Column -->
-        <ng-container matColumnDef="updated_at">
-          <th
-            id="updated_at"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Update"
-            class="text-center"
-          >
-            Update
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.updated_at }}
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedTransactions"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedTransactions"></tr>
-      </table>
       <mat-paginator
-        #transactionsPaginator
+        #ordersPaginator
         [pageSizeOptions]="[10, 20, 50]"
         showFirstLastButtons
       >
       </mat-paginator>
-    </div>
-  </mat-tab>
-
-  <mat-tab label="Orders">
-    <div class="mat-elevation-z1 mt-3 table-responsive">
-      <div class="row align-items-center m-1" align="center">
-        <div class="col-12">
-          <mat-form-field appearance="standard">
-            <mat-label>Filter</mat-label>
-            <input
-              matInput
-              (keyup)="applyFilter($event)"
-              placeholder="Input"
-              #input
-            />
-          </mat-form-field>
-        </div>
-      </div>
-      <table
-        #ordersSort="matSort"
-        mat-table
-        [dataSource]="ordersDataSource"
-        matSort
-        (matSortChange)="announceSortChange($event)"
-      >
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by ID"
-          >
-            No.
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-        </ng-container>
-
-        <!-- Product Column -->
-        <ng-container matColumnDef="product_name">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Product "
-          >
-            Product
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.product_name }}</td>
-        </ng-container>
-
-        <!-- Price Column -->
-        <ng-container matColumnDef="price">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Price "
-          >
-            Price
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.price }}</td>
-        </ng-container>
-
-        <!-- Quantity Column -->
-        <ng-container matColumnDef="quantity">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Quantity "
-          >
-            Quantity
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
-        </ng-container>
-
-        <!-- Code Column -->
-        <ng-container matColumnDef="code">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Code"
-          >
-            Code
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.code }}
-          </td>
-        </ng-container>
-
-        <!-- Date Column -->
-        <ng-container matColumnDef="created_at">
-          <th
-            id="created_at"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Date"
-            class="text-center"
-          >
-            Date
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.created_at }}
-          </td>
-        </ng-container>
-
-        <!-- Update Column -->
-        <ng-container matColumnDef="updated_at">
-          <th
-            id="updated_at"
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by Update"
-            class="text-center"
-          >
-            Update
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.updated_at }}
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedOrders"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedOrders"></tr>
-      </table>
-    </div>
-    <mat-paginator
-      #ordersPaginator
-      [pageSizeOptions]="[10, 20, 50]"
-      showFirstLastButtons
-    >
-    </mat-paginator>
-  </mat-tab>
-</mat-tab-group>
+    </mat-tab>
+  </mat-tab-group>
+</section>

@@ -43,11 +43,9 @@ export class SalesComponent implements OnInit {
 
   @ViewChild('transactionsPaginator') transactionsPaginator?: MatPaginator;
   @ViewChild('transactionsSort') transactionsSort?: MatSort;
-  // @ViewChild(MatSort) transactionsSort?: MatSort;
 
   @ViewChild('ordersPaginator') ordersPaginator?: MatPaginator;
   @ViewChild('ordersSort') ordersSort?: MatSort;
-  // @ViewChild(MatSort) ordersSort?: MatSort;
 
   ngOnInit(): void {
     this.appService.getTransactions().subscribe(
@@ -56,12 +54,9 @@ export class SalesComponent implements OnInit {
         this.transactionsDataSource = new MatTableDataSource(response.data);
         this.transactionsDataSource.paginator = this.transactionsPaginator;
         this.transactionsDataSource.sort = this.transactionsSort;
-        console.log(this.transactions);
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
       }
     );
 
@@ -71,12 +66,9 @@ export class SalesComponent implements OnInit {
         this.ordersDataSource = new MatTableDataSource(response.data);
         this.ordersDataSource.paginator = this.ordersPaginator;
         this.ordersDataSource.sort = this.ordersSort;
-        console.log(this.orders);
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
       }
     );
   }

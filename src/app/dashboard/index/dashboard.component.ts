@@ -31,7 +31,6 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
   // Data not laoded properly
   ngOnInit() {
     this.getTransactions();
-    console.log(this.transactions);
   }
 
   ngAfterViewInit() {

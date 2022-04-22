@@ -1,5 +1,5 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,7 +10,7 @@ import { AppService } from 'src/app/services/app.service';
   templateUrl: './sales.component.html',
   styleUrls: ['./sales.component.scss'],
 })
-export class SalesComponent implements OnInit {
+export class SalesComponent implements OnInit, AfterViewInit {
   transactions: any;
   orders: any;
   displayedTransactions: string[] = [
@@ -48,6 +48,16 @@ export class SalesComponent implements OnInit {
   @ViewChild('ordersSort') ordersSort?: MatSort;
 
   ngOnInit(): void {
+    this.getTransactions();
+    this.getOrders();
+  }
+
+  ngAfterViewInit() {
+    this.getTransactions();
+    this.getOrders();
+  }
+
+  getTransactions() {
     this.appService.getTransactions().subscribe(
       (response) => {
         this.transactions = response.data;
@@ -59,7 +69,9 @@ export class SalesComponent implements OnInit {
         console.log(err.error.message);
       }
     );
+  }
 
+  getOrders() {
     this.appService.getOrders().subscribe(
       (response) => {
         this.orders = response.data;

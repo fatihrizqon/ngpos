@@ -31,9 +31,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   imports: [
+    MatBadgeModule,
     MatSortModule,
     MatSlideToggleModule,
     MatPaginatorModule,
@@ -69,6 +71,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatStepperModule,
   ],
   exports: [
+    MatBadgeModule,
     MatSortModule,
     MatSlideToggleModule,
     MatPaginatorModule,

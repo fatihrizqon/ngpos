@@ -16,9 +16,27 @@
   <button mat-button color="accent" routerLink="/dashboard">
     <i class="navigation bx bxs-dashboard bx-sm"></i>
   </button>
-  <button mat-button color="accent">
-    <i class="bx bx-bell bx-sm"></i>
+  <button
+    mat-button
+    color="accent"
+    (click)="getProducts()"
+    [matMenuTriggerFor]="notification"
+  >
+    <i
+      matBadge="{{ outofstocks?.length }}"
+      matBadgePosition="after"
+      matBadgeColor="accent"
+      matBadgeSize="small"
+      class="bx bx-bell bx-sm"
+    ></i>
   </button>
+  <mat-menu #notification="matMenu">
+    <div *ngFor="let product of outofstocks">
+      <button mat-menu-item routerLink="/dashboard/products">
+        Product {{ product.name }} | Stock: {{ product.stocks }}
+      </button>
+    </div>
+  </mat-menu>
   <div class="spacer"></div>
 
   <mat-slide-toggle
@@ -53,10 +71,7 @@
         <span class="sidenav_link" *ngIf="isOpen">Product</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/supply">
-        <i
-          class="bx bx-purchase-tag-alt bx-sm sidenav_icon"
-          color="primary"
-        ></i>
+        <i class="bx bx-data bx-sm sidenav_icon" color="primary"></i>
         <span class="sidenav_link" *ngIf="isOpen">Supplies</span>
       </mat-list-item>
       <mat-list-item routerLink="/dashboard/sales">
@@ -65,9 +80,9 @@
       </mat-list-item>
 
       <!-- Ballance Flow -->
-      <mat-list-item>
+      <mat-list-item routerLink="/dashboard/balance">
         <i class="bx bxs-bank bx-sm sidenav_icon"></i>
-        <span class="sidenav_link" *ngIf="isOpen">Ballance</span>
+        <span class="sidenav_link" *ngIf="isOpen">Balance</span>
       </mat-list-item>
       <!-- Log Activity -->
       <mat-list-item>

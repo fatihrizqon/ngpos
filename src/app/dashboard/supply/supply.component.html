@@ -24,6 +24,7 @@
         </div>
         <table
           *ngIf="suppliesDataSource"
+          #suppliesSort="matSort"
           mat-table
           [dataSource]="suppliesDataSource"
           matSort
@@ -221,8 +222,10 @@
             </button>
           </div>
         </div>
+
         <table
           *ngIf="suppliersDataSource"
+          #suppliersSort="matSort"
           mat-table
           [dataSource]="suppliersDataSource"
           matSort

@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Order } from '../interfaces/Order';
@@ -16,27 +16,28 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './cashier.component.html',
   styleUrls: ['./cashier.component.scss'],
 })
-export class CashierComponent implements OnInit {
-  index!: number;
-  createOrder = true;
-  products!: Product[];
-  order_code!: String;
-  order: Order[] = [];
-  orders: any[] = [];
+export class CashierComponent implements OnInit, OnDestroy {
+  index!: any;
   total_items!: any;
   total_quantity!: any;
   total_price!: any;
-  savedOrders: any[] = [];
-  quantities = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  quantity!: number;
-  query: any;
-  disableProducts = true;
+  orderDataSource: any;
+
+  createOrder = true;
   clicked = false;
   spinner = false;
+
+  order_code!: String;
   currentDate!: String;
-  return: number = 0;
+
   pay: number = 0;
-  orderDataSource: any;
+  quantity!: number;
+  return: number = 0;
+
+  savedOrders: any[] = [];
+  orders: any[] = [];
+  order: Order[] = [];
+  products!: Product[];
   displayedItems: string[] = [
     'id',
     'product_name',
@@ -50,6 +51,7 @@ export class CashierComponent implements OnInit {
   paymentForm = new FormControl();
   options: string[] = [];
   filteredOptions!: Observable<string[]>;
+
   user: {
     id: number;
     username: string;
@@ -70,6 +72,8 @@ export class CashierComponent implements OnInit {
       'en-US',
       '+0700'
     );
+
+    // delete this soon
     this.user = {
       id: 1,
       username: 'misha',
@@ -78,18 +82,17 @@ export class CashierComponent implements OnInit {
       phone: '082145556225',
       role: 5,
     };
+
+    this.savedOrders = JSON.parse(localStorage.getItem('savedOrders') || '[]');
+    this.orders = JSON.parse(localStorage.getItem('orders') || '[]');
   }
 
   ngOnInit(): void {
     this.getProducts();
-
     this.filteredOptions = this.searchForm.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
     );
-
-    this.savedOrders = JSON.parse(localStorage.getItem('savedOrders') || '[]');
-    this.orders = JSON.parse(localStorage.getItem('orders') || '[]');
   }
 
   private _filter(value: string): string[] {
@@ -101,11 +104,20 @@ export class CashierComponent implements OnInit {
   }
 
   newOrder() {
-    this.order = [];
-    this.getProducts();
     this.reset();
-    this.createOrder = false;
     this.order_code = this.generateCode();
+    this.getProducts();
+  }
+
+  generateCode() {
+    var date = formatDate(new Date(), 'HHmmssddMMyyyy', 'en-US', '+0700');
+    var length = 3;
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var result = '';
+    for (var i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result + date;
   }
 
   getProducts() {
@@ -124,17 +136,21 @@ export class CashierComponent implements OnInit {
 
   addItem() {
     this.clicked = false;
-    var code = this.order_code;
     var quantity = 1;
-    var keyword = this.searchForm.value;
-    var product = this.products.find((product) => product.code === keyword);
+    var product = this.products.find(
+      (product) => product.code === this.searchForm.value
+    );
 
     const check = this.order.find(
       (x) => x.product_code == this.searchForm.value
     );
 
     if (product!.stocks === 0) {
-      return this.openSnackBar('Selected product is out of stock!', 'Got It!');
+      this.searchForm.setValue('');
+      return this.openSnackBar(
+        product?.name + ' currently is out of stock!',
+        'Got It!'
+      );
     }
 
     if (check) {
@@ -150,7 +166,7 @@ export class CashierComponent implements OnInit {
         quantity: quantity,
         price: product!.sell * quantity,
         created_at: this.currentDate,
-        code: code,
+        code: this.order_code,
       };
 
       const newItem = JSON.parse(JSON.stringify(item));
@@ -162,8 +178,9 @@ export class CashierComponent implements OnInit {
 
   addQty(i: number) {
     this.clicked = false;
-    var product_id = this.order[i].product_id;
-    var product = this.products.find((product) => product.id === product_id);
+    var product = this.products.find(
+      (product) => product.id === this.order[i].product_id
+    );
     this.order[i].quantity = this.order[i].quantity + 1;
 
     if (this.order[i].quantity > product!.stocks) {
@@ -189,9 +206,10 @@ export class CashierComponent implements OnInit {
     this.order = this.orders[i];
     this.pay = 0;
     this.return = 0;
-    this.refresh();
+    this.paymentForm.setValue('');
     this.order_code = this.savedOrders[i];
-    return this.openSnackBar('Selected Order has been loaded.', 'Got It!');
+    this.openSnackBar('Selected Order has been loaded.', 'Got It!');
+    return this.refresh();
   }
 
   removeItem(i: number) {
@@ -230,42 +248,46 @@ export class CashierComponent implements OnInit {
   }
 
   clearOrder(message?: string) {
-    // demo ulang, masih ada error.
     if (message) {
       return this.openSnackBar(message, 'Got It!');
-    } else {
-      const dialogRef = this.dialog
-        .open(DialogComponent, {
-          width: '550px',
-          data: {
-            title: 'Clear Item(s)',
-            message: 'Do you want to proceed this action?',
-            action_yes: 'Yes',
-            action_no: 'No',
-          },
-          disableClose: true,
-        })
-        .afterClosed()
-        .subscribe(
-          (response) => {
-            if (response !== false) {
-              this.order = [];
-              this.orders[this.index] = [];
-              this.refresh();
-              return this.openSnackBar(
-                'Order list has been cleared.',
-                'Got It!'
-              );
-            }
-          },
-          (err) => {
-            alert(err.error.message);
-          }
-        );
     }
+
+    const dialogRef = this.dialog
+      .open(DialogComponent, {
+        width: '550px',
+        data: {
+          title: 'Clear Item(s)',
+          message: 'Do you want to proceed this action?',
+          action_yes: 'Yes',
+          action_no: 'No',
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.order = [];
+            this.orders[this.index] = [];
+            this.refresh();
+            return this.openSnackBar('Order list has been cleared.', 'Got It!');
+          }
+        },
+        (err) => {
+          alert(err.error.message);
+        }
+      );
   }
 
-  removeOrder(i: number) {
+  removeOrder(i: number, message?: string) {
+    if (message) {
+      this.savedOrders.splice(i, 1);
+      this.orders.splice(i, 1);
+      localStorage.setItem('savedOrders', JSON.stringify(this.savedOrders));
+      localStorage.setItem('orders', JSON.stringify(this.orders));
+      this.newOrder();
+      return this.openSnackBar(message, 'Got It!');
+    }
     const dialogRef = this.dialog
       .open(DialogComponent, {
         width: '550px',
@@ -280,6 +302,8 @@ export class CashierComponent implements OnInit {
       .afterClosed()
       .subscribe(
         (response) => {
+          console.log('removing order');
+
           if (response !== false) {
             this.savedOrders.splice(i, 1);
             this.orders.splice(i, 1);
@@ -287,9 +311,8 @@ export class CashierComponent implements OnInit {
               'savedOrders',
               JSON.stringify(this.savedOrders)
             );
-            this.orderDataSource = undefined;
-            this.newOrder();
             localStorage.setItem('orders', JSON.stringify(this.orders));
+            this.newOrder();
             this.openSnackBar('An Order has been deleted.', 'Got It!');
           }
         },
@@ -333,30 +356,6 @@ export class CashierComponent implements OnInit {
       );
       this.orderDataSource = new MatTableDataSource(this.order);
     }
-  }
-
-  reset() {
-    this.order = [];
-    if (this.index) {
-      this.order = [];
-      this.orders[this.index] = [];
-    }
-    this.pay = 0;
-    this.return = 0;
-    this.total_items = 0;
-    this.total_quantity = 0;
-    this.total_price = 0;
-  }
-
-  generateCode() {
-    var date = formatDate(new Date(), 'HHmmssddMMyyyy', 'en-US', '+0700');
-    var length = 3;
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var result = '';
-    for (var i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result + date;
   }
 
   checkOut() {
@@ -407,11 +406,10 @@ export class CashierComponent implements OnInit {
                   this.appService.newTransaction(transaction).subscribe(
                     (response) => {
                       this.spinner = false;
-                      this.newOrder();
-                      this.removeOrder(this.index);
+                      this.removeOrder(this.index, response.message);
                       this.clearOrder(response.message);
                       this.createOrder = true;
-                      this.orderDataSource = undefined;
+                      this.newOrder();
                     },
                     (err) => {
                       this.openSnackBar(err.error.message, 'Got It!');
@@ -432,5 +430,29 @@ export class CashierComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 5000,
     });
+  }
+
+  reset() {
+    this.order = [];
+    this.pay = 0;
+    this.return = 0;
+    this.total_items = 0;
+    this.total_price = 0;
+    this.total_quantity = 0;
+    this.index = undefined;
+    this.createOrder = false;
+    this.orderDataSource = undefined;
+    this.paymentForm.setValue('');
+  }
+
+  ngOnDestroy(): void {
+    this.order = [];
+    this.pay = 0;
+    this.return = 0;
+    this.total_items = 0;
+    this.total_price = 0;
+    this.total_quantity = 0;
+    this.index = undefined;
+    this.orderDataSource = undefined;
   }
 }

@@ -1,11 +1,3 @@
-::ng-deep .receipt-container {
-  font-family: "Courier Prime", monospace !important;
-}
-
-::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-  background-color: transparent;
-}
-
 .input-form {
   width: 100%;
 }
@@ -28,6 +20,13 @@ th {
 }
 
 .receipt-column {
+  text-align: left;
+  padding: 1px;
+  border: none;
+}
+
+.receipt-footer {
+  font-weight: 600;
   text-align: left;
   padding: 1px;
   border: none;

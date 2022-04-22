@@ -12,6 +12,7 @@ body {
 body {
   margin: 0;
   overflow-y: scroll; /* Add the ability to scroll */
+  overflow-x: scroll; /* Add the ability to scroll */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }

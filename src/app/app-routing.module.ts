@@ -11,6 +11,7 @@ import { SupplyComponent } from './dashboard/supply/supply.component';
 import { ReportsComponent } from './dashboard/reports/reports.component';
 import { UsersComponent } from './dashboard/users/users.component';
 import { CashierComponent } from './cashier/cashier.component';
+import { BalanceComponent } from './dashboard/balance/balance.component';
 
 const routes: Routes = [
   /* Primary Router Outlet */
@@ -43,6 +44,10 @@ const routes: Routes = [
       {
         path: 'sales',
         component: SalesComponent,
+      },
+      {
+        path: 'balance',
+        component: BalanceComponent,
       },
       {
         path: 'reports',

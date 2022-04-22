@@ -1,4 +1,4 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
+import { ViewChild, Component, OnInit, AfterViewInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -15,7 +15,8 @@ import { SupplierDialogComponent } from './dialog/supplier.component';
   templateUrl: './supply.component.html',
   styleUrls: ['./supply.component.scss'],
 })
-export class SupplyComponent implements OnInit {
+export class SupplyComponent implements OnInit, AfterViewInit {
+  data: any;
   supplies: any;
   suppliers: any;
   products: any;
@@ -30,7 +31,6 @@ export class SupplyComponent implements OnInit {
     'update',
     'option',
   ];
-
   displayedSuppliers: string[] = [
     'id',
     'name',
@@ -44,7 +44,6 @@ export class SupplyComponent implements OnInit {
 
   suppliesDataSource: any;
   suppliersDataSource: any;
-
   progress = false;
 
   constructor(
@@ -54,16 +53,19 @@ export class SupplyComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  // @ViewChild(MatSort) sort: MatSort | undefined;
-
   @ViewChild('suppliesPaginator') suppliesPaginator?: MatPaginator;
   @ViewChild('suppliesSort') suppliesSort?: MatSort;
 
   @ViewChild('suppliersPaginator') suppliersPaginator?: MatPaginator;
   @ViewChild('suppliersSort') suppliersSort?: MatSort;
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.getSupplies();
+    this.getSuppliers();
+    this.getProducts();
+  }
+
+  ngAfterViewInit() {
     this.getSupplies();
     this.getSuppliers();
     this.getProducts();
@@ -89,7 +91,7 @@ export class SupplyComponent implements OnInit {
         this.supplies = response.data;
         this.suppliesDataSource = new MatTableDataSource(response.data);
         this.suppliesDataSource.paginator = this.suppliesPaginator;
-        this.suppliesDataSource.sort = this.suppliersSort;
+        this.suppliesDataSource.sort = this.suppliesSort;
       },
       (err) => {
         if (err.error.message) {

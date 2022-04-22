@@ -28,6 +28,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
+import { BalanceComponent } from './dashboard/balance/balance.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
     SupplyDialogComponent,
     SupplierDialogComponent,
     NavbarComponent,
+    BalanceComponent,
   ],
   imports: [
     CommonModule,

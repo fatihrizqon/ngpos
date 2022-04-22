@@ -1,4 +1,4 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
+import { ViewChild, Component, OnInit, AfterViewInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent implements OnInit, AfterViewInit {
   products: any;
   categories: any;
   displayedColumns: string[] = [
@@ -42,6 +42,11 @@ export class ProductComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   ngOnInit(): void {
+    this.getAllProducts();
+    this.getCategories();
+  }
+
+  ngAfterViewInit() {
     this.getAllProducts();
     this.getCategories();
   }

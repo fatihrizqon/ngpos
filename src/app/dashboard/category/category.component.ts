@@ -1,4 +1,4 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
+import { ViewChild, Component, OnInit, AfterViewInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, AfterViewInit {
   category?: string;
   categories: any;
   displayedColumns: string[] = ['id', 'name', 'products', 'option'];
@@ -29,10 +29,16 @@ export class CategoryComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  // @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  // @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit() {
+    this.getCategories();
+  }
+
+  ngAfterViewInit() {
     this.getCategories();
   }
 
@@ -62,6 +68,8 @@ export class CategoryComponent implements OnInit {
   }
 
   announceSortChange(sortState: Sort) {
+    console.log(sortState);
+
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {

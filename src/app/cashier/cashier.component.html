@@ -12,7 +12,7 @@
       style="height: 100vh"
     >
       <div class="col-12">
-        <button mat-stroked-button color="primary" (click)="newOrder()">
+        <button mat-raised-button color="primary" (click)="newOrder()">
           Create a New Order
         </button>
       </div>
@@ -216,28 +216,32 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td class="receipt-column text-start">Total:</td>
-                        <td class="receipt-column text-start">
+                        <td class="receipt-footer text-start">Total</td>
+                        <td class="receipt-footer text-start">
                           {{ total_items }}
                         </td>
-                        <td class="receipt-column text-center">
+                        <td class="receipt-footer text-center">
                           {{ total_quantity }}
                         </td>
-                        <td class="receipt-column text-center">
+                        <td class="receipt-footer text-center">
                           Rp.{{ total_price }},-
                         </td>
                       </tr>
                       <tr>
-                        <td class="receipt-column text-start" colspan="3">
-                          Pay:
+                        <td class="receipt-footer text-start" colspan="3">
+                          Pay
                         </td>
-                        <td class="receipt-column text-center">{{ pay }}</td>
+                        <td class="receipt-footer text-center">
+                          Rp.{{ pay }},-
+                        </td>
                       </tr>
                       <tr>
-                        <td class="receipt-column text-start" colspan="3">
-                          Return:
+                        <td class="receipt-footer text-start" colspan="3">
+                          Return
                         </td>
-                        <td class="receipt-column text-center">{{ return }}</td>
+                        <td class="receipt-footer text-center">
+                          Rp.{{ return }},-
+                        </td>
                       </tr>
                     </tfoot>
                   </table>

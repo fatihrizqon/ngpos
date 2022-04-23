@@ -27,7 +27,7 @@
   <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
   <div mat-dialog-actions [align]="'end'" *ngIf="!progress">
     <button
-      mat-stroked-button
+      mat-raised-button
       (click)="onNoClick()"
       mat-dialog-close
       color="warn"
@@ -35,7 +35,7 @@
       {{ data.action_no }}
     </button>
     <button
-      mat-stroked-button
+      mat-raised-button
       (click)="submit()"
       color="primary"
       [disabled]="!dialogForm.valid"

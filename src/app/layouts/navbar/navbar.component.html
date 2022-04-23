@@ -1,5 +1,10 @@
 <div class="container">
   <mat-toolbar color="primary">
+    <mat-slide-toggle
+      color="accent"
+      (change)="changeMode($event)"
+      matTooltip="Turn On/Off the Dark Mode"
+    ></mat-slide-toggle>
     <div class="spacer"></div>
     <button mat-button color="accent" routerLink="/">
       <i class="navigation bx bx-home bx-sm"></i>
@@ -11,7 +16,7 @@
       <i class="navigation bx bxs-dashboard bx-sm"></i>
     </button>
     <div class="spacer"></div>
-    <button mat-button (click)="logout()" matTooltip="Logout">
+    <button mat-button color="warn" (click)="logout()" matTooltip="Logout">
       <i class="bx bx-log-out bx-sm"></i>
     </button>
   </mat-toolbar>

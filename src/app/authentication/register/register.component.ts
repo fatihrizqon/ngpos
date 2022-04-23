@@ -35,12 +35,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
-  ) {
-    // if (this.authService.isLoggedIn()) {
-    //   this.openSnackBar('You are logged in.', 'Got It!');
-    //   this.router.navigate(['/']);
-    // }
-  }
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({

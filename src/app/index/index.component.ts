@@ -16,12 +16,7 @@ export class IndexComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
-  ) {
-    // if (!this.authService.isLoggedIn()) {
-    //   this.openSnackBar('You are not logged in.', 'Got It!');
-    //   this.router.navigate(['/login ']);
-    // }
-  }
+  ) {}
 
   ngOnInit() {}
 

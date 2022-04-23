@@ -1,7 +1,7 @@
 <section class="animate__animated animate__slideInRight">
   <mat-tab-group class="mat-elevation-z1 mt-3 mb-3" *ngIf="!progress">
     <mat-tab label="Supplies">
-      <div class="mat-elevation-z1 mt-3 table-responsive">
+      <mat-card class="mat-elevation-z1 mt-3 table-responsive">
         <div class="row align-items-center m-1" align="center">
           <div class="col-12" align="end">
             <mat-form-field appearance="outline">
@@ -13,6 +13,7 @@
                 #input
               />
             </mat-form-field>
+
             <button
               mat-icon-button
               (click)="createSupply()"
@@ -22,6 +23,7 @@
             </button>
           </div>
         </div>
+
         <table
           *ngIf="suppliesDataSource"
           #suppliesSort="matSort"
@@ -184,24 +186,17 @@
           <tr mat-row *matRowDef="let row; columns: displayedSupplies"></tr>
         </table>
 
-        <div class="row align-items-center" *ngIf="!suppliesDataSource">
-          <div class="col">
-            <mat-spinner
-              color="primary"
-              [diameter]="50"
-              [strokeWidth]="3"
-              mode="indeterminate"
-              style="margin: 0 auto"
-            ></mat-spinner>
-          </div>
-        </div>
-        <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+        <mat-paginator
+          *ngIf="suppliesDataSource"
+          [pageSizeOptions]="[10, 20, 50]"
+          showFirstLastButtons
+        >
         </mat-paginator>
-      </div>
+      </mat-card>
     </mat-tab>
 
     <mat-tab label="Suppliers">
-      <div class="mat-elevation-z1 mt-3 table-responsive">
+      <mat-card class="mat-elevation-z1 mt-3 table-responsive">
         <div class="row align-items-center m-1" align="center">
           <div class="col-12" align="end">
             <mat-form-field appearance="outline">
@@ -360,20 +355,13 @@
           <tr mat-row *matRowDef="let row; columns: displayedSuppliers"></tr>
         </table>
 
-        <div class="row align-items-center" *ngIf="!suppliersDataSource">
-          <div class="col">
-            <mat-spinner
-              color="primary"
-              [diameter]="50"
-              [strokeWidth]="3"
-              mode="indeterminate"
-              style="margin: 0 auto"
-            ></mat-spinner>
-          </div>
-        </div>
-        <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+        <mat-paginator
+          *ngIf="suppliersDataSource"
+          [pageSizeOptions]="[10, 20, 50]"
+          showFirstLastButtons
+        >
         </mat-paginator>
-      </div>
+      </mat-card>
     </mat-tab>
   </mat-tab-group>
 

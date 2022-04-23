@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DialogComponent } from '../layouts/dialog/dialog.component';
 import { AppService } from '../services/app.service';
@@ -24,27 +25,12 @@ export class DashboardComponent implements OnInit {
     private appService: AppService,
     private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.getProducts();
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog
-      .open(DialogComponent, {
-        width: '550px',
-        data: {
-          title: 'Caution',
-          message: 'You are not authorized to visit this page.',
-          action: 'caution',
-          action_yes: 'Got It!',
-          action_no: 'No',
-        },
-        disableClose: false,
-      })
-      .afterClosed();
   }
 
   getProducts() {
@@ -68,5 +54,41 @@ export class DashboardComponent implements OnInit {
   changeMode(event: MatSlideToggleChange): void {
     this.getProducts();
     document.body.classList.toggle('darkMode');
+  }
+
+  logout() {
+    const dialogRef = this.dialog
+      .open(DialogComponent, {
+        width: '550px',
+        data: {
+          title: 'Logout',
+          message: 'Do you want to continue?',
+          action: 'confirmation',
+          action_yes: 'Yes',
+          action_no: 'No',
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.authService.logout();
+            return this.openSnackBar(
+              'You are succesfully logged out.',
+              'Got It!'
+            );
+          }
+        },
+        (err) => {
+          alert(err.error.message);
+        }
+      );
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 }

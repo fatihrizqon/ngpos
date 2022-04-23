@@ -1,7 +1,7 @@
 <section class="animate__animated animate__slideInRight">
   <mat-tab-group class="mat-elevation-z1 mt-3 mb-3">
     <mat-tab label="Transaction">
-      <div class="mat-elevation-z1 mt-3 table-responsive">
+      <mat-card class="mat-elevation-z1 mt-3 table-responsive">
         <div class="row align-items-center m-1" align="center">
           <div class="col-12" align="end">
             <mat-form-field appearance="outline">
@@ -175,11 +175,11 @@
           showFirstLastButtons
         >
         </mat-paginator>
-      </div>
+      </mat-card>
     </mat-tab>
 
     <mat-tab label="Orders">
-      <div class="mat-elevation-z1 mt-3 table-responsive">
+      <mat-card class="mat-elevation-z1 mt-3 table-responsive">
         <div class="row align-items-center m-1" align="center">
           <div class="col-12" align="end">
             <mat-form-field appearance="outline">
@@ -320,7 +320,7 @@
             ></mat-spinner>
           </div>
         </div>
-      </div>
+      </mat-card>
       <mat-paginator
         #ordersPaginator
         [pageSizeOptions]="[10, 20, 50]"

@@ -28,12 +28,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
-  ) {
-    // if (this.authService.isLoggedIn()) {
-    //   this.openSnackBar('You are logged in.', 'Got It!');
-    //   this.router.navigate(['/']);
-    // }
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({

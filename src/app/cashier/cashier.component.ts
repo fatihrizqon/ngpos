@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../layouts/dialog/dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cashier',
@@ -63,7 +65,9 @@ export class CashierComponent implements OnInit, OnDestroy {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private dialog: MatDialog,
+    private router: Router,
     private _snackBar: MatSnackBar
   ) {
     this.currentDate = formatDate(
@@ -295,6 +299,7 @@ export class CashierComponent implements OnInit, OnDestroy {
         data: {
           title: 'Delete a Saved Order',
           message: 'Do you want to proceed this action?',
+          action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
         },
@@ -303,8 +308,6 @@ export class CashierComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe(
         (response) => {
-          console.log('removing order');
-
           if (response !== false) {
             this.savedOrders.splice(i, 1);
             this.orders.splice(i, 1);
@@ -377,6 +380,7 @@ export class CashierComponent implements OnInit, OnDestroy {
           data: {
             title: 'Check Out',
             message: 'Do you want to proceed this transaction?',
+            action: 'confirmation',
             action_yes: 'Yes',
             action_no: 'No',
           },

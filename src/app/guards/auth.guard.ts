@@ -8,8 +8,9 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DialogComponent } from './layouts/dialog/dialog.component';
-import { AuthService } from './services/auth.service';
+import { tap } from 'rxjs/operators';
+import { DialogComponent } from '../layouts/dialog/dialog.component';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,13 +30,14 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const isAuthorized = this.authService.user.role > 0;
-    if (!isAuthorized) {
-      this.openDialog();
-      this.router.navigate(['']);
-    }
-
-    return isAuthorized;
+    return this.authService.isLoggedIn$.pipe(
+      tap((isLoggedIn) => {
+        if (!isLoggedIn) {
+          this.openDialog();
+          this.router.navigate(['/login']);
+        }
+      })
+    );
   }
 
   openDialog() {
@@ -43,8 +45,8 @@ export class AuthGuard implements CanActivate {
       .open(DialogComponent, {
         width: '550px',
         data: {
-          title: 'Caution',
-          message: 'You are not authorized to visit this page.',
+          title: '⚠ Attention ⚠',
+          message: 'You needs login to visit this page.',
           action: 'caution',
           action_yes: 'Got It!',
           action_no: 'No',

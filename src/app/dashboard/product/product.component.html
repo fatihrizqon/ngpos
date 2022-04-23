@@ -1,5 +1,8 @@
 <section class="animate__animated animate__slideInRight">
-  <div class="mat-elevation-z1 mt-3 mb-3 table-responsive" *ngIf="!progress">
+  <mat-card
+    class="mat-elevation-z1 mt-3 mb-3 table-responsive"
+    *ngIf="!progress"
+  >
     <h4 class="mt-3 mb-3 fs-5 text-center">Products</h4>
     <div class="row align-items-center m-1" align="center">
       <div class="col-12" align="end">
@@ -236,7 +239,7 @@
     </div>
     <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
     </mat-paginator>
-  </div>
+  </mat-card>
 
   <div class="row align-items-center" *ngIf="progress" style="height: 100vh">
     <div class="col-12">

@@ -21,6 +21,12 @@ export class AppService {
     });
   }
 
+  public logout(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/auth/logout', {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   public register(user: any): Observable<any> {
     return this.http.post<any>(this.baseURI + 'api/auth/register', user, {
       headers: { 'Content-Type': 'application/json' },

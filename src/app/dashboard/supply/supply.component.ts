@@ -31,6 +31,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
     'update',
     'option',
   ];
+
   displayedSuppliers: string[] = [
     'id',
     'name',

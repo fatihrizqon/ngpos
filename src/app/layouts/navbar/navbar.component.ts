@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -25,8 +26,8 @@ export class NavbarComponent implements OnInit {
     this.isOpen = !this.isOpen;
   }
 
-  changeMode() {
-    alert('Change to Dark/Light Mode');
+  changeMode(event: MatSlideToggleChange): void {
+    document.body.classList.toggle('darkMode');
   }
 
   toggleActive() {
@@ -39,24 +40,29 @@ export class NavbarComponent implements OnInit {
       .open(DialogComponent, {
         width: '550px',
         data: {
-          title: 'Logout',
-          message: 'Are you sure to logout from this page?',
+          title: '🏃‍♂️ Logout 🏃‍♂️',
+          message: 'Do you want to continue?',
           action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
         },
-        disableClose: false,
+        disableClose: true,
       })
       .afterClosed()
       .subscribe(
         (response) => {
+          console.log(response);
+
           if (response !== false) {
             this.authService.logout();
-            this.openSnackBar('You are logged out from frontend', 'Got It!');
+            return this.openSnackBar(
+              'You are succesfully logged out.',
+              'Got It!'
+            );
           }
         },
         (err) => {
-          console.log(err.error.message);
+          alert(err.error.message);
         }
       );
   }

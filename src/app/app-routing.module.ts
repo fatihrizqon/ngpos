@@ -14,21 +14,27 @@ import { CashierComponent } from './cashier/cashier.component';
 import { BalanceComponent } from './dashboard/balance/balance.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
   /* Primary Router Outlet */
-  { path: '', component: IndexComponent },
+  { path: '', component: IndexComponent, canActivate: [AuthGuard] },
   {
     path: 'cashier',
     component: CashierComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {
+      role: 3,
+    },
     children: [
       {
         path: '',
@@ -48,6 +54,9 @@ const routes: Routes = [
       {
         path: 'supply',
         component: SupplyComponent,
+        data: {
+          role: 6,
+        },
       },
       {
         path: 'sales',

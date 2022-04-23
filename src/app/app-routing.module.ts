@@ -12,12 +12,20 @@ import { ReportsComponent } from './dashboard/reports/reports.component';
 import { UsersComponent } from './dashboard/users/users.component';
 import { CashierComponent } from './cashier/cashier.component';
 import { BalanceComponent } from './dashboard/balance/balance.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { RegisterComponent } from './authentication/register/register.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+
   /* Primary Router Outlet */
   { path: '', component: IndexComponent },
-  { path: 'cashier', component: CashierComponent },
-
+  {
+    path: 'cashier',
+    component: CashierComponent,
+  },
   {
     path: 'dashboard',
     component: DashboardComponent,
@@ -47,6 +55,7 @@ const routes: Routes = [
       },
       {
         path: 'balance',
+
         component: BalanceComponent,
       },
       {

@@ -258,6 +258,7 @@ export class CashierComponent implements OnInit, OnDestroy {
         data: {
           title: 'Clear Item(s)',
           message: 'Do you want to proceed this action?',
+          action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
         },

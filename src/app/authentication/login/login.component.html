@@ -1,0 +1,87 @@
+<section
+  class="animate__animated animate__slideInLeft"
+  style="background-color: teal"
+>
+  <div
+    class="row align-items-center justify-content-center"
+    style="height: 100vh"
+    *ngIf="!spinner"
+  >
+    <div class="col-12" style="width: 400px">
+      <mat-card class="login-card text-center">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3028/3028956.png"
+          alt=""
+          width="40"
+          matTooltip="Point of Sale System"
+        />
+
+        <form [formGroup]="loginForm" class="mt-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Enter your username</mat-label>
+            <input matInput formControlName="username" />
+            <mat-error
+              *ngIf="
+                loginForm.get('username')?.touched &&
+                loginForm.get('username')?.errors
+              "
+            >
+              This field is required.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Enter your password</mat-label>
+            <input
+              matInput
+              [type]="hide ? 'password' : 'text'"
+              formControlName="password"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <i class="bx bx-{{ hide ? 'hide' : 'show' }} bx-sm"></i>
+            </button>
+            <mat-error
+              *ngIf="
+                loginForm.get('password')?.touched &&
+                loginForm.get('password')?.errors
+              "
+            >
+              This field is required.
+            </mat-error>
+          </mat-form-field>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <a class="me-3" routerLink="/register">Create an Account</a>
+            <a class="me-3">Forgot Password</a>
+            <button
+              (click)="login()"
+              mat-button
+              color="primary"
+              [disabled]="!loginForm.valid"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row align-items-center" *ngIf="spinner" style="height: 100vh">
+    <div class="col-12">
+      <mat-spinner
+        color="accent"
+        [diameter]="50"
+        [strokeWidth]="3"
+        mode="indeterminate"
+        style="margin: 0 auto"
+      ></mat-spinner>
+    </div>
+  </div>
+</section>

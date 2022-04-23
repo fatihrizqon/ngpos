@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Router } from '@angular/router';
+import { DialogComponent } from '../layouts/dialog/dialog.component';
 import { AppService } from '../services/app.service';
+import { AuthService } from '../services/auth.service';
 import { SupplyComponent } from './supply/supply.component';
 
 @Component({
@@ -16,10 +20,31 @@ export class DashboardComponent implements OnInit {
   outofstocks: any;
   refresh: any;
 
-  constructor(private appService: AppService) {}
+  constructor(
+    private appService: AppService,
+    private authService: AuthService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog
+      .open(DialogComponent, {
+        width: '550px',
+        data: {
+          title: 'Caution',
+          message: 'You are not authorized to visit this page.',
+          action: 'caution',
+          action_yes: 'Got It!',
+          action_no: 'No',
+        },
+        disableClose: false,
+      })
+      .afterClosed();
   }
 
   getProducts() {

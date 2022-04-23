@@ -29,6 +29,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { BalanceComponent } from './dashboard/balance/balance.component';
+import { AuthService } from './services/auth.service';
+import { LoginComponent } from './authentication/login/login.component';
+import { RegisterComponent } from './authentication/register/register.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +53,8 @@ import { BalanceComponent } from './dashboard/balance/balance.component';
     SupplierDialogComponent,
     NavbarComponent,
     BalanceComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     CommonModule,
@@ -62,7 +67,7 @@ import { BalanceComponent } from './dashboard/balance/balance.component';
     ReactiveFormsModule,
     FormsModule,
   ],
-  providers: [AppService],
+  providers: [AppService, AuthService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [DialogComponent],

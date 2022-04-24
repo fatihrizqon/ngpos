@@ -81,7 +81,8 @@ export class DashboardComponent implements OnInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }

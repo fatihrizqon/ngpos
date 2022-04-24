@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  spinner = false;
+  progress = false;
   hide = true;
   loginForm!: FormGroup;
   username = new FormControl();
@@ -38,15 +38,16 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.spinner = true;
+    this.progress = true;
     this.authService.login(this.loginForm.value).subscribe(
       (response) => {
-        this.spinner = false;
+        this.progress = false;
         this.openSnackBar(response.message, 'Got It!');
         this.router.navigate(['/']);
       },
       (err) => {
-        this.spinner = false;
+        this.progress = false;
+        console.log(err.error.message);
         this.openSnackBar(err.error.message, 'Got It!');
       }
     );

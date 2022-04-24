@@ -28,7 +28,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     'code',
     'option',
   ];
-  productDataSource: any;
+  productsDataSource: any;
   progress = false;
 
   constructor(
@@ -53,7 +53,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.productDataSource.filter = filterValue.trim().toLowerCase();
+    this.productsDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   announceSortChange(sortState: Sort) {
@@ -85,9 +85,9 @@ export class ProductComponent implements OnInit, AfterViewInit {
     this.appService.getAllProducts().subscribe(
       (response) => {
         this.products = response.data;
-        this.productDataSource = new MatTableDataSource(response.data);
-        this.productDataSource.paginator = this.productsPaginator;
-        this.productDataSource.sort = this.productsSort;
+        this.productsDataSource = new MatTableDataSource(response.data);
+        this.productsDataSource.paginator = this.productsPaginator;
+        this.productsDataSource.sort = this.productsSort;
       },
       (err) => {
         if (err.error.message) {
@@ -121,7 +121,8 @@ export class ProductComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -147,6 +148,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
+          console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }
       );
@@ -176,6 +178,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
             },
             (err) => {
               this.progress = false;
+              console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
             }
           );

@@ -31,7 +31,7 @@ export class CategoryDialogComponent implements OnInit {
         this.category = response.data;
       },
       (err) => {
-        alert(err.error.message);
+        console.log(err.error.message);
       }
     );
 
@@ -54,7 +54,7 @@ export class CategoryDialogComponent implements OnInit {
           this.progress = false;
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
         }
       );
     } else {
@@ -64,7 +64,7 @@ export class CategoryDialogComponent implements OnInit {
           this.progress = false;
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
         }
       );
     }

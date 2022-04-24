@@ -19,9 +19,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
     'revenue',
     'pay',
     'return',
-    'user_id',
+    'cashier',
     'created_at',
     'updated_at',
+    'option',
   ];
   displayedOrders: string[] = [
     'id',
@@ -85,10 +86,18 @@ export class SalesComponent implements OnInit, AfterViewInit {
     );
   }
 
-  applyFilter(event: Event) {
+  transactionsFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.transactionsDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  ordersFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
     this.ordersDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  printTransaction(row: any) {
+    alert('Print...');
   }
 
   announceSortChange(sortState: Sort) {

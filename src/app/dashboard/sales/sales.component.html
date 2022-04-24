@@ -8,7 +8,7 @@
               <mat-label>Filter</mat-label>
               <input
                 matInput
-                (keyup)="applyFilter($event)"
+                (keyup)="transactionsFilter($event)"
                 placeholder="Input"
                 #input
               />
@@ -24,7 +24,7 @@
           matSort
           (matSortChange)="announceSortChange($event)"
         >
-          <!-- ID Column -->
+          <!-- Position Column -->
           <ng-container matColumnDef="id">
             <th
               mat-header-cell
@@ -103,20 +103,20 @@
             </td>
           </ng-container>
 
-          <!-- User Column -->
-          <ng-container matColumnDef="user_id">
+          <!-- Cashier Column -->
+          <ng-container matColumnDef="cashier">
             <th
-              id="user_id"
+              id="cashier"
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
-              sortActionDescription="Sort by User"
+              sortActionDescription="Sort by Cashier"
               class="text-center"
             >
-              User
+              Cashier
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.user_id }}
+              {{ element.cashier }}
             </td>
           </ng-container>
 
@@ -154,6 +154,22 @@
             </td>
           </ng-container>
 
+          <!-- Option Column -->
+          <ng-container matColumnDef="option">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Option
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <button
+                mat-icon-button
+                (click)="printTransaction(element)"
+                matTooltip="Print Transaction Receipt"
+              >
+                <i class="bx bx-printer bx-sm"></i>
+              </button>
+            </td>
+          </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedTransactions"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedTransactions"></tr>
         </table>
@@ -169,6 +185,7 @@
             ></mat-spinner>
           </div>
         </div>
+
         <mat-paginator
           #transactionsPaginator
           [pageSizeOptions]="[10, 20, 50]"
@@ -186,7 +203,7 @@
               <mat-label>Filter</mat-label>
               <input
                 matInput
-                (keyup)="applyFilter($event)"
+                (keyup)="ordersFilter($event)"
                 placeholder="Input"
                 #input
               />
@@ -202,7 +219,7 @@
           matSort
           (matSortChange)="announceSortChange($event)"
         >
-          <!-- ID Column -->
+          <!-- Position Column -->
           <ng-container matColumnDef="id">
             <th
               mat-header-cell
@@ -212,7 +229,9 @@
             >
               No.
             </th>
-            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
           </ng-container>
 
           <!-- Product Column -->

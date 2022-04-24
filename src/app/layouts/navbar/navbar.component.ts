@@ -47,8 +47,6 @@ export class NavbarComponent implements OnInit {
       .afterClosed()
       .subscribe(
         (response) => {
-          console.log(response);
-
           if (response !== false) {
             this.authService.logout();
             return this.openSnackBar(
@@ -58,7 +56,7 @@ export class NavbarComponent implements OnInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
         }
       );
   }

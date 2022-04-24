@@ -6,7 +6,7 @@
     *ngIf="!spinner"
   >
     <!-- Create a New Order -->
-    <div
+    <!-- <div
       class="row align-items-center"
       *ngIf="createOrder"
       style="height: 100vh"
@@ -16,15 +16,13 @@
           Create a New Order
         </button>
       </div>
-    </div>
+    </div> -->
+    <!-- End of Create a New Order -->
 
     <!-- Order Layout -->
     <div class="col-xl-8 col-lg-6 col-sm-12">
       <!-- Order List(s) -->
-      <mat-card
-        class="col-12 mt-3 mat-elevation-z1 p-3 table-responsive animate__animated animate__slideInLeft"
-        *ngIf="!createOrder"
-      >
+      <mat-card class="col-12 mt-3 mat-elevation-z1 p-3 table-responsive">
         <form (submit)="addItem()">
           <mat-form-field appearance="outline" class="input-form">
             <mat-label>Add a Product</mat-label>
@@ -123,10 +121,7 @@
     <!-- End of Order Layout -->
 
     <!-- Order Action(s) Layout -->
-    <div
-      class="col-xl-4 col-lg-6 col-md-0 animate__animated animate__slideInRight"
-      *ngIf="!createOrder"
-    >
+    <div class="col-xl-4 col-lg-6 col-md-0">
       <div class="mt-3 mb-3">
         <mat-accordion class="headers-align" multi>
           <!-- Saved Order(s) -->

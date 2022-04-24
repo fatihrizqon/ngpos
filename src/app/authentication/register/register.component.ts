@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  spinner = false;
+  progress = false;
   hidePassword = true;
   hideRepassword = true;
   genders = ['male', 'female'];
@@ -50,10 +50,11 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.spinner = true;
+    this.progress = true;
     var user = this.registerForm.value;
+
     if (user.password !== user.repassword) {
-      this.spinner = false;
+      this.progress = false;
       this.openSnackBar(
         'Password and Confirmation Password does not match.',
         'Got It!'
@@ -61,12 +62,15 @@ export class RegisterComponent implements OnInit {
     } else {
       this.authService.register(user).subscribe(
         (response) => {
-          this.spinner = false;
+          console.log(response);
+
+          this.progress = false;
           this.registerForm.reset();
           this.openSnackBar(response.message, 'Got It!');
         },
         (err) => {
-          this.spinner = false;
+          this.progress = false;
+          console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }
       );

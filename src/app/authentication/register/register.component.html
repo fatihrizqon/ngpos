@@ -2,7 +2,7 @@
   <div
     class="row align-items-center justify-content-center"
     style="height: 100vh"
-    *ngIf="!spinner"
+    *ngIf="!progress"
   >
     <div class="col-12" style="width: 400px">
       <mat-card class="register-card">
@@ -67,7 +67,6 @@
             </mat-error>
           </div>
 
-          <!-- Needs -->
           <mat-form-field appearance="outline">
             <mat-label>Enter your email</mat-label>
             <input matInput type="email" formControlName="email" />
@@ -91,6 +90,7 @@
                   [type]="hidePassword ? 'password' : 'text'"
                   formControlName="password"
                   minlength="6"
+                  autocomplete="on"
                 />
                 <button
                   mat-icon-button
@@ -122,6 +122,7 @@
                   [type]="hideRepassword ? 'password' : 'text'"
                   formControlName="repassword"
                   minlength="6"
+                  autocomplete="on"
                 />
                 <button
                   mat-icon-button
@@ -169,7 +170,7 @@
     </div>
   </div>
 
-  <div class="row align-items-center" *ngIf="spinner" style="height: 100vh">
+  <div class="row align-items-center" *ngIf="progress" style="height: 100vh">
     <div class="col-12">
       <mat-spinner
         color="accent"

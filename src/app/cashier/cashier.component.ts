@@ -92,6 +92,7 @@ export class CashierComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.newOrder();
     this.getProducts();
     this.filteredOptions = this.searchForm.valueChanges.pipe(
       startWith(''),
@@ -206,7 +207,6 @@ export class CashierComponent implements OnInit, OnDestroy {
 
   getOrder(i: number) {
     this.index = i;
-    this.createOrder = false;
     this.order = this.orders[i];
     this.pay = 0;
     this.return = 0;
@@ -279,7 +279,8 @@ export class CashierComponent implements OnInit, OnDestroy {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -321,7 +322,8 @@ export class CashierComponent implements OnInit, OnDestroy {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -401,10 +403,9 @@ export class CashierComponent implements OnInit, OnDestroy {
               for (let i = 0; i < this.order.length; i++) {
                 this.spinner = true;
                 this.appService.newOrder(this.order[i]).subscribe(
-                  (response) => {
-                    console.log('Order created...');
-                  },
+                  (response) => {},
                   (err) => {
+                    console.log(err.error.message);
                     this.openSnackBar(err.error.message, 'Got It!');
                   }
                 );
@@ -416,9 +417,10 @@ export class CashierComponent implements OnInit, OnDestroy {
                       this.removeOrder(this.index, response.message);
                       this.clearOrder(response.message);
                       this.reset();
-                      this.createOrder = true;
+                      this.newOrder();
                     },
                     (err) => {
+                      console.log(err.error.message);
                       this.openSnackBar(err.error.message, 'Got It!');
                     }
                   );
@@ -427,16 +429,11 @@ export class CashierComponent implements OnInit, OnDestroy {
             }
           },
           (err) => {
+            console.log(err.error.message);
             this.openSnackBar(err.error.message, 'Got It!');
           }
         );
     }
-  }
-
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 5000,
-    });
   }
 
   reset() {
@@ -447,9 +444,14 @@ export class CashierComponent implements OnInit, OnDestroy {
     this.revenue = 0;
     this.total_quantity = 0;
     this.index = undefined;
-    this.createOrder = false;
     this.orderDataSource = undefined;
     this.paymentForm.setValue('');
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 
   ngOnDestroy(): void {

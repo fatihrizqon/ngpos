@@ -75,7 +75,7 @@ export class SupplyDialogComponent implements OnInit {
           this.progress = false;
         },
         (err) => {
-          console.log(err);
+          console.log(err.error.message);
         }
       );
     } else {
@@ -85,7 +85,7 @@ export class SupplyDialogComponent implements OnInit {
           this.progress = false;
         },
         (err) => {
-          console.log(err);
+          console.log(err.error.message);
         }
       );
     }

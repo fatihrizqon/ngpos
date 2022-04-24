@@ -40,11 +40,7 @@ export class AuthService implements OnInit {
   }
 
   public register(user: any) {
-    return this.appService.register(user).pipe(
-      tap((response: any) => {
-        console.log(response);
-      })
-    );
+    return this.appService.register(user).pipe(tap((response: any) => {}));
   }
 
   private getUser(access_token: string): User {

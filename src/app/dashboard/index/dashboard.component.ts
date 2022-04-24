@@ -7,6 +7,7 @@ import {
   ElementRef,
   OnChanges,
 } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Chart, registerables } from 'chart.js';
 import { AppService } from 'src/app/services/app.service';
 
@@ -27,7 +28,7 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
 
   @ViewChild('saleschart') saleschart: any;
 
-  constructor(private appService: AppService) {}
+  constructor(private appService: AppService, private _snackBar: MatSnackBar) {}
   // Data not laoded properly
   ngOnInit() {
     this.getTransactions();
@@ -46,9 +47,8 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
         this.date = this.transactions.map((date: any) => date.created_at);
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }
@@ -89,6 +89,12 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
           },
         },
       },
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
     });
   }
 }

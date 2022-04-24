@@ -72,9 +72,13 @@ export class SupplyComponent implements OnInit, AfterViewInit {
     this.getProducts();
   }
 
-  applyFilter(event: Event) {
+  suppliesFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.suppliesDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  suppliersFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
     this.suppliersDataSource.filter = filterValue.trim().toLowerCase();
   }
 
@@ -151,7 +155,8 @@ export class SupplyComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -178,6 +183,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
+          console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }
       );
@@ -208,11 +214,16 @@ export class SupplyComponent implements OnInit, AfterViewInit {
             },
             (err) => {
               this.progress = false;
+              console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
             }
           );
         }
       });
+  }
+
+  printSupply(row: any) {
+    alert('Print...');
   }
 
   createSupplier() {
@@ -236,7 +247,8 @@ export class SupplyComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -263,6 +275,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
+          console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }
       );
@@ -292,6 +305,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
             },
             (err) => {
               this.progress = false;
+              console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
             }
           );

@@ -22,10 +22,10 @@ export class CashflowComponent implements OnInit, AfterViewInit {
     'debit',
     'credit',
     'balance',
-    'user_id',
+    'operator',
     'notes',
-    'date',
-    'update',
+    'created_at',
+    'updated_at',
     'option',
   ];
   cashflowsDataSource: any;
@@ -58,9 +58,7 @@ export class CashflowComponent implements OnInit, AfterViewInit {
         this.cashflowsDataSource.sort = this.cashflowsSort;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
       }
     );
   }
@@ -99,7 +97,8 @@ export class CashflowComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -126,6 +125,7 @@ export class CashflowComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
+          console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }
       );
@@ -148,7 +148,7 @@ export class CashflowComponent implements OnInit, AfterViewInit {
       .subscribe((response) => {
         if (response === true) {
           this.progress = true;
-          this.appService.deleteCategory(id).subscribe(
+          this.appService.deleteCashflow(id).subscribe(
             (response) => {
               this.getCashflows();
               this.progress = false;
@@ -156,6 +156,7 @@ export class CashflowComponent implements OnInit, AfterViewInit {
             },
             (err) => {
               this.progress = false;
+              console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
             }
           );

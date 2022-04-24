@@ -32,7 +32,7 @@ export class ProductDialogComponent implements OnInit {
         this.categories = response.data;
       },
       (err) => {
-        alert(err.error.message);
+        console.log(err.error.message);
       }
     );
 

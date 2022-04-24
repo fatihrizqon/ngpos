@@ -26,10 +26,10 @@
     </div>
 
     <table
-      *ngIf="productDataSource"
-      #transactionsSort="matSort"
+      *ngIf="productsDataSource"
+      #productsSort="matSort"
       mat-table
-      [dataSource]="productDataSource"
+      [dataSource]="productsDataSource"
       matSort
       (matSortChange)="announceSortChange($event)"
     >
@@ -227,7 +227,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedProducts"></tr>
     </table>
 
-    <div class="row align-items-center" *ngIf="!productDataSource">
+    <div class="row align-items-center" *ngIf="!productsDataSource">
       <div class="col">
         <mat-spinner
           color="primary"

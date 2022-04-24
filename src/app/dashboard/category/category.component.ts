@@ -94,7 +94,8 @@ export class CategoryComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
-          alert(err.error.message);
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
   }
@@ -121,6 +122,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
+          console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }
       );
@@ -151,6 +153,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
             },
             (err) => {
               this.progress = false;
+              console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
             }
           );

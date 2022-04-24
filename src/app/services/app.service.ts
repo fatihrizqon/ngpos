@@ -169,14 +169,29 @@ export class AppService {
     );
   }
 
-  // public register(user): Observable<any>{
-  //   const base = this.http.post(
-  //     this.baseUri+'api/auth/signup',user,{headers:{'Content-Type': 'application/json'}}
-  //   );
-  //   const response = base.pipe(
-  //     map((response: TokenResponse) =>{
-  //     })
-  //   );
-  //   return response;
-  // }
+  public getCashflows(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/cashflows');
+  }
+
+  public newCashflow(cashflow: any): Observable<any> {
+    return this.http.post<any>(this.baseURI + 'api/cashflow/create', cashflow, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  public updateCashflow(cashflow: any, id: number): Observable<any> {
+    return this.http.put<any>(
+      this.baseURI + 'api/cashflow/update/' + id,
+      cashflow,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
+  public deleteCashflow(id: number): Observable<any> {
+    return this.http.delete<any>(this.baseURI + 'api/cashflow/delete/' + id, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }

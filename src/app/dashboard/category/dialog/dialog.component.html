@@ -1,16 +1,23 @@
 <div>
-  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
   <mat-dialog-content>
     <form [formGroup]="dialogForm">
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Category Name</mat-label>
         <input matInput formControlName="name" />
+        <mat-error
+          *ngIf="
+            dialogForm.get('name')?.touched && dialogForm.get('name')?.errors
+          "
+        >
+          This field is required.
+        </mat-error>
       </mat-form-field>
     </form>
   </mat-dialog-content>
 
   <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
-  <div mat-dialog-actions [align]="'end'" *ngIf="!progress">
+  <div mat-dialog-actions align="end" *ngIf="!progress">
     <button
       mat-raised-button
       (click)="onNoClick()"

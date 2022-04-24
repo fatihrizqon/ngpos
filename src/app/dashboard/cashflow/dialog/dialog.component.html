@@ -3,11 +3,12 @@
   <mat-dialog-content>
     <form [formGroup]="dialogForm">
       <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" formControlName="name" />
+        <mat-label>Operation</mat-label>
+        <input matInput formControlName="operation" />
         <mat-error
           *ngIf="
-            dialogForm.get('name')?.touched && dialogForm.get('name')?.errors
+            dialogForm.get('operation')?.touched &&
+            dialogForm.get('operation')?.errors
           "
         >
           This field is required.
@@ -15,12 +16,19 @@
       </mat-form-field>
 
       <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Address</mat-label>
-        <input matInput type="text" formControlName="address" />
+        <mat-label>Debit</mat-label>
+        <input
+          matInput
+          formControlName="debit"
+          type="number"
+          (change)="debitChange()"
+        />
+
+        <span matPrefix>Rp.&nbsp;</span>
+        <span matSuffix>,-</span>
         <mat-error
           *ngIf="
-            dialogForm.get('address')?.touched &&
-            dialogForm.get('address')?.errors
+            dialogForm.get('debit')?.touched && dialogForm.get('debit')?.errors
           "
         >
           This field is required.
@@ -28,11 +36,20 @@
       </mat-form-field>
 
       <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="text" formControlName="email" />
+        <mat-label>Credit</mat-label>
+        <input
+          matInput
+          formControlName="credit"
+          type="number"
+          (change)="creditChange()"
+        />
+
+        <span matPrefix>Rp.&nbsp;</span>
+        <span matSuffix>,-</span>
         <mat-error
           *ngIf="
-            dialogForm.get('email')?.touched && dialogForm.get('email')?.errors
+            dialogForm.get('credit')?.touched &&
+            dialogForm.get('credit')?.errors
           "
         >
           This field is required.
@@ -40,12 +57,11 @@
       </mat-form-field>
 
       <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Contact</mat-label>
-        <input matInput type="text" formControlName="contact" />
+        <mat-label>Notes</mat-label>
+        <input matInput formControlName="notes" />
         <mat-error
           *ngIf="
-            dialogForm.get('contact')?.touched &&
-            dialogForm.get('contact')?.errors
+            dialogForm.get('notes')?.touched && dialogForm.get('notes')?.errors
           "
         >
           This field is required.

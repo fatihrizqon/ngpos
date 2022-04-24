@@ -26,7 +26,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
     'quantity',
     'supplier',
     'stocker',
-    'total',
+    'cost',
     'date',
     'update',
     'option',
@@ -140,7 +140,6 @@ export class SupplyComponent implements OnInit, AfterViewInit {
           action_no: 'Cancel',
           action_yes: 'Submit',
         },
-
         disableClose: true,
       })
       .afterClosed()
@@ -191,6 +190,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
         data: {
           title: 'Delete Supply',
           message: 'Do you want to Delete this Supply?',
+          action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
         },

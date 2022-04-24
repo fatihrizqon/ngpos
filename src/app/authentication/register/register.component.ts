@@ -62,7 +62,8 @@ export class RegisterComponent implements OnInit {
       this.authService.register(user).subscribe(
         (response) => {
           this.spinner = false;
-          console.log(response);
+          this.registerForm.reset();
+          this.openSnackBar(response.message, 'Got It!');
         },
         (err) => {
           this.spinner = false;

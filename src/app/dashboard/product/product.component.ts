@@ -17,7 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ProductComponent implements OnInit, AfterViewInit {
   products: any;
   categories: any;
-  displayedColumns: string[] = [
+  displayedProducts: string[] = [
     'id',
     'name',
     'category',
@@ -28,7 +28,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     'code',
     'option',
   ];
-  dataSource: any;
+  productDataSource: any;
   progress = false;
 
   constructor(
@@ -38,8 +38,8 @@ export class ProductComponent implements OnInit, AfterViewInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild('productsPaginator') productsPaginator?: MatPaginator;
+  @ViewChild('productsSort') productsSort?: MatSort;
 
   ngOnInit(): void {
     this.getAllProducts();
@@ -53,7 +53,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.productDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   announceSortChange(sortState: Sort) {
@@ -85,9 +85,9 @@ export class ProductComponent implements OnInit, AfterViewInit {
     this.appService.getAllProducts().subscribe(
       (response) => {
         this.products = response.data;
-        this.dataSource = new MatTableDataSource(response.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.productDataSource = new MatTableDataSource(response.data);
+        this.productDataSource.paginator = this.productsPaginator;
+        this.productDataSource.sort = this.productsSort;
       },
       (err) => {
         if (err.error.message) {

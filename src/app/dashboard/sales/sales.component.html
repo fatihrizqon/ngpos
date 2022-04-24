@@ -54,18 +54,18 @@
             </td>
           </ng-container>
 
-          <!-- Total Price Column -->
-          <ng-container matColumnDef="total_price">
+          <!-- Revenue Column -->
+          <ng-container matColumnDef="revenue">
             <th
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
-              sortActionDescription="Sort by Total Price"
+              sortActionDescription="Sort by Revenue"
             >
-              Total Price
+              Revenue
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.total_price }}
+              {{ element.revenue | currency: "Rp":"symbol":"0.0" }}
             </td>
           </ng-container>
 
@@ -82,7 +82,7 @@
               Pay
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.pay }}
+              {{ element.pay | currency: "Rp":"symbol":"0.0" }}
             </td>
           </ng-container>
 
@@ -99,7 +99,7 @@
               Return
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.return }}
+              {{ element.return | currency: "Rp":"symbol":"0.0" }}
             </td>
           </ng-container>
 
@@ -240,7 +240,9 @@
             >
               Price
             </th>
-            <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+            <td mat-cell *matCellDef="let element">
+              {{ element.price | currency: "Rp":"symbol":"0.0" }}
+            </td>
           </ng-container>
 
           <!-- Quantity Column -->

@@ -11,11 +11,11 @@ import { SupplyComponent } from './dashboard/supply/supply.component';
 import { ReportsComponent } from './dashboard/reports/reports.component';
 import { UsersComponent } from './dashboard/users/users.component';
 import { CashierComponent } from './cashier/cashier.component';
-import { BalanceComponent } from './dashboard/balance/balance.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
+import { CashflowComponent } from './dashboard/cashflow/cashflow.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -54,18 +54,14 @@ const routes: Routes = [
       {
         path: 'supply',
         component: SupplyComponent,
-        data: {
-          role: 6,
-        },
       },
       {
         path: 'sales',
         component: SalesComponent,
       },
       {
-        path: 'balance',
-
-        component: BalanceComponent,
+        path: 'cashflow',
+        component: CashflowComponent,
       },
       {
         path: 'reports',

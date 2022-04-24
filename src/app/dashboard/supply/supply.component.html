@@ -107,20 +107,20 @@
             </td>
           </ng-container>
 
-          <!-- Total Price Column -->
-          <ng-container matColumnDef="total">
+          <!-- Cost Column -->
+          <ng-container matColumnDef="cost">
             <th
-              id="total"
+              id="cost"
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
-              sortActionDescription="Sort by Total Price"
+              sortActionDescription="Sort by Cost"
               class="text-center"
             >
-              Total Price
+              Cost
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.purchase * element.quantity }}
+              {{ element.cost | currency: "Rp":"symbol":"0.0" }}
             </td>
           </ng-container>
 

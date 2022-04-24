@@ -210,7 +210,10 @@
                           {{ item.quantity }}
                         </td>
                         <td class="receipt-column text-center">
-                          Rp.{{ item.price * item.quantity }},-
+                          Rp.{{
+                            item.price * item.quantity
+                              | currency: "Rp":"symbol":"0.0"
+                          }},-
                         </td>
                       </tr>
                     </tbody>
@@ -224,7 +227,7 @@
                           {{ total_quantity }}
                         </td>
                         <td class="receipt-footer text-center">
-                          Rp.{{ total_price }},-
+                          Rp.{{ revenue | currency: "Rp":"symbol":"0.0" }},-
                         </td>
                       </tr>
                       <tr>
@@ -232,7 +235,7 @@
                           Pay
                         </td>
                         <td class="receipt-footer text-center">
-                          Rp.{{ pay }},-
+                          Rp.{{ pay | currency: "Rp":"symbol":"0.0" }},-
                         </td>
                       </tr>
                       <tr>
@@ -240,7 +243,7 @@
                           Return
                         </td>
                         <td class="receipt-footer text-center">
-                          Rp.{{ return }},-
+                          Rp.{{ return | currency: "Rp":"symbol":"0.0" }},-
                         </td>
                       </tr>
                     </tfoot>

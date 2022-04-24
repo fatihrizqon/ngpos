@@ -1,25 +1,34 @@
-import { ViewChild, Component, OnInit, AfterViewInit } from '@angular/core';
-import { AppService } from 'src/app/services/app.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CategoryDialogComponent } from './dialog/dialog.component';
-import { FormControl, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
+import { AppService } from 'src/app/services/app.service';
+import { CashflowDialogComponent } from './dialog/dialog.component';
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.scss'],
+  selector: 'app-cashflow',
+  templateUrl: './cashflow.component.html',
+  styleUrls: ['./cashflow.component.scss'],
 })
-export class CategoryComponent implements OnInit, AfterViewInit {
-  category?: string;
-  categories: any;
-  displayedCategories: string[] = ['id', 'name', 'products', 'option'];
-  categoriesDataSource: any;
+export class CashflowComponent implements OnInit, AfterViewInit {
+  cashflows: any;
+  displayedCashflows: string[] = [
+    'id',
+    'operation',
+    'debit',
+    'credit',
+    'balance',
+    'user_id',
+    'notes',
+    'date',
+    'update',
+    'option',
+  ];
+  cashflowsDataSource: any;
   progress = false;
 
   constructor(
@@ -29,24 +38,24 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  @ViewChild('categoriesPaginator') categoriesPaginator?: MatPaginator;
-  @ViewChild('categoriesSort') categoriesSort?: MatSort;
+  @ViewChild('cashflowsPaginator') cashflowsPaginator?: MatPaginator;
+  @ViewChild('cashflowsSort') cashflowsSort?: MatSort;
 
   ngOnInit() {
-    this.getCategories();
+    this.getCashflows();
   }
 
   ngAfterViewInit() {
-    this.getCategories();
+    this.getCashflows();
   }
 
-  getCategories() {
-    this.appService.getCategories().subscribe(
+  getCashflows() {
+    this.appService.getCashflows().subscribe(
       (response) => {
-        this.categories = response.data;
-        this.categoriesDataSource = new MatTableDataSource(this.categories);
-        this.categoriesDataSource.paginator = this.categoriesPaginator;
-        this.categoriesDataSource.sort = this.categoriesSort;
+        this.cashflows = response.data;
+        this.cashflowsDataSource = new MatTableDataSource(this.cashflows);
+        this.cashflowsDataSource.paginator = this.cashflowsPaginator;
+        this.cashflowsDataSource.sort = this.cashflowsSort;
       },
       (err) => {
         if (err.error.message) {
@@ -56,13 +65,9 @@ export class CategoryComponent implements OnInit, AfterViewInit {
     );
   }
 
-  getCategory(id: number) {
-    return this.categories.find((category: any) => category.id === id);
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.categoriesDataSource.filter = filterValue.trim().toLowerCase();
+    this.cashflowsDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   announceSortChange(sortState: Sort) {
@@ -75,9 +80,9 @@ export class CategoryComponent implements OnInit, AfterViewInit {
 
   create() {
     const dialogRef = this.dialog
-      .open(CategoryDialogComponent, {
+      .open(CashflowDialogComponent, {
         data: {
-          title: 'Create a New Category',
+          title: 'Create a New Cashflow',
           action: 'create',
           action_no: 'Cancel',
           action_yes: 'Submit',
@@ -89,7 +94,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       .subscribe(
         (response) => {
           if (response !== false) {
-            this.getCategories();
+            this.getCashflows();
             this.openSnackBar(response.message, 'Got It!');
           }
         },
@@ -101,9 +106,9 @@ export class CategoryComponent implements OnInit, AfterViewInit {
 
   update(row: any) {
     const dialogRef = this.dialog
-      .open(CategoryDialogComponent, {
+      .open(CashflowDialogComponent, {
         data: {
-          title: 'Update Category',
+          title: 'Update Cashflow',
           row: row,
           action: 'confirmation',
           action_no: 'Cancel',
@@ -116,7 +121,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       .subscribe(
         (response) => {
           if (response !== false) {
-            this.getCategories();
+            this.getCashflows();
             this.openSnackBar(response.message, 'Got It!');
           }
         },
@@ -131,8 +136,8 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       .open(DialogComponent, {
         width: '550px',
         data: {
-          title: 'Delete Category',
-          message: 'Do you want to Delete this Category?',
+          title: 'Delete Cashflow',
+          message: 'Do you want to Delete this Cashflow?',
           action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
@@ -145,7 +150,7 @@ export class CategoryComponent implements OnInit, AfterViewInit {
           this.progress = true;
           this.appService.deleteCategory(id).subscribe(
             (response) => {
-              this.getCategories();
+              this.getCashflows();
               this.progress = false;
               this.openSnackBar(response.message, 'Got It!');
             },

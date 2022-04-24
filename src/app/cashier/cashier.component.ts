@@ -22,7 +22,7 @@ export class CashierComponent implements OnInit, OnDestroy {
   index!: any;
   total_items!: any;
   total_quantity!: any;
-  total_price!: any;
+  revenue!: any;
   orderDataSource: any;
 
   createOrder = true;
@@ -331,14 +331,14 @@ export class CashierComponent implements OnInit, OnDestroy {
       if (this.orders[this.index].length < 1) {
         this.total_items = 0;
         this.total_quantity = 0;
-        this.total_price = 0;
+        this.revenue = 0;
       }
       this.total_items = this.orders[this.index].length;
       this.total_quantity = this.orders[this.index].reduce(
         (acc: any, curr: any) => acc + curr.quantity,
         0
       );
-      this.total_price = this.orders[this.index].reduce(
+      this.revenue = this.orders[this.index].reduce(
         (acc: any, curr: any) => acc + curr.quantity * curr.price,
         0
       );
@@ -346,7 +346,7 @@ export class CashierComponent implements OnInit, OnDestroy {
     } else {
       if (this.order.length < 1) {
         this.total_items = 0;
-        this.total_price = 0;
+        this.revenue = 0;
         this.total_quantity = 0;
       }
       this.total_items = this.order.length;
@@ -354,7 +354,7 @@ export class CashierComponent implements OnInit, OnDestroy {
         (acc: any, curr: any) => acc + curr.quantity,
         0
       );
-      this.total_price = this.order.reduce(
+      this.revenue = this.order.reduce(
         (acc: any, curr: any) => acc + curr.quantity * curr.price,
         0
       );
@@ -364,7 +364,7 @@ export class CashierComponent implements OnInit, OnDestroy {
 
   checkOut() {
     this.pay = this.paymentForm.value;
-    if (this.pay < this.total_price) {
+    if (this.pay < this.revenue) {
       this.pay = 0;
       this.return = 0;
       return this.openSnackBar('Insufficient fund.', 'Got It!');
@@ -373,7 +373,7 @@ export class CashierComponent implements OnInit, OnDestroy {
       this.return = 0;
       return this.openSnackBar('The order is empty.', 'Got It!');
     } else {
-      this.return = this.paymentForm.value - this.total_price;
+      this.return = this.paymentForm.value - this.revenue;
       const dialogRef = this.dialog
         .open(DialogComponent, {
           width: '550px',
@@ -392,7 +392,7 @@ export class CashierComponent implements OnInit, OnDestroy {
             if (response === true) {
               var transaction = {
                 code: this.order_code,
-                total_price: this.total_price,
+                revenue: this.revenue,
                 pay: this.pay,
                 return: this.return,
                 user_id: this.user.id,
@@ -401,7 +401,9 @@ export class CashierComponent implements OnInit, OnDestroy {
               for (let i = 0; i < this.order.length; i++) {
                 this.spinner = true;
                 this.appService.newOrder(this.order[i]).subscribe(
-                  (response) => {},
+                  (response) => {
+                    console.log('Order created...');
+                  },
                   (err) => {
                     this.openSnackBar(err.error.message, 'Got It!');
                   }
@@ -413,8 +415,8 @@ export class CashierComponent implements OnInit, OnDestroy {
                       this.spinner = false;
                       this.removeOrder(this.index, response.message);
                       this.clearOrder(response.message);
+                      this.reset();
                       this.createOrder = true;
-                      this.newOrder();
                     },
                     (err) => {
                       this.openSnackBar(err.error.message, 'Got It!');
@@ -442,7 +444,7 @@ export class CashierComponent implements OnInit, OnDestroy {
     this.pay = 0;
     this.return = 0;
     this.total_items = 0;
-    this.total_price = 0;
+    this.revenue = 0;
     this.total_quantity = 0;
     this.index = undefined;
     this.createOrder = false;
@@ -455,7 +457,7 @@ export class CashierComponent implements OnInit, OnDestroy {
     this.pay = 0;
     this.return = 0;
     this.total_items = 0;
-    this.total_price = 0;
+    this.revenue = 0;
     this.total_quantity = 0;
     this.index = undefined;
     this.orderDataSource = undefined;

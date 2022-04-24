@@ -26,10 +26,6 @@ export class NavbarComponent implements OnInit {
     this.isOpen = !this.isOpen;
   }
 
-  changeMode(event: MatSlideToggleChange): void {
-    document.body.classList.toggle('darkMode');
-  }
-
   toggleActive() {
     console.log('Toggle Active');
     this.active = !this.active;

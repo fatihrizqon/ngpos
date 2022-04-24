@@ -16,7 +16,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   displayedTransactions: string[] = [
     'id',
     'order_code',
-    'total_price',
+    'revenue',
     'pay',
     'return',
     'user_id',

@@ -27,9 +27,10 @@
     </div>
 
     <table
-      *ngIf="dataSource"
+      *ngIf="categoriesDataSource"
+      #categoriesSort="matSort"
       mat-table
-      [dataSource]="dataSource"
+      [dataSource]="categoriesDataSource"
       matSort
       (matSortChange)="announceSortChange($event)"
     >
@@ -101,11 +102,11 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedCategories"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedCategories"></tr>
     </table>
 
-    <div class="row align-items-center" *ngIf="!dataSource">
+    <div class="row align-items-center" *ngIf="!categoriesDataSource">
       <div class="col">
         <mat-spinner
           color="primary"

@@ -6,12 +6,6 @@
   >
     <i class="bx bx-menu bx-sm"></i>
   </button>
-
-  <mat-slide-toggle
-    color="accent"
-    (change)="changeMode($event)"
-    matTooltip="Turn On/Off the Dark Mode"
-  ></mat-slide-toggle>
   <div class="spacer"></div>
   <button mat-button color="accent" routerLink="/">
     <i class="navigation bx bx-home bx-sm"></i>
@@ -44,6 +38,13 @@
     </div>
   </mat-menu>
   <div class="spacer"></div>
+
+  <mat-slide-toggle
+    color="accent"
+    (change)="changeMode($event)"
+    matTooltip="Turn On/Off the Dark Mode"
+  ></mat-slide-toggle>
+
   <button mat-button color="warn" (click)="logout()" matTooltip="Logout">
     <i class="bx bx-log-out bx-sm"></i>
   </button>
@@ -83,9 +84,9 @@
       </mat-list-item>
 
       <!-- Ballance Flow -->
-      <mat-list-item routerLink="/dashboard/balance">
-        <i class="bx bxs-bank bx-sm sidenav_icon"></i>
-        <span class="sidenav_link" *ngIf="isOpen">Balance</span>
+      <mat-list-item routerLink="/dashboard/cashflow">
+        <i class="bx bx-recycle bx-sm sidenav_icon"></i>
+        <span class="sidenav_link" *ngIf="isOpen">Cash Flow</span>
       </mat-list-item>
       <!-- Log Activity -->
       <mat-list-item>

@@ -28,10 +28,11 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
-import { BalanceComponent } from './dashboard/balance/balance.component';
 import { AuthService } from './services/auth.service';
 import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
+import { CashflowComponent } from './dashboard/cashflow/cashflow.component';
+import { CashflowDialogComponent } from './dashboard/cashflow/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,8 +52,9 @@ import { RegisterComponent } from './authentication/register/register.component'
     ProductDialogComponent,
     SupplyDialogComponent,
     SupplierDialogComponent,
+    CashflowDialogComponent,
     NavbarComponent,
-    BalanceComponent,
+    CashflowComponent,
     LoginComponent,
     RegisterComponent,
   ],

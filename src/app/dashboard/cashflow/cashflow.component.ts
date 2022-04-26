@@ -1,5 +1,6 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -30,6 +31,18 @@ export class CashflowComponent implements OnInit, AfterViewInit {
   ];
   cashflowsDataSource: any;
   progress = false;
+
+  filterForm = new FormGroup({
+    fromDate: new FormControl(),
+    toDate: new FormControl(),
+  });
+
+  get fromDate() {
+    return this.filterForm.get('fromDate');
+  }
+  get toDate() {
+    return this.filterForm.get('toDate');
+  }
 
   constructor(
     private appService: AppService,
@@ -66,6 +79,19 @@ export class CashflowComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.cashflowsDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getDateRange(value) {
+    const fromDate = value.fromDate;
+    const toDate = value.toDate;
+    const output = this.cashflows.filter((entry) => {
+      const time = new Date(entry['created_at']).getTime();
+      return time >= fromDate && time <= toDate;
+    });
+
+    this.cashflowsDataSource = new MatTableDataSource(output);
+    this.cashflowsDataSource.paginator = this.cashflowsPaginator;
+    this.cashflowsDataSource.sort = this.cashflowsSort;
   }
 
   announceSortChange(sortState: Sort) {
@@ -147,7 +173,6 @@ export class CashflowComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe((response) => {
         if (response === true) {
-          this.progress = true;
           this.appService.deleteCashflow(id).subscribe(
             (response) => {
               this.getCashflows();

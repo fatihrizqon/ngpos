@@ -15,13 +15,64 @@
             #input
           />
         </mat-form-field>
+      </div>
+      <div class="col-12">
+        <form class="row" [formGroup]="filterForm">
+          <div class="col-6">
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="fromDate"
+                placeholder="From Date"
+                formControlName="fromDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="fromDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #fromDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="toDate"
+                placeholder="To Date"
+                formControlName="toDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="toDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #toDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="getDateRange(filterForm.value)"
+            >
+              <i class="bx bx-filter bx-sm"></i>
+            </button>
+          </div>
+        </form>
+      </div>
 
+      <div class="col-12" align="end">
+        <button mat-icon-button matTooltip="Export to Spreadsheet">
+          <i class="bx bxs-spreadsheet bx-sm" style="color: #0ab33f"></i>
+        </button>
+        <button mat-icon-button matTooltip="Export to PDF">
+          <i class="bx bxs-file-pdf bx-sm" style="color: #be1212"></i>
+        </button>
         <button
           mat-icon-button
           (click)="create()"
-          matTooltip="Create a New Cashflow"
+          matTooltip="Add a New Operation"
         >
-          <i class="bx bx-message-square-add bx-sm text-primary"></i>
+          <i class="bx bx-plus bx-sm" style="color: #0088ff"></i>
         </button>
       </div>
     </div>
@@ -201,17 +252,16 @@
           <button
             mat-icon-button
             (click)="update(element)"
-            matTooltip="Update Selected Product Category"
+            matTooltip="Update Selected Operation"
           >
-            <i class="bx bx-message-square-edit bx-sm text-info"></i>
+            <i class="bx bx-edit bx-sm" style="color: #00faff"></i>
           </button>
-
           <button
             mat-icon-button
             (click)="delete(element.id)"
-            matTooltip="Delete Selected Product Category"
+            matTooltip="Delete Selected Operation"
           >
-            <i class="bx bx-message-square-x bx-sm text-danger"></i>
+            <i class="bx bx-trash bx-sm" style="color: #ff0004"></i>
           </button>
         </td>
       </ng-container>
@@ -232,7 +282,12 @@
       </div>
     </div>
 
-    <mat-paginator [pageSizeOptions]="[50, 200, 500]" showFirstLastButtons>
+    <mat-paginator
+      *ngIf="cashflowsDataSource"
+      #cashflowsPaginator
+      [pageSizeOptions]="[10, 50, 100]"
+      showFirstLastButtons
+    >
     </mat-paginator>
   </mat-card>
 

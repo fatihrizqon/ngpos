@@ -26,7 +26,7 @@ import { AppService } from './services/app.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { QRCodeModule } from 'angularx-qrcode';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { AuthService } from './services/auth.service';
 import { LoginComponent } from './authentication/login/login.component';
@@ -69,7 +69,7 @@ import { CashflowDialogComponent } from './dashboard/cashflow/dialog/dialog.comp
     ReactiveFormsModule,
     FormsModule,
   ],
-  providers: [AppService, AuthService],
+  providers: [AppService, AuthService, DatePipe],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [DialogComponent],

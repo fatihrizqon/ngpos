@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppService } from 'src/app/services/app.service';
 
 @Component({
@@ -23,6 +24,7 @@ export class SupplyDialogComponent implements OnInit {
   constructor(
     private appService: AppService,
     private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<SupplyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -44,9 +46,7 @@ export class SupplyDialogComponent implements OnInit {
         this.suppliers = response.data;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
       }
     );
 
@@ -68,6 +68,12 @@ export class SupplyDialogComponent implements OnInit {
   submit(): void {
     this.progress = true;
     var supply = this.dialogForm.value;
+
+    if (this.dialogForm.controls['quantity'].value === 0) {
+      this.progress = false;
+      return this.openSnackBar('Quantity cannot be 0', 'Got It!');
+    }
+
     if (this.data.action === 'create') {
       this.appService.newSupply(supply).subscribe(
         (response) => {
@@ -76,6 +82,7 @@ export class SupplyDialogComponent implements OnInit {
         },
         (err) => {
           console.log(err.error.message);
+          this.progress = false;
         }
       );
     } else {
@@ -86,6 +93,7 @@ export class SupplyDialogComponent implements OnInit {
         },
         (err) => {
           console.log(err.error.message);
+          this.progress = false;
         }
       );
     }
@@ -93,5 +101,11 @@ export class SupplyDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close(false);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 }

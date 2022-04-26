@@ -4,27 +4,14 @@
   <div
     class="row text-center animate__animated animate__slideInUp"
     *ngIf="!spinner"
+    style="height: 100vh"
   >
-    <!-- Create a New Order -->
-    <!-- <div
-      class="row align-items-center"
-      *ngIf="createOrder"
-      style="height: 100vh"
-    >
-      <div class="col-12">
-        <button mat-raised-button color="primary" (click)="newOrder()">
-          Create a New Order
-        </button>
-      </div>
-    </div> -->
-    <!-- End of Create a New Order -->
-
     <!-- Order Layout -->
     <div class="col-xl-8 col-lg-6 col-sm-12">
       <!-- Order List(s) -->
       <mat-card class="col-12 mt-3 mat-elevation-z1 p-3 table-responsive">
         <form (submit)="addItem()">
-          <mat-form-field appearance="outline" class="input-form">
+          <mat-form-field appearance="outline" class="search-form">
             <mat-label>Add a Product</mat-label>
             <input
               #keyword
@@ -53,60 +40,94 @@
           *ngIf="orderDataSource"
           mat-table
           [dataSource]="orderDataSource"
-          class="mat-elevation-z1 mt-3"
+          class="mt-3"
         >
           <!-- ID Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
-            <td mat-cell *matCellDef="let element; let i = index">
+            <th mat-header-cell *matHeaderCellDef class="text-start">No.</th>
+            <td
+              mat-cell
+              *matCellDef="let element; let i = index"
+              class="text-start"
+            >
               {{ i + 1 }}
             </td>
           </ng-container>
 
           <!-- Product Column -->
           <ng-container matColumnDef="product_name">
-            <th mat-header-cell *matHeaderCellDef>Product</th>
-            <td mat-cell *matCellDef="let element">
+            <th mat-header-cell *matHeaderCellDef class="text-start">
+              Product
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-start">
               {{ element.product_name }}
             </td>
           </ng-container>
 
           <!-- Product Code Column -->
           <ng-container matColumnDef="product_code">
-            <th mat-header-cell *matHeaderCellDef>Product Code</th>
-            <td mat-cell *matCellDef="let element">
+            <th mat-header-cell *matHeaderCellDef class="text-start">
+              Product Code
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-start">
               {{ element.product_code }}
             </td>
           </ng-container>
 
           <!-- Quantity Column -->
           <ng-container matColumnDef="quantity">
-            <th mat-header-cell *matHeaderCellDef>Quantity</th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              <button mat-icon-button (click)="reduceQty(i)">
-                <i class="bx bx-minus-circle bx-sm text-warning"></i>
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Quantity
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let i = index"
+              class="text-center"
+            >
+              <button
+                mat-icon-button
+                (click)="reduceQty(i)"
+                matTooltip="Reduce Quantity"
+              >
+                <i class="bx bx-minus-circle bx-sm" style="color: #ffee00"></i>
               </button>
               {{ element.quantity }}
-              <button mat-icon-button (click)="addQty(i)">
-                <i class="bx bx-plus-circle bx-sm text-primary"></i>
+              <button
+                mat-icon-button
+                (click)="addQty(i)"
+                matTooltip="Add Quantity"
+              >
+                <i class="bx bx-plus-circle bx-sm" style="color: #0088ff"></i>
               </button>
             </td>
           </ng-container>
 
           <!-- Price Column -->
           <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Price</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.price * element.quantity }}
+            <th mat-header-cell *matHeaderCellDef class="text-center">Price</th>
+            <td mat-cell *matCellDef="let element" class="text-end">
+              {{
+                element.price * element.quantity | currency: "Rp":"symbol":"0.0"
+              }}
             </td>
           </ng-container>
 
           <!-- Options Column -->
           <ng-container matColumnDef="option">
-            <th mat-header-cell *matHeaderCellDef>Options</th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              <button mat-icon-button (click)="removeItem(i)">
-                <i class="bx bx-x-circle bx-sm text-danger"></i>
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Options
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; let i = index"
+              class="text-center"
+            >
+              <button
+                mat-icon-button
+                (click)="removeItem(i)"
+                matTooltip="Remove Item"
+              >
+                <i class="bx bx-x-circle bx-sm" style="color: #ff0004"></i>
               </button>
             </td>
           </ng-container>
@@ -151,112 +172,112 @@
                 >Invoice</mat-panel-title
               ></mat-expansion-panel-header
             >
-            <div *ngIf="orderDataSource">
-              <!-- Receipt -->
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <div class="strike">
-                    <span>Resto SatSet</span>
-                  </div>
-                  Jl. TransJawa No.1, Surabaya. Telp: (0271) 7366 Instagram:
-                  @satsetresto.official
-                </li>
-                <li class="list-group-item">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <td class="receipt-column text-start" colspan="2">
-                          Tanggal:
-                        </td>
-                        <td class="receipt-column text-end" colspan="2">
-                          {{ currentDate }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="receipt-column text-start" colspan="2">
-                          Kasir:
-                        </td>
-                        <td class="receipt-column text-end" colspan="2">
-                          {{ user.fullname }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="receipt-column text-start" colspan="2">
-                          Receipt Code:
-                        </td>
-                        <td class="receipt-column text-end" colspan="2">
-                          {{ order_code }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-start">No.</td>
-                        <td class="text-start">Item</td>
-                        <td class="text-center">Qty</td>
-                        <td class="text-center">Price</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let item of order; index as i">
-                        <td class="receipt-column text-start">{{ i + 1 }}.</td>
-                        <td class="receipt-column text-start">
-                          {{ item.product_name }}
-                        </td>
-                        <td class="receipt-column text-center">
-                          {{ item.quantity }}
-                        </td>
-                        <td class="receipt-column text-center">
-                          Rp.{{
-                            item.price * item.quantity
-                              | currency: "Rp":"symbol":"0.0"
-                          }},-
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td class="receipt-footer text-start">Total</td>
-                        <td class="receipt-footer text-start">
-                          {{ total_items }}
-                        </td>
-                        <td class="receipt-footer text-center">
-                          {{ total_quantity }}
-                        </td>
-                        <td class="receipt-footer text-center">
-                          Rp.{{ revenue | currency: "Rp":"symbol":"0.0" }},-
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="receipt-footer text-start" colspan="3">
-                          Pay
-                        </td>
-                        <td class="receipt-footer text-center">
-                          Rp.{{ pay | currency: "Rp":"symbol":"0.0" }},-
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="receipt-footer text-start" colspan="3">
-                          Return
-                        </td>
-                        <td class="receipt-footer text-center">
-                          Rp.{{ return | currency: "Rp":"symbol":"0.0" }},-
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </li>
-                <li class="list-group-item">
-                  <p>
-                    Barang yang sudah dibeli tidak dapat dikembalikan. Terima
-                    Kasih telah berkunjung, selamat berbelanja kembali.
-                  </p>
-                </li>
-              </ul>
-              <!-- End of Receipt -->
 
+            <div *ngIf="orderDataSource" align="center">
+              <div class="col-12" id="invoice" #invoice>
+                <!-- Invoice -->
+                <ul class="list-group">
+                  <li class="list-group-item text-center">
+                    <div class="strike">
+                      <span>Resto SatSet</span>
+                    </div>
+                    Jl. TransJawa No.1, Surabaya. Telp: (0271) 7366 Instagram:
+                    @satsetresto.official
+                  </li>
+                  <li class="list-group-item">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <td class="invoice-body text-start" colspan="2">
+                            Tanggal:
+                          </td>
+                          <td class="invoice-body text-end" colspan="2">
+                            {{ currentDate }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="invoice-body text-start" colspan="2">
+                            Kasir:
+                          </td>
+                          <td class="invoice-body text-end" colspan="2">
+                            {{ user.fullname }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="invoice-body text-start" colspan="2">
+                            Invoice Code:
+                          </td>
+                          <td class="invoice-body text-end" colspan="2">
+                            {{ order_code }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-start">No.</td>
+                          <td class="text-start">Item</td>
+                          <td class="text-center">Qty</td>
+                          <td class="text-center">Price</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of order; index as i">
+                          <td class="invoice-body text-start">{{ i + 1 }}.</td>
+                          <td class="invoice-body text-start">
+                            {{ item.product_name }}
+                          </td>
+                          <td class="invoice-body text-center">
+                            {{ item.quantity }}
+                          </td>
+                          <td class="invoice-body text-end">
+                            {{
+                              item.price * item.quantity
+                                | currency: "Rp":"symbol":"0.0"
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td class="invoice-footer text-start">Total</td>
+                          <td class="invoice-footer text-center">
+                            {{ total_items }}
+                          </td>
+                          <td class="invoice-footer text-center">
+                            {{ total_quantity }}
+                          </td>
+                          <td class="invoice-footer text-end">
+                            {{ revenue | currency: "Rp":"symbol":"0.0" }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="invoice-footer text-start" colspan="3">
+                            Pay
+                          </td>
+                          <td class="invoice-footer text-end">
+                            {{ pay | currency: "Rp":"symbol":"0.0" }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="invoice-footer text-start" colspan="3">
+                            Return
+                          </td>
+                          <td class="invoice-footer text-end">
+                            {{ return | currency: "Rp":"symbol":"0.0" }}
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </li>
+                  <li class="list-group-item text-center">
+                    Barang yang sudah dibeli tidak dapat dikembalikan. Terima
+                    Kasih atas kunjungan anda, selamat berbelanja kembali.
+                  </li>
+                </ul>
+                <!-- End of Invoice -->
+              </div>
               <!-- Payment -->
-              <div class="col-12 mt-3">
+              <div class="col-12">
                 <mat-form-field
-                  class="payment"
+                  class="input-payment"
                   appearance="outline"
                   floatLabel="always"
                 >
@@ -270,12 +291,11 @@
                     [formControl]="paymentForm"
                     [autofocus]="false"
                   />
-                  <span matPrefix>Rp.&nbsp;</span>
-                  <span matSuffix>,-</span>
+                  <span matPrefix>&nbsp;</span>
+                  <span matSuffix></span>
                 </mat-form-field>
               </div>
               <!-- End of Payment -->
-
               <!-- Actions -->
               <div class="col-12">
                 <button
@@ -283,7 +303,7 @@
                   matTooltip="Clear Order(s)"
                   (click)="clearOrder()"
                 >
-                  <i class="bx bx-message-square-x bx-sm text-danger"></i>
+                  <i class="bx bxs-x-square bx-sm" style="color: #ff0004"></i>
                 </button>
                 <button
                   mat-icon-button
@@ -291,14 +311,14 @@
                   *ngIf="!clicked"
                   (click)="saveOrder()"
                 >
-                  <i class="bx bx-save bx-sm text-info"></i>
+                  <i class="bx bxs-save bx-sm" style="color: #00ff0d"></i>
                 </button>
                 <button
                   mat-icon-button
                   matTooltip="Check Out"
                   (click)="checkOut()"
                 >
-                  <i class="bx bx-receipt bx-sm text-primary"></i>
+                  <i class="bx bxs-wallet bx-sm"></i>
                 </button>
               </div>
               <!-- End of Actions -->

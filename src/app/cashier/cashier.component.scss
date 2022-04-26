@@ -1,16 +1,14 @@
-.input-form {
+.search-form,
+.payment-form {
+  width: 100% !important;
+}
+#payment {
   width: 100%;
 }
-
-.payment {
-  width: 100%;
-}
-
 ul {
   padding: 0;
   list-style-type: none;
 }
-
 table {
   width: 100%;
 }
@@ -18,20 +16,27 @@ td,
 th {
   vertical-align: middle !important;
 }
-
-.receipt-column {
+#invoice * {
+  font-family: "Courier Prime", sans-serif;
+  width: 74mm !important;
+}
+.invoice-body {
   text-align: left;
   padding: 1px;
   border: none;
 }
-
-.receipt-footer {
-  font-weight: 600;
+.invoice-footer {
   text-align: left;
   padding: 1px;
   border: none;
 }
-
+#invoice .list-group,
+.list-group-item {
+  padding: 2px 0;
+  color: #000 !important;
+  border: none;
+  border-radius: 0;
+}
 .mat-sort-header-container {
   justify-content: center !important;
 }

@@ -57,14 +57,20 @@
           <!-- Revenue Column -->
           <ng-container matColumnDef="revenue">
             <th
+              id="revenue"
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
               sortActionDescription="Sort by Revenue"
+              class="text-center text-success"
             >
               Revenue
             </th>
-            <td mat-cell *matCellDef="let element">
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="text-start fw-bold text-success"
+            >
               {{ element.revenue | currency: "Rp":"symbol":"0.0" }}
             </td>
           </ng-container>
@@ -188,7 +194,7 @@
 
         <mat-paginator
           #transactionsPaginator
-          [pageSizeOptions]="[10, 20, 50]"
+          [pageSizeOptions]="[10, 50, 100]"
           showFirstLastButtons
         >
         </mat-paginator>
@@ -344,7 +350,7 @@
       </mat-card>
       <mat-paginator
         #ordersPaginator
-        [pageSizeOptions]="[10, 20, 50]"
+        [pageSizeOptions]="[10, 50, 100]"
         showFirstLastButtons
       >
       </mat-paginator>

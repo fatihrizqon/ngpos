@@ -27,8 +27,8 @@ export class SupplyComponent implements OnInit, AfterViewInit {
     'supplier',
     'stocker',
     'cost',
-    'date',
-    'update',
+    'created_at',
+    'updated_at',
     'option',
   ];
 

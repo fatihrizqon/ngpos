@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { formatDate } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -12,6 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import * as html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'app-cashier',
@@ -62,6 +69,9 @@ export class CashierComponent implements OnInit, OnDestroy {
     phone: string;
     role: number;
   };
+
+  @ViewChild('invoice', { static: false })
+  invoice!: ElementRef<HTMLImageElement>;
 
   constructor(
     private appService: AppService,
@@ -365,7 +375,14 @@ export class CashierComponent implements OnInit, OnDestroy {
   }
 
   checkOut() {
+    this.currentDate = formatDate(
+      new Date(),
+      'dd/MM/yyyy HH:mm:ss',
+      'en-US',
+      '+0700'
+    );
     this.pay = this.paymentForm.value;
+
     if (this.pay < this.revenue) {
       this.pay = 0;
       this.return = 0;
@@ -411,6 +428,7 @@ export class CashierComponent implements OnInit, OnDestroy {
                 );
 
                 if (i === this.order.length - 1) {
+                  this.saveInvoice();
                   this.appService.newTransaction(transaction).subscribe(
                     (response) => {
                       this.spinner = false;
@@ -434,6 +452,20 @@ export class CashierComponent implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  saveInvoice() {
+    const options = {
+      filename: this.order_code + '.pdf',
+      html2canvas: {},
+      jsPDF: {
+        unit: 'mm',
+        orientation: 'portrait',
+        format: 'A7',
+      },
+    };
+    const content = window.document.getElementById('invoice');
+    html2pdf().from(content).set(options).save();
   }
 
   reset() {

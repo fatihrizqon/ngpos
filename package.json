@@ -23,6 +23,7 @@
     "@angular/router": "~12.2.0",
     "angularx-qrcode": "^13.0.6",
     "chart.js": "^3.7.1",
+    "html2pdf.js": "^0.10.1",
     "randomstring": "^1.2.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",

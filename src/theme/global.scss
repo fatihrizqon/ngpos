@@ -17,8 +17,8 @@ $light-theme: mat.define-light-theme(
 );
 
 // Define Darkmode
-$dark-primary: mat.define-palette(mat.$indigo-palette, 900);
-$dark-accent: mat.define-palette(mat.$orange-palette, 900, A200, A100, A400);
+$dark-primary: mat.define-palette(mat.$pink-palette, 700);
+$dark-accent: mat.define-palette(mat.$gray-palette, A200, A100, A400);
 $dark-warn: mat.define-palette(mat.$red-palette, 500);
 $dark-theme: mat.define-dark-theme(
   (

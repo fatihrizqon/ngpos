@@ -2,7 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { User } from 'src/app/interfaces/User';
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'cashflow-dialog',
@@ -10,12 +12,14 @@ import { AppService } from 'src/app/services/app.service';
   styleUrls: ['./dialog.component.scss'],
 })
 export class CashflowDialogComponent implements OnInit {
+  user!: User;
   cashflow?: any;
   dialogForm!: FormGroup;
   progress = false;
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private _snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<CashflowDialogComponent>,
@@ -50,6 +54,7 @@ export class CashflowDialogComponent implements OnInit {
   submit(): void {
     this.progress = true;
     var cashflow = this.dialogForm.value;
+    cashflow.user_id = this.user.id;
 
     if (
       this.dialogForm.controls['debit'].value === 0 &&
@@ -66,6 +71,7 @@ export class CashflowDialogComponent implements OnInit {
         },
         (err) => {
           console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
     } else {

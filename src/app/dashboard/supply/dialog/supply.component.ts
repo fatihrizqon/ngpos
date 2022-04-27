@@ -7,7 +7,9 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { User } from 'src/app/interfaces/User';
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'supply-dialog',
@@ -15,6 +17,7 @@ import { AppService } from 'src/app/services/app.service';
   styleUrls: ['./dialog.component.scss'],
 })
 export class SupplyDialogComponent implements OnInit {
+  user!: User;
   products?: any;
   suppliers?: any;
   supply?: any;
@@ -23,11 +26,14 @@ export class SupplyDialogComponent implements OnInit {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<SupplyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.user = this.authService.userdata();
+  }
 
   ngOnInit(): void {
     this.appService.getProducts().subscribe(
@@ -35,9 +41,8 @@ export class SupplyDialogComponent implements OnInit {
         this.products = response.data;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
 
@@ -47,6 +52,7 @@ export class SupplyDialogComponent implements OnInit {
       },
       (err) => {
         console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
 
@@ -68,6 +74,7 @@ export class SupplyDialogComponent implements OnInit {
   submit(): void {
     this.progress = true;
     var supply = this.dialogForm.value;
+    supply.user_id = this.user.id;
 
     if (this.dialogForm.controls['quantity'].value === 0) {
       this.progress = false;
@@ -93,6 +100,7 @@ export class SupplyDialogComponent implements OnInit {
         },
         (err) => {
           console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
           this.progress = false;
         }
       );

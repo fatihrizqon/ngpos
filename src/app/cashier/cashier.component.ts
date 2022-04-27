@@ -19,6 +19,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import * as html2pdf from 'html2pdf.js';
+import { User } from '../interfaces/User';
 
 @Component({
   selector: 'app-cashier',
@@ -27,8 +28,8 @@ import * as html2pdf from 'html2pdf.js';
 })
 export class CashierComponent implements OnInit, OnDestroy {
   index!: any;
+  total_products!: any;
   total_items!: any;
-  total_quantity!: any;
   revenue!: any;
   orderDataSource: any;
 
@@ -46,6 +47,7 @@ export class CashierComponent implements OnInit, OnDestroy {
   savedOrders: any[] = [];
   orders: any[] = [];
   order: Order[] = [];
+  user: User;
   products!: Product[];
   displayedItems: string[] = [
     'id',
@@ -61,15 +63,6 @@ export class CashierComponent implements OnInit, OnDestroy {
   options: string[] = [];
   filteredOptions!: Observable<string[]>;
 
-  user: {
-    id: number;
-    username: string;
-    fullname: string;
-    email: string;
-    phone: string;
-    role: number;
-  };
-
   @ViewChild('invoice', { static: false })
   invoice!: ElementRef<HTMLImageElement>;
 
@@ -77,7 +70,6 @@ export class CashierComponent implements OnInit, OnDestroy {
     private appService: AppService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private router: Router,
     private _snackBar: MatSnackBar
   ) {
     this.currentDate = formatDate(
@@ -86,19 +78,16 @@ export class CashierComponent implements OnInit, OnDestroy {
       'en-US',
       '+0700'
     );
-
-    // delete this soon
-    this.user = {
-      id: 1,
-      username: 'misha',
-      fullname: 'Misha Anastashya',
-      email: 'misha@mail.id',
-      phone: '082145556225',
-      role: 5,
-    };
-
+    this.user = this.authService.userdata();
     this.savedOrders = JSON.parse(localStorage.getItem('savedOrders') || '[]');
     this.orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
   }
 
   ngOnInit(): void {
@@ -142,9 +131,8 @@ export class CashierComponent implements OnInit, OnDestroy {
         this.options = this.products.map((product: any) => product.code);
       },
       (err) => {
-        if (err.error.message) {
-          alert(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }
@@ -341,12 +329,12 @@ export class CashierComponent implements OnInit, OnDestroy {
   refresh() {
     if (this.index !== undefined) {
       if (this.orders[this.index].length < 1) {
+        this.total_products = 0;
         this.total_items = 0;
-        this.total_quantity = 0;
         this.revenue = 0;
       }
-      this.total_items = this.orders[this.index].length;
-      this.total_quantity = this.orders[this.index].reduce(
+      this.total_products = this.orders[this.index].length;
+      this.total_items = this.orders[this.index].reduce(
         (acc: any, curr: any) => acc + curr.quantity,
         0
       );
@@ -357,12 +345,12 @@ export class CashierComponent implements OnInit, OnDestroy {
       this.orderDataSource = new MatTableDataSource(this.orders[this.index]);
     } else {
       if (this.order.length < 1) {
-        this.total_items = 0;
+        this.total_products = 0;
         this.revenue = 0;
-        this.total_quantity = 0;
+        this.total_items = 0;
       }
-      this.total_items = this.order.length;
-      this.total_quantity = this.order.reduce(
+      this.total_products = this.order.length;
+      this.total_items = this.order.reduce(
         (acc: any, curr: any) => acc + curr.quantity,
         0
       );
@@ -415,6 +403,8 @@ export class CashierComponent implements OnInit, OnDestroy {
                 pay: this.pay,
                 return: this.return,
                 user_id: this.user.id,
+                products: this.total_products,
+                items: this.total_items,
               };
 
               for (let i = 0; i < this.order.length; i++) {
@@ -472,9 +462,9 @@ export class CashierComponent implements OnInit, OnDestroy {
     this.order = [];
     this.pay = 0;
     this.return = 0;
-    this.total_items = 0;
+    this.total_products = 0;
     this.revenue = 0;
-    this.total_quantity = 0;
+    this.total_items = 0;
     this.index = undefined;
     this.orderDataSource = undefined;
     this.paymentForm.setValue('');
@@ -490,9 +480,9 @@ export class CashierComponent implements OnInit, OnDestroy {
     this.order = [];
     this.pay = 0;
     this.return = 0;
-    this.total_items = 0;
+    this.total_products = 0;
     this.revenue = 0;
-    this.total_quantity = 0;
+    this.total_items = 0;
     this.index = undefined;
     this.orderDataSource = undefined;
   }

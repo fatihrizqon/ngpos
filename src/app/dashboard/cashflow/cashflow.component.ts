@@ -9,6 +9,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
 import { AppService } from 'src/app/services/app.service';
 import { CashflowDialogComponent } from './dialog/dialog.component';
+import * as XLSX from 'xlsx';
+import { formatDate } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/interfaces/User';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cashflow',
@@ -16,6 +21,7 @@ import { CashflowDialogComponent } from './dialog/dialog.component';
   styleUrls: ['./cashflow.component.scss'],
 })
 export class CashflowComponent implements OnInit, AfterViewInit {
+  user!: User;
   cashflows: any;
   displayedCashflows: string[] = [
     'id',
@@ -37,6 +43,9 @@ export class CashflowComponent implements OnInit, AfterViewInit {
     toDate: new FormControl(),
   });
 
+  currentDate: any;
+  filtered: any;
+
   get fromDate() {
     return this.filterForm.get('fromDate');
   }
@@ -46,10 +55,20 @@ export class CashflowComponent implements OnInit, AfterViewInit {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US', '+0700');
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   @ViewChild('cashflowsPaginator') cashflowsPaginator?: MatPaginator;
   @ViewChild('cashflowsSort') cashflowsSort?: MatSort;
@@ -72,6 +91,19 @@ export class CashflowComponent implements OnInit, AfterViewInit {
       },
       (err) => {
         console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
+      }
+    );
+  }
+
+  cashflow() {
+    this.appService.getCashflows().subscribe(
+      (response) => {
+        this.cashflows = response.data;
+      },
+      (err) => {
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }
@@ -84,14 +116,20 @@ export class CashflowComponent implements OnInit, AfterViewInit {
   getDateRange(value) {
     const fromDate = value.fromDate;
     const toDate = value.toDate;
-    const output = this.cashflows.filter((entry) => {
+    if (!fromDate || !toDate) {
+      return this.openSnackBar('Please select a valid Date Range.', 'Got It!');
+    }
+
+    this.filtered = this.cashflows.filter((entry) => {
       const time = new Date(entry['created_at']).getTime();
       return time >= fromDate && time <= toDate;
     });
 
-    this.cashflowsDataSource = new MatTableDataSource(output);
+    this.cashflowsDataSource = new MatTableDataSource(this.filtered);
     this.cashflowsDataSource.paginator = this.cashflowsPaginator;
     this.cashflowsDataSource.sort = this.cashflowsSort;
+    this.cashflow();
+    this.openSnackBar('Selected data has been loaded.', 'Got It!');
   }
 
   announceSortChange(sortState: Sort) {
@@ -187,6 +225,35 @@ export class CashflowComponent implements OnInit, AfterViewInit {
           );
         }
       });
+  }
+
+  report() {
+    var data;
+    if (this.filtered !== undefined) {
+      data = this.filtered;
+    } else {
+      data = this.cashflows;
+    }
+    if (data.length === 0) {
+      return this.openSnackBar(
+        'Cannot Export an empty data, please check your data again.',
+        'Got It!'
+      );
+    }
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Cashflow Reports');
+
+    let buff = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+    XLSX.writeFile(workbook, 'Cashflow Reports ' + this.currentDate + '.xlsx');
+  }
+
+  reset() {
+    this.filtered = undefined;
+    this.getCashflows();
+    this.filterForm.reset();
+    this.openSnackBar('All filters has been cleared.', 'Got It!');
   }
 
   openSnackBar(message: string, action: string) {

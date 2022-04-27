@@ -9,6 +9,8 @@ import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SupplierDialogComponent } from './dialog/supplier.component';
+import { User } from 'src/app/interfaces/User';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-supply',
@@ -20,6 +22,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
   supplies: any;
   suppliers: any;
   products: any;
+  user!: User;
   displayedSupplies: string[] = [
     'id',
     'product',
@@ -49,10 +52,19 @@ export class SupplyComponent implements OnInit, AfterViewInit {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   @ViewChild('suppliesPaginator') suppliesPaginator?: MatPaginator;
   @ViewChild('suppliesSort') suppliesSort?: MatSort;
@@ -99,9 +111,8 @@ export class SupplyComponent implements OnInit, AfterViewInit {
         this.suppliesDataSource.sort = this.suppliesSort;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }
@@ -115,9 +126,8 @@ export class SupplyComponent implements OnInit, AfterViewInit {
         this.suppliersDataSource.sort = this.suppliersSort;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }
@@ -128,9 +138,8 @@ export class SupplyComponent implements OnInit, AfterViewInit {
         this.products = response.data;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }
@@ -213,9 +222,9 @@ export class SupplyComponent implements OnInit, AfterViewInit {
               this.openSnackBar(response.message, 'Got It!');
             },
             (err) => {
-              this.progress = false;
               console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
+              this.progress = false;
             }
           );
         }
@@ -288,6 +297,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
         data: {
           title: 'Delete Supplier',
           message: 'Do you want to Delete this Supplier?',
+          action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
         },
@@ -304,9 +314,9 @@ export class SupplyComponent implements OnInit, AfterViewInit {
               this.openSnackBar(response.message, 'Got It!');
             },
             (err) => {
-              this.progress = false;
               console.log(err.error.message);
               this.openSnackBar(err.error.message, 'Got It!');
+              this.progress = false;
             }
           );
         }

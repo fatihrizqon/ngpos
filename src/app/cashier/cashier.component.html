@@ -200,7 +200,7 @@
                             Kasir:
                           </td>
                           <td class="invoice-body text-end" colspan="2">
-                            {{ user.fullname }}
+                            {{ user.name }}
                           </td>
                         </tr>
                         <tr>
@@ -212,10 +212,18 @@
                           </td>
                         </tr>
                         <tr>
-                          <td class="text-start">No.</td>
-                          <td class="text-start">Item</td>
-                          <td class="text-center">Qty</td>
-                          <td class="text-center">Price</td>
+                          <td class="text-start" style="padding: 0 !important">
+                            No.
+                          </td>
+                          <td class="text-start" style="padding: 0 !important">
+                            Item
+                          </td>
+                          <td class="text-center" style="padding: 0 !important">
+                            Qty
+                          </td>
+                          <td class="text-center" style="padding: 0 !important">
+                            Price
+                          </td>
                         </tr>
                       </thead>
                       <tbody>
@@ -239,10 +247,10 @@
                         <tr>
                           <td class="invoice-footer text-start">Total</td>
                           <td class="invoice-footer text-center">
-                            {{ total_items }}
+                            {{ total_products }}
                           </td>
                           <td class="invoice-footer text-center">
-                            {{ total_quantity }}
+                            {{ total_items }}
                           </td>
                           <td class="invoice-footer text-end">
                             {{ revenue | currency: "Rp":"symbol":"0.0" }}

@@ -1,3 +1,7 @@
 .sidenav_link {
   margin-left: 0.5rem;
 }
+
+.darkMode .mat-list-base .mat-list-item {
+  color: red !important;
+}

@@ -10,10 +10,6 @@ import { Router } from '@angular/router';
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 
-/**
- * $2y$10$uMcqd6428A5KD1Gi4hqUueFrdc5h2rSxIT9I0.rgVEMtrocqWdX8a
- */
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

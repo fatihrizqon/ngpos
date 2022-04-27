@@ -1,0 +1,110 @@
+<div>
+  <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
+  <div mat-dialog-content class="mat-typography" align="center">
+    <div class="col-12" id="invoice" #invoice>
+      <!-- Invoice -->
+      <ul class="list-group">
+        <li class="list-group-item text-center">
+          <div class="strike">
+            <span>Resto SatSet</span>
+          </div>
+          Jl. TransJawa No.1, Surabaya. Telp: (0271) 7366 Instagram:
+          @satsetresto.official
+        </li>
+        <li class="list-group-item">
+          <table class="table">
+            <thead>
+              <tr>
+                <td class="invoice-body text-start" colspan="2">Tanggal:</td>
+                <td class="invoice-body text-end" colspan="2">
+                  {{ transaction.created_at | date: "dd/MM/YYYY hh:mm:ss" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-body text-start" colspan="2">Kasir:</td>
+                <td class="invoice-body text-end" colspan="2">
+                  {{ transaction.cashier }}
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-body text-start" colspan="2">
+                  Invoice Code:
+                </td>
+                <td class="invoice-body text-end" colspan="2">
+                  {{ transaction.order_code }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-start" style="padding: 0 !important">No.</td>
+                <td class="text-start" style="padding: 0 !important">Item</td>
+                <td class="text-center" style="padding: 0 !important">Qty</td>
+                <td class="text-center" style="padding: 0 !important">Price</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of orders; index as i">
+                <td class="invoice-body text-start">{{ i + 1 }}.</td>
+                <td class="invoice-body text-start">
+                  {{ item.product_name }}
+                </td>
+                <td class="invoice-body text-center">
+                  {{ item.quantity }}
+                </td>
+                <td class="invoice-body text-end">
+                  {{
+                    item.price * item.quantity | currency: "Rp":"symbol":"0.0"
+                  }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td class="invoice-footer text-start">Total</td>
+                <td class="invoice-footer text-center">
+                  {{ transaction.products }}
+                </td>
+                <td class="invoice-footer text-center">
+                  {{ transaction.items }}
+                </td>
+                <td class="invoice-footer text-end">
+                  {{ transaction.revenue | currency: "Rp":"symbol":"0.0" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-footer text-start" colspan="3">Pay</td>
+                <td class="invoice-footer text-end">
+                  {{ transaction.pay | currency: "Rp":"symbol":"0.0" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-footer text-start" colspan="3">Return</td>
+                <td class="invoice-footer text-end">
+                  {{ transaction.return | currency: "Rp":"symbol":"0.0" }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </li>
+        <li class="list-group-item text-center">
+          Barang yang sudah dibeli tidak dapat dikembalikan. Terima Kasih atas
+          kunjungan anda, selamat berbelanja kembali.
+        </li>
+      </ul>
+      <!-- End of Invoice -->
+    </div>
+  </div>
+  <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+  <div mat-dialog-actions align="end" *ngIf="!progress">
+    <button
+      mat-raised-button
+      (click)="onNoClick()"
+      mat-dialog-close
+      color="warn"
+    >
+      {{ data.action_no }}
+    </button>
+    <button mat-raised-button (click)="print()" color="primary">
+      {{ data.action_yes }}
+    </button>
+  </div>
+</div>

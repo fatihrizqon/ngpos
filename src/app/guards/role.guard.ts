@@ -23,7 +23,7 @@ export class RoleGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const isAuthorized = this.authService.user.role > route.data.role;
+    const isAuthorized = this.authService.user.role >= route.data.role;
 
     if (!isAuthorized) {
       this.openDialog();

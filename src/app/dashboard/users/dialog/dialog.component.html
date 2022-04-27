@@ -1,0 +1,54 @@
+<div>
+  <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
+  <mat-dialog-content>
+    <form [formGroup]="dialogForm">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Select Role</mat-label>
+        <mat-select formControlName="role">
+          <mat-option *ngFor="let role of roles" [value]="role">
+            {{
+              role === 0
+                ? "👶 Registered User 👶"
+                : role === 1
+                ? "👨‍💼 Cashier 👩‍💼"
+                : role === 2
+                ? "👷‍♂️ Stocker 👷‍♀️"
+                : role === 3
+                ? "👨‍✈️ Manager 👩‍✈️ "
+                : role === 4
+                ? "👮‍♂️ Admin 👮‍♀️"
+                : "👻 Super Admin 👻"
+            }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            dialogForm.get('role')?.touched && dialogForm.get('role')?.errors
+          "
+        >
+          This field is required.
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+  <div mat-dialog-actions align="end" *ngIf="!progress">
+    <button
+      mat-raised-button
+      (click)="onNoClick()"
+      mat-dialog-close
+      color="warn"
+    >
+      {{ data.action_no }}
+    </button>
+    <button
+      mat-raised-button
+      (click)="submit()"
+      color="primary"
+      [disabled]="!dialogForm.valid"
+    >
+      {{ data.action_yes }}
+    </button>
+  </div>
+</div>

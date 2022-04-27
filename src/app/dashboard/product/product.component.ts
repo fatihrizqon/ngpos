@@ -8,6 +8,7 @@ import { DialogComponent } from 'src/app/layouts/dialog/dialog.component';
 import { ProductDialogComponent } from './dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-product',
@@ -26,6 +27,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     'stocks',
     'supplier',
     'code',
+    'created_at',
     'option',
   ];
   productsDataSource: any;
@@ -33,10 +35,19 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   @ViewChild('productsPaginator') productsPaginator?: MatPaginator;
   @ViewChild('productsSort') productsSort?: MatSort;

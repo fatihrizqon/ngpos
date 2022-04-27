@@ -2,13 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { Order } from '../interfaces/Order';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AppService {
-  public baseURI: String = 'http://127.0.0.1:8000/';
 
+/**
+ * php artisan serve --host=192.168.43.165 --port=8000
+ * ng serve --host 192.168.43.165
+ */
+export class AppService {
+  public baseURI: String = 'http://192.168.43.165:8000/';
   constructor(private http: HttpClient) {}
 
   getURI() {
@@ -22,9 +27,7 @@ export class AppService {
   }
 
   public logout(): Observable<any> {
-    return this.http.get<any>(this.baseURI + 'api/auth/logout', {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return this.http.get<any>(this.baseURI + 'api/auth/logout');
   }
 
   public register(user: any): Observable<any> {
@@ -54,9 +57,7 @@ export class AppService {
   }
 
   public deleteCategory(id: number): Observable<any> {
-    return this.http.delete<any>(this.baseURI + 'api/category/delete/' + id, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return this.http.delete<any>(this.baseURI + 'api/category/delete/' + id);
   }
 
   public getAllProducts(): Observable<any> {
@@ -84,9 +85,7 @@ export class AppService {
   }
 
   public deleteProduct(id: number): Observable<any> {
-    return this.http.delete<any>(this.baseURI + 'api/product/delete/' + id, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return this.http.delete<any>(this.baseURI + 'api/product/delete/' + id);
   }
 
   public getStocks(): Observable<any> {
@@ -114,9 +113,7 @@ export class AppService {
   }
 
   public deleteSupplier(id: number): Observable<any> {
-    return this.http.delete<any>(this.baseURI + 'api/supplier/delete/' + id, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return this.http.delete<any>(this.baseURI + 'api/supplier/delete/' + id);
   }
 
   public getSupplies(): Observable<any> {
@@ -151,6 +148,10 @@ export class AppService {
 
   public getTransactions(): Observable<any> {
     return this.http.get<any>(this.baseURI + 'api/transactions');
+  }
+
+  public getTransactionsData(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/transactions/data');
   }
 
   public newOrder(order: Order): Observable<any> {
@@ -190,7 +191,19 @@ export class AppService {
   }
 
   public deleteCashflow(id: number): Observable<any> {
-    return this.http.delete<any>(this.baseURI + 'api/cashflow/delete/' + id, {
+    return this.http.delete<any>(this.baseURI + 'api/cashflow/delete/' + id);
+  }
+
+  public getUsers(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/users');
+  }
+
+  public getUser(id: number): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/user/view/' + id);
+  }
+
+  public updateUser(user: any, id: number): Observable<any> {
+    return this.http.put<any>(this.baseURI + 'api/user/update/' + id, user, {
       headers: { 'Content-Type': 'application/json' },
     });
   }

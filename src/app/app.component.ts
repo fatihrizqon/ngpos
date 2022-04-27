@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'ngpos';
+  title = 'Point of Sale';
 
-  isLogin = true;
+  constructor() {}
 }

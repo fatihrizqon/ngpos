@@ -28,7 +28,7 @@ const routes: Routes = [
     component: CashierComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: {
-      role: 2,
+      role: 1,
     },
   },
   {
@@ -36,7 +36,7 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: {
-      role: 3,
+      role: 1,
     },
     children: [
       {
@@ -49,7 +49,7 @@ const routes: Routes = [
         component: CategoryComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 3,
+          role: 1,
         },
       },
 
@@ -58,7 +58,7 @@ const routes: Routes = [
         component: ProductComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 3,
+          role: 1,
         },
       },
 
@@ -67,7 +67,7 @@ const routes: Routes = [
         component: SupplyComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 4,
+          role: 2,
         },
       },
       {
@@ -75,7 +75,7 @@ const routes: Routes = [
         component: SalesComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 3,
+          role: 1,
         },
       },
       {
@@ -83,7 +83,7 @@ const routes: Routes = [
         component: CashflowComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 4,
+          role: 3,
         },
       },
       {
@@ -91,7 +91,7 @@ const routes: Routes = [
         component: ReportsComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 3,
+          role: 2,
         },
       },
       {
@@ -99,7 +99,7 @@ const routes: Routes = [
         component: UsersComponent,
         canActivate: [RoleGuard],
         data: {
-          role: 5,
+          role: 4,
         },
       },
     ],

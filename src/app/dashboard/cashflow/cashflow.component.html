@@ -19,7 +19,7 @@
       <div class="col-12">
         <form class="row" [formGroup]="filterForm">
           <div class="col-6">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <input
                 matInput
                 [matDatepicker]="fromDate"
@@ -34,7 +34,7 @@
             </mat-form-field>
           </div>
           <div class="col-6">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <input
                 matInput
                 [matDatepicker]="toDate"
@@ -50,11 +50,20 @@
           </div>
           <div class="col-12">
             <button
+              class="m-1"
+              mat-stroked-button
+              color="warn"
+              (click)="reset()"
+            >
+              Reset
+            </button>
+            <button
+              class="m-1"
               mat-stroked-button
               color="primary"
               (click)="getDateRange(filterForm.value)"
             >
-              <i class="bx bx-filter bx-sm"></i>
+              Apply
             </button>
           </div>
         </form>
@@ -62,11 +71,15 @@
 
       <div class="col-12" align="end">
         <button mat-icon-button matTooltip="Export to Spreadsheet">
-          <i class="bx bxs-spreadsheet bx-sm" style="color: #0ab33f"></i>
+          <i
+            class="bx bxs-spreadsheet bx-sm"
+            style="color: #0ab33f"
+            (click)="report()"
+          ></i>
         </button>
-        <button mat-icon-button matTooltip="Export to PDF">
+        <!-- <button mat-icon-button matTooltip="Export to PDF">
           <i class="bx bxs-file-pdf bx-sm" style="color: #be1212"></i>
-        </button>
+        </button> -->
         <button
           mat-icon-button
           (click)="create()"
@@ -121,14 +134,16 @@
           *matHeaderCellDef
           mat-sort-header
           sortActionDescription="Sort by Debit"
-          class="text-center text-success"
+          class="text-center"
+          style="color: #0ab33f"
         >
           Debit
         </th>
         <td
           mat-cell
           *matCellDef="let element"
-          class="text-start fw-bold text-success"
+          class="text-start fw-bold"
+          style="color: #0ab33f"
         >
           {{ element.debit | currency: "Rp":"symbol":"0.0" }}
         </td>
@@ -142,14 +157,16 @@
           *matHeaderCellDef
           mat-sort-header
           sortActionDescription="Sort by Credit"
-          class="text-center text-danger"
+          class="text-center"
+          style="color: #be1212"
         >
           Credit
         </th>
         <td
           mat-cell
           *matCellDef="let element"
-          class="text-start fw-bold text-danger"
+          class="text-start fw-bold"
+          style="color: #be1212"
         >
           {{ element.credit | currency: "Rp":"symbol":"0.0" }}
         </td>
@@ -163,14 +180,16 @@
           *matHeaderCellDef
           mat-sort-header
           sortActionDescription="Sort by Balance"
-          class="text-center text-primary"
+          class="text-center"
+          style="color: #0088ff"
         >
           Balance
         </th>
         <td
           mat-cell
           *matCellDef="let element"
-          class="text-start fw-bold text-primary"
+          class="text-start fw-bold"
+          style="color: #0088ff"
         >
           {{ element.balance | currency: "Rp":"symbol":"0.0" }}
         </td>
@@ -248,7 +267,6 @@
       <ng-container matColumnDef="option">
         <th mat-header-cell *matHeaderCellDef class="text-center">Option</th>
         <td mat-cell *matCellDef="let element" class="text-center">
-          {{ element.option }}
           <button
             mat-icon-button
             (click)="update(element)"

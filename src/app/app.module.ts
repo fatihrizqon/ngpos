@@ -33,6 +33,9 @@ import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
 import { CashflowComponent } from './dashboard/cashflow/cashflow.component';
 import { CashflowDialogComponent } from './dashboard/cashflow/dialog/dialog.component';
+import { SalesDialogComponent } from './dashboard/sales/dialog/dialog.component';
+import { UserDialogComponent } from './dashboard/users/dialog/dialog.component';
+import { AuthInterceptorProvider } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,8 @@ import { CashflowDialogComponent } from './dashboard/cashflow/dialog/dialog.comp
     SupplyDialogComponent,
     SupplierDialogComponent,
     CashflowDialogComponent,
+    SalesDialogComponent,
+    UserDialogComponent,
     NavbarComponent,
     CashflowComponent,
     LoginComponent,
@@ -69,7 +74,7 @@ import { CashflowDialogComponent } from './dashboard/cashflow/dialog/dialog.comp
     ReactiveFormsModule,
     FormsModule,
   ],
-  providers: [AppService, AuthService, DatePipe],
+  providers: [AppService, AuthService, DatePipe, AuthInterceptorProvider],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [DialogComponent],

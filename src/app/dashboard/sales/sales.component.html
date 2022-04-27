@@ -14,6 +14,70 @@
               />
             </mat-form-field>
           </div>
+          <div class="col-12">
+            <form class="row" [formGroup]="transactionsFilterForm">
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="transactionsFromDate"
+                    placeholder="From Date"
+                    formControlName="transactionsFromDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="transactionsFromDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #transactionsFromDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="transactionsToDate"
+                    placeholder="To Date"
+                    formControlName="transactionsToDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="transactionsToDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #transactionsToDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <button
+                  class="m-1"
+                  mat-stroked-button
+                  color="warn"
+                  (click)="resetTransactionsFilter()"
+                >
+                  Reset
+                </button>
+                <button
+                  class="m-1"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="
+                    getTransactionsDateRange(transactionsFilterForm.value)
+                  "
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-12" align="end">
+            <button mat-icon-button matTooltip="Export to Spreadsheet">
+              <i
+                class="bx bxs-spreadsheet bx-sm"
+                style="color: #0ab33f"
+                (click)="transactionsReport()"
+              ></i>
+            </button>
+          </div>
         </div>
 
         <table
@@ -168,10 +232,10 @@
             <td mat-cell *matCellDef="let element" class="text-center">
               <button
                 mat-icon-button
-                (click)="printTransaction(element)"
-                matTooltip="Print Transaction Receipt"
+                (click)="saveInvoice(element)"
+                matTooltip="Print Selected Invoice"
               >
-                <i class="bx bx-printer bx-sm"></i>
+                <i class="bx bx-receipt bx-sm" style="color: #ff6b01"></i>
               </button>
             </td>
           </ng-container>
@@ -214,6 +278,68 @@
                 #input
               />
             </mat-form-field>
+          </div>
+          <div class="col-12">
+            <form class="row" [formGroup]="ordersFilterForm">
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="ordersFromDate"
+                    placeholder="From Date"
+                    formControlName="ordersFromDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="ordersFromDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #ordersFromDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="ordersToDate"
+                    placeholder="To Date"
+                    formControlName="ordersToDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="ordersToDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #ordersToDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <button
+                  class="m-1"
+                  mat-stroked-button
+                  color="warn"
+                  (click)="resetOrdersFilter()"
+                >
+                  Reset
+                </button>
+                <button
+                  class="m-1"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="getOrdersDateRange(ordersFilterForm.value)"
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-12" align="end">
+            <button mat-icon-button matTooltip="Export to Spreadsheet">
+              <i
+                class="bx bxs-spreadsheet bx-sm"
+                style="color: #0ab33f"
+                (click)="ordersReport()"
+              ></i>
+            </button>
           </div>
         </div>
 

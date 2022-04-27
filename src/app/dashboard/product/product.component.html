@@ -83,10 +83,16 @@
           mat-sort-header
           sortActionDescription="Sort by Purchase"
           class="text-center"
+          style="color: #be1212"
         >
           Purchase Price
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="fw-bold"
+          style="color: #be1212"
+        >
           {{ element.purchase | currency: "Rp":"symbol":"0.0" }}
         </td>
       </ng-container>
@@ -100,10 +106,16 @@
           mat-sort-header
           sortActionDescription="Sort by Purchase"
           class="text-center"
+          style="color: #0ab33f"
         >
           Sell Price
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="fw-bold"
+          style="color: #0ab33f"
+        >
           {{ element.sell | currency: "Rp":"symbol":"0.0" }}
         </td>
       </ng-container>
@@ -143,9 +155,9 @@
       </ng-container>
 
       <!-- Date Column -->
-      <ng-container matColumnDef="date">
+      <ng-container matColumnDef="created_at">
         <th
-          id="date"
+          id="created_at"
           mat-header-cell
           *matHeaderCellDef
           mat-sort-header
@@ -155,24 +167,7 @@
           Date
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.date }}
-        </td>
-      </ng-container>
-
-      <!-- Update Column -->
-      <ng-container matColumnDef="update">
-        <th
-          id="update"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Update"
-          class="text-center"
-        >
-          Update
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.update }}
+          {{ element.created_at | date: "dd/MM/YYYY hh:mm a" }}
         </td>
       </ng-container>
 

@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CategoryDialogComponent } from './dialog/dialog.component';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-category',
@@ -24,10 +25,19 @@ export class CategoryComponent implements OnInit, AfterViewInit {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   @ViewChild('categoriesPaginator') categoriesPaginator?: MatPaginator;
   @ViewChild('categoriesSort') categoriesSort?: MatSort;
@@ -49,9 +59,8 @@ export class CategoryComponent implements OnInit, AfterViewInit {
         this.categoriesDataSource.sort = this.categoriesSort;
       },
       (err) => {
-        if (err.error.message) {
-          console.log(err.error.message);
-        }
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
       }
     );
   }

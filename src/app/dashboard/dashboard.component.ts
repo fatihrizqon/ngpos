@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { User } from '../interfaces/User';
 import { DialogComponent } from '../layouts/dialog/dialog.component';
 import { AppService } from '../services/app.service';
 import { AuthService } from '../services/auth.service';
@@ -14,6 +15,7 @@ import { SupplyComponent } from './supply/supply.component';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  user!: User;
   isOpen = false;
   active = false;
   lightMode = true;
@@ -24,10 +26,17 @@ export class DashboardComponent implements OnInit {
   constructor(
     private appService: AppService,
     private authService: AuthService,
-    private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   ngOnInit(): void {
     this.getProducts();

@@ -11,6 +11,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Chart, registerables } from 'chart.js';
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-dashboardindex',
@@ -29,9 +30,18 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
 
   constructor(
     private appService: AppService,
+    private authService: AuthService,
     private _snackBar: MatSnackBar,
     public datePipe: DatePipe
-  ) {}
+  ) {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   ngOnInit() {
     this.getTransactions();
@@ -39,11 +49,10 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     Chart.register(...registerables);
-    // this.loadSalesChart();
   }
 
   getTransactions() {
-    this.appService.getTransactions().subscribe(
+    this.appService.getTransactionsData().subscribe(
       (response) => {
         this.transactions = response.data;
         this.revenue = this.transactions.map(
@@ -51,7 +60,7 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
         );
 
         this.date = this.transactions.map((transaction: any) =>
-          this.datePipe.transform(transaction.created_at, 'mm:ss')
+          this.datePipe.transform(transaction.created_at, 'dd/MM/yy')
         );
 
         this.canvas = this.saleschart.nativeElement;

@@ -13,10 +13,17 @@ import { AuthService } from '../services/auth.service';
 export class IndexComponent implements OnInit {
   constructor(
     public authService: AuthService,
-    private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (!this.authService.isLoggedIn()) {
+      this.authService.logout();
+      this.openSnackBar(
+        'Your login session has been expired, please re-login.',
+        'Got It'
+      );
+    }
+  }
 
   ngOnInit() {}
 

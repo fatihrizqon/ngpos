@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppService } from 'src/app/services/app.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class ProductDialogComponent implements OnInit {
   constructor(
     private appService: AppService,
     private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -65,6 +67,7 @@ export class ProductDialogComponent implements OnInit {
         },
         (err) => {
           console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
     } else {
@@ -75,6 +78,7 @@ export class ProductDialogComponent implements OnInit {
         },
         (err) => {
           console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
         }
       );
     }
@@ -82,5 +86,11 @@ export class ProductDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close(false);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 }

@@ -11,6 +11,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SupplierDialogComponent } from './dialog/supplier.component';
 import { User } from 'src/app/interfaces/User';
 import { AuthService } from 'src/app/services/auth.service';
+import { FormControl, FormGroup } from '@angular/forms';
+import { formatDate } from '@angular/common';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-supply',
@@ -49,6 +52,21 @@ export class SupplyComponent implements OnInit, AfterViewInit {
   suppliesDataSource: any;
   suppliersDataSource: any;
   progress = false;
+  currentDate: any;
+
+  suppliesFilterForm = new FormGroup({
+    suppliesFromDate: new FormControl(),
+    suppliesToDate: new FormControl(),
+  });
+
+  filtered: any;
+
+  get suppliesFromDate() {
+    return this.suppliesFilterForm.get('suppliesFromDate');
+  }
+  get suppliesToDate() {
+    return this.suppliesFilterForm.get('suppliesToDate');
+  }
 
   constructor(
     private appService: AppService,
@@ -57,6 +75,7 @@ export class SupplyComponent implements OnInit, AfterViewInit {
     private _liveAnnouncer: LiveAnnouncer,
     private _snackBar: MatSnackBar
   ) {
+    this.currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US', '+0700');
     if (!this.authService.isLoggedIn()) {
       this.authService.logout();
       this.openSnackBar(
@@ -100,6 +119,39 @@ export class SupplyComponent implements OnInit, AfterViewInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  getSuppliesDateRange(value) {
+    const suppliesFromDate = value.suppliesFromDate;
+    const suppliesToDate = value.suppliesToDate;
+    if (!suppliesFromDate || !suppliesToDate) {
+      return this.openSnackBar('Please select a valid Date Range.', 'Got It!');
+    }
+
+    this.filtered = this.supplies.filter((entry) => {
+      const time = new Date(entry['created_at']).getTime();
+      return time >= suppliesFromDate && time <= suppliesToDate;
+    });
+
+    console.log(this.filtered);
+
+    this.suppliesDataSource = new MatTableDataSource(this.filtered);
+    this.suppliesDataSource.paginator = this.suppliesPaginator;
+    this.suppliesDataSource.sort = this.suppliesSort;
+    this.supply();
+    this.openSnackBar('Selected data has been loaded.', 'Got It!');
+  }
+
+  supply() {
+    this.appService.getSupplies().subscribe(
+      (response) => {
+        this.supplies = response.data;
+      },
+      (err) => {
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
+      }
+    );
   }
 
   getSupplies() {
@@ -233,6 +285,61 @@ export class SupplyComponent implements OnInit, AfterViewInit {
 
   printSupply(row: any) {
     alert('Print...');
+  }
+
+  resetSuppliesFilter() {
+    this.filtered = undefined;
+    this.getSupplies();
+    this.suppliesFilterForm.reset();
+    this.openSnackBar('All filters has been cleared.', 'Got It!');
+  }
+
+  suppliesReport() {
+    var data;
+    if (this.filtered !== undefined) {
+      data = this.filtered;
+    } else {
+      data = this.supplies;
+    }
+    if (data.length === 0) {
+      return this.openSnackBar(
+        'Cannot Export an empty data, please check your data again.',
+        'Got It!'
+      );
+    }
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Cashflow Reports');
+
+    let buff = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+    XLSX.writeFile(workbook, 'Cashflow Reports ' + this.currentDate + '.xlsx');
+  }
+
+  importSuppliers() {
+    const dialogRef = this.dialog
+      .open(SupplierDialogComponent, {
+        data: {
+          title: 'Import Suppliers',
+          action: 'import',
+          action_no: 'Cancel',
+          action_yes: 'Submit',
+        },
+
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.getSuppliers();
+          }
+        },
+        (err) => {
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
+        }
+      );
   }
 
   createSupplier() {

@@ -138,6 +138,32 @@ export class ProductComponent implements OnInit, AfterViewInit {
       );
   }
 
+  importProducts() {
+    const dialogRef = this.dialog
+      .open(ProductDialogComponent, {
+        data: {
+          title: 'Import Products',
+          action: 'import',
+          action_no: 'Cancel',
+          action_yes: 'Submit',
+        },
+
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.getAllProducts();
+          }
+        },
+        (err) => {
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
+        }
+      );
+  }
+
   update(row: any) {
     const dialogRef = this.dialog
       .open(ProductDialogComponent, {

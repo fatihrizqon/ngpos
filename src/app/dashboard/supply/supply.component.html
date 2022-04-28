@@ -13,7 +13,69 @@
                 #input
               />
             </mat-form-field>
+          </div>
 
+          <div class="col-12">
+            <form class="row" [formGroup]="suppliesFilterForm">
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="suppliesFromDate"
+                    placeholder="From Date"
+                    formControlName="suppliesFromDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="suppliesFromDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #suppliesFromDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="suppliesToDate"
+                    placeholder="To Date"
+                    formControlName="suppliesToDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="suppliesToDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #suppliesToDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <button
+                  class="m-1"
+                  mat-stroked-button
+                  color="warn"
+                  (click)="resetSuppliesFilter()"
+                >
+                  Reset
+                </button>
+                <button
+                  class="m-1"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="getSuppliesDateRange(suppliesFilterForm.value)"
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-12" align="end">
+            <button mat-icon-button matTooltip="Export to Spreadsheet">
+              <i
+                class="bx bxs-spreadsheet bx-sm"
+                style="color: #0ab33f"
+                (click)="suppliesReport()"
+              ></i>
+            </button>
             <button
               mat-icon-button
               (click)="createSupply()"
@@ -166,14 +228,6 @@
             <td mat-cell *matCellDef="let element" class="text-center">
               <button
                 mat-icon-button
-                (click)="printSupply(element)"
-                matTooltip="Print Supply Receipt"
-              >
-                <i class="bx bx-printer bx-sm"></i>
-              </button>
-
-              <button
-                mat-icon-button
                 (click)="updateSupply(element)"
                 matTooltip="Update Selected Supply"
               >
@@ -217,6 +271,13 @@
                 #input
               />
             </mat-form-field>
+            <button
+              mat-icon-button
+              (click)="importSuppliers()"
+              matTooltip="Import Suppliers"
+            >
+              <i class="bx bxs-file-import bx-sm" style="color: #aeea00"></i>
+            </button>
             <button
               mat-icon-button
               (click)="createSupplier()"

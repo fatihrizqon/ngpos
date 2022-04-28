@@ -15,6 +15,14 @@
             #input
           />
         </mat-form-field>
+
+        <button
+          mat-icon-button
+          (click)="importCategories()"
+          matTooltip="Import Categories"
+        >
+          <i class="bx bxs-file-import bx-sm" style="color: #aeea00"></i>
+        </button>
         <button
           mat-icon-button
           (click)="create()"

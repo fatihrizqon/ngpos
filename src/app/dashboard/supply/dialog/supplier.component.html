@@ -1,7 +1,7 @@
 <div>
   <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
-  <mat-dialog-content>
-    <form [formGroup]="dialogForm">
+  <div mat-dialog-content>
+    <form [formGroup]="dialogForm" *ngIf="data.action !== 'import'">
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput type="text" formControlName="name" />
@@ -52,8 +52,25 @@
         </mat-error>
       </mat-form-field>
     </form>
-  </mat-dialog-content>
 
+    <div *ngIf="data.action === 'import'">
+      <div class="col-12 mt-3" class="full-width">
+        <a href="{{ baseURI }}/assets/documents/import_suppliers.xlsx"
+          >Download Format File
+        </a>
+      </div>
+
+      <form class="col-12 mt-3">
+        <input
+          (change)="read($event)"
+          name="file"
+          type="file"
+          accept=".xls, .xlsx"
+        />
+      </form>
+    </div>
+  </div>
+  <br />
   <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
   <div mat-dialog-actions align="end" *ngIf="!progress">
     <button
@@ -65,10 +82,19 @@
       {{ data.action_no }}
     </button>
     <button
+      *ngIf="data.action !== 'import'"
       mat-raised-button
       (click)="submit()"
       color="primary"
       [disabled]="!dialogForm.valid"
+    >
+      {{ data.action_yes }}
+    </button>
+    <button
+      *ngIf="data.action === 'import'"
+      mat-raised-button
+      (click)="import()"
+      color="primary"
     >
       {{ data.action_yes }}
     </button>

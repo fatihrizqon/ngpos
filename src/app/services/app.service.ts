@@ -40,6 +40,16 @@ export class AppService {
     return this.http.get<any>(this.baseURI + 'api/categories');
   }
 
+  public importCategories(categories: any): Observable<any> {
+    return this.http.post<any>(
+      this.baseURI + 'api/category/import',
+      categories,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
   public newCategory(category: any): Observable<any> {
     return this.http.post<any>(this.baseURI + 'api/category/create', category, {
       headers: { 'Content-Type': 'application/json' },
@@ -74,6 +84,12 @@ export class AppService {
     });
   }
 
+  public importProducts(products: any): Observable<any> {
+    return this.http.post<any>(this.baseURI + 'api/product/import', products, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   public updateProduct(product: any, id: number): Observable<any> {
     return this.http.put<any>(
       this.baseURI + 'api/product/update/' + id,
@@ -94,6 +110,16 @@ export class AppService {
 
   public getSuppliers(): Observable<any> {
     return this.http.get<any>(this.baseURI + 'api/suppliers');
+  }
+
+  public importSuppliers(suppliers: any): Observable<any> {
+    return this.http.post<any>(
+      this.baseURI + 'api/supplier/import',
+      suppliers,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 
   public newSupplier(supplier: any): Observable<any> {

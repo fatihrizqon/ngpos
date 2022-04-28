@@ -7,7 +7,9 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { stringify } from 'querystring';
 import { AppService } from 'src/app/services/app.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'supplier-dialog',
@@ -18,7 +20,11 @@ export class SupplierDialogComponent implements OnInit {
   suppliers?: any;
   supplier?: any;
   dialogForm!: FormGroup;
+  importForm!: FormGroup;
   progress = false;
+  files: any;
+  importedData!: string;
+  baseURI = this.appService.baseURI;
 
   constructor(
     private appService: AppService,
@@ -79,6 +85,49 @@ export class SupplierDialogComponent implements OnInit {
         }
       );
     }
+  }
+
+  read(event: any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (event: any) => {
+      let binaryData = event.target?.result;
+      let workbook = XLSX.read(binaryData, {
+        type: 'binary',
+      });
+      workbook.SheetNames.forEach((sheet) => {
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+        this.importedData = JSON.stringify(data, undefined);
+      });
+    };
+  }
+
+  import() {
+    this.progress = true;
+    if (this.importedData === undefined) {
+      return this.openSnackBar('Cannot Import an Empty File.', 'Got It!');
+    }
+    var suppliers = {
+      suppliers: this.importedData,
+    };
+    this.appService.importSuppliers(suppliers).subscribe(
+      (response) => {
+        console.log(response);
+        this.progress = false;
+        this.openSnackBar('Importing Data, please wait.', 'Got It!');
+        if (response.data) {
+          this.openSnackBar(response.message, 'Got It!');
+          this.progress = false;
+          this.dialogRef.close();
+        }
+      },
+      (err) => {
+        this.progress = false;
+        console.log(err.error.message);
+        this.openSnackBar(err.error.message, 'Got It!');
+      }
+    );
   }
 
   onNoClick(): void {

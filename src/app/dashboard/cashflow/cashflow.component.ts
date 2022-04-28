@@ -37,13 +37,13 @@ export class CashflowComponent implements OnInit, AfterViewInit {
   ];
   cashflowsDataSource: any;
   progress = false;
+  currentDate: any;
 
   filterForm = new FormGroup({
     fromDate: new FormControl(),
     toDate: new FormControl(),
   });
 
-  currentDate: any;
   filtered: any;
 
   get fromDate() {

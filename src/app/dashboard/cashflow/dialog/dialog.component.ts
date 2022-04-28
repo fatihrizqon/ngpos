@@ -24,7 +24,9 @@ export class CashflowDialogComponent implements OnInit {
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<CashflowDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.user = this.authService.userdata();
+  }
 
   ngOnInit(): void {
     this.appService.getCategories().subscribe(
@@ -55,7 +57,6 @@ export class CashflowDialogComponent implements OnInit {
     this.progress = true;
     var cashflow = this.dialogForm.value;
     cashflow.user_id = this.user.id;
-
     if (
       this.dialogForm.controls['debit'].value === 0 &&
       this.dialogForm.controls['credit'].value === 0

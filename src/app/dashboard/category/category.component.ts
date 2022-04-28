@@ -109,6 +109,32 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       );
   }
 
+  importCategories() {
+    const dialogRef = this.dialog
+      .open(CategoryDialogComponent, {
+        data: {
+          title: 'Import Categories',
+          action: 'import',
+          action_no: 'Cancel',
+          action_yes: 'Submit',
+        },
+
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.getCategories();
+          }
+        },
+        (err) => {
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
+        }
+      );
+  }
+
   update(row: any) {
     const dialogRef = this.dialog
       .open(CategoryDialogComponent, {

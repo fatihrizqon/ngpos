@@ -290,7 +290,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
             transaction: row,
             orders: orders,
           },
-          action: 'create',
+          action: 'print',
           action_no: 'Close',
           action_yes: 'Print',
         },

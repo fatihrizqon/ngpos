@@ -16,6 +16,7 @@ import { RegisterComponent } from './authentication/register/register.component'
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { CashflowComponent } from './dashboard/cashflow/cashflow.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -104,6 +105,7 @@ const routes: Routes = [
       },
     ],
   },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

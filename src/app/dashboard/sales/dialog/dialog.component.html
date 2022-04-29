@@ -103,7 +103,12 @@
     >
       {{ data.action_no }}
     </button>
-    <button mat-raised-button (click)="print()" color="primary">
+    <button
+      *ngIf="data.action === 'print'"
+      mat-raised-button
+      (click)="print()"
+      color="primary"
+    >
       {{ data.action_yes }}
     </button>
   </div>

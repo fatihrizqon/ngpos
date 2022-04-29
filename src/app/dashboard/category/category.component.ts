@@ -19,7 +19,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CategoryComponent implements OnInit, AfterViewInit {
   category?: string;
   categories: any;
-  displayedCategories: string[] = ['id', 'name', 'products', 'option'];
+  displayedCategories: string[] = [
+    'position',
+    'id',
+    'name',
+    'products',
+    'option',
+  ];
   categoriesDataSource: any;
   progress = false;
 

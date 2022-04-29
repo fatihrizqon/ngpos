@@ -39,19 +39,24 @@
   </mat-menu>
   <div class="spacer"></div>
 
-  <mat-slide-toggle
-    color="accent"
-    (change)="changeMode($event)"
-    matTooltip="Turn On/Off the Dark Mode"
-  ></mat-slide-toggle>
-
-  <button mat-button color="warn" (click)="logout()" matTooltip="Logout">
-    <i class="bx bx-log-out bx-sm"></i>
+  <button mat-icon-button [matMenuTriggerFor]="profile" color="accent">
+    <i class="bx bx-user-circle bx-sm"></i>
   </button>
+  <mat-menu #profile="matMenu" xPosition="before">
+    <button mat-menu-item routerLink="/profile">Profile</button>
+
+    <button mat-menu-item (click)="logout()" matTooltip="Logout">Logout</button>
+  </mat-menu>
 </mat-toolbar>
 
 <mat-drawer-container class="mat-typography" autosize>
-  <mat-drawer #drawer mode="side" disableClose="true" opened="true">
+  <mat-drawer
+    #drawer
+    mode="side"
+    disableClose="true"
+    opened="true"
+    color="primary"
+  >
     <button
       mat-icon-button
       (click)="toggle($event)"
@@ -93,6 +98,13 @@
       <mat-list-item routerLink="/dashboard/users">
         <i class="bx bxs-user-badge bx-sm sidenav_icon"></i>
         <span class="sidenav_link" *ngIf="isOpen">Users</span>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle
+          color="accent"
+          (change)="changeMode($event)"
+          matTooltip="Turn On/Off the Dark Mode"
+        ></mat-slide-toggle>
       </mat-list-item>
     </mat-nav-list>
   </mat-drawer>

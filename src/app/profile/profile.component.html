@@ -1,0 +1,201 @@
+<app-navbar></app-navbar>
+<section class="container">
+  <div class="row text-center animate__animated animate__slideInUp">
+    <mat-card class="align-items-center mt-3 mb-3 p-3" *ngIf="!progress">
+      <img
+        mat-card-image
+        class="rounded-circle img-thumbnail m-5"
+        src="https://www.clipartmax.com/png/full/405-4050774_avatar-icon-flat-icon-shop-download-free-icons-for-avatar-icon-flat.png"
+        alt="Profile Picture"
+      />
+
+      <mat-card-header class="justify-content-center">
+        <mat-card-title class="p-1">{{ user?.name }} </mat-card-title>
+        <mat-card-subtitle>{{
+          user?.role == 0
+            ? "👶 Registered User 👶"
+            : user?.role == 1
+            ? "👨‍💼 Cashier 👩‍💼"
+            : user?.role == 2
+            ? "👷‍♂️ Stocker 👷‍♀️"
+            : user?.role == 3
+            ? "👨‍✈️ Manager 👩‍✈️ "
+            : user?.role == 4
+            ? "👮‍♂️ Admin 👮‍♀️"
+            : "👻 Super Admin 👻"
+        }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="container">
+        <div class="row">
+          <div class="col-12">
+            <form [formGroup]="profileForm" class="mt-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Enter your name</mat-label>
+                <input matInput formControlName="name" minlength="6" />
+                <mat-error
+                  *ngIf="
+                    profileForm.get('name')?.touched &&
+                    profileForm.get('name')?.errors
+                  "
+                >
+                  This field is required (minimum 6 characters).
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Enter your username</mat-label>
+                <input matInput formControlName="username" minlength="6" />
+                <mat-error
+                  *ngIf="
+                    profileForm.get('username')?.touched &&
+                    profileForm.get('username')?.errors
+                  "
+                >
+                  This field is required (minimum 6 characters).
+                </mat-error>
+              </mat-form-field>
+
+              <div class="m-3" align="start">
+                <mat-label>Select your gender:</mat-label>
+                <br />
+                <mat-radio-group
+                  class="gender-radio-group"
+                  formControlName="gender"
+                >
+                  <mat-radio-button
+                    class="gender-radio-button m-3"
+                    color="primary"
+                    *ngFor="let gender of genders"
+                    [value]="gender"
+                  >
+                    {{ gender }}
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-error
+                  *ngIf="
+                    profileForm.get('gender')?.touched &&
+                    profileForm.get('gender')?.errors
+                  "
+                >
+                  This option is required.
+                </mat-error>
+              </div>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Enter your email</mat-label>
+                <input matInput type="email" formControlName="email" />
+
+                <mat-error
+                  *ngIf="
+                    profileForm.get('email')?.touched &&
+                    profileForm.get('email')?.errors
+                  "
+                >
+                  This field is required.
+                </mat-error>
+              </mat-form-field>
+
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Enter your password</mat-label>
+                    <input
+                      matInput
+                      [type]="hidePassword ? 'password' : 'text'"
+                      formControlName="password"
+                      minlength="6"
+                      autocomplete="on"
+                    />
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="hidePassword = !hidePassword"
+                      [attr.aria-label]="'Hide password'"
+                      [attr.aria-pressed]="hidePassword"
+                    >
+                      <i
+                        class="bx bx-{{ hidePassword ? 'hide' : 'show' }} bx-sm"
+                      ></i>
+                    </button>
+                  </mat-form-field>
+                  <mat-error
+                    *ngIf="
+                      profileForm.get('password')?.touched &&
+                      profileForm.get('password')?.errors
+                    "
+                  >
+                    This field is required.
+                  </mat-error>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Repeat your password</mat-label>
+                    <input
+                      matInput
+                      [type]="hideRepassword ? 'password' : 'text'"
+                      formControlName="repassword"
+                      minlength="6"
+                      autocomplete="on"
+                    />
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="hideRepassword = !hideRepassword"
+                      [attr.aria-label]="'Hide repeat password'"
+                      [attr.aria-pressed]="hideRepassword"
+                    >
+                      <i
+                        class="bx bx-{{
+                          hideRepassword ? 'hide' : 'show'
+                        }} bx-sm"
+                      ></i>
+                    </button>
+                  </mat-form-field>
+                  <mat-error
+                    *ngIf="
+                      profileForm.get('repassword')?.touched &&
+                      profileForm.get('repassword')?.errors
+                    "
+                  >
+                    This field is required.
+                  </mat-error>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <mat-form-field appearance="outline">
+                  <mat-label>Enter your phone</mat-label>
+                  <input matInput type="number" formControlName="phone" />
+                </mat-form-field>
+              </div>
+
+              <div align="end">
+                <button
+                  (click)="updateProfile()"
+                  mat-raised-button
+                  color="primary"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="row align-items-center" *ngIf="progress" style="height: 100vh">
+      <div class="col-12">
+        <mat-spinner
+          color="accent"
+          [diameter]="50"
+          [strokeWidth]="3"
+          mode="indeterminate"
+          style="margin: 0 auto"
+        ></mat-spinner>
+      </div>
+    </div>
+  </div>
+</section>

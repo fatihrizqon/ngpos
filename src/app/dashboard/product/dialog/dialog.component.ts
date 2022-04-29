@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppService } from 'src/app/services/app.service';
 import * as XLSX from 'xlsx';
+import * as html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'product-dialog',
@@ -18,6 +19,7 @@ import * as XLSX from 'xlsx';
 export class ProductDialogComponent implements OnInit {
   categories?: any;
   product?: any;
+  products?: any;
   dialogForm!: FormGroup;
   progress = false;
   importedData!: string;
@@ -29,7 +31,9 @@ export class ProductDialogComponent implements OnInit {
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.products = data.datasets?.products;
+  }
 
   ngOnInit(): void {
     this.appService.getCategories().subscribe(
@@ -43,6 +47,7 @@ export class ProductDialogComponent implements OnInit {
 
     this.dialogForm = this.formBuilder.group({
       name: [this.product?.name, Validators.required],
+      code: [this.product?.code],
       purchase: [this.product?.purchase, Validators.required],
       sell: [this.product?.sell, Validators.required],
       category_id: [this.product?.category_id, Validators.required],
@@ -50,6 +55,7 @@ export class ProductDialogComponent implements OnInit {
 
     if (this.data.row != null) {
       this.dialogForm.controls['name'].setValue(this.data.row.name);
+      this.dialogForm.controls['code'].setValue(this.data.row.code);
       this.dialogForm.controls['purchase'].setValue(this.data.row.purchase);
       this.dialogForm.controls['sell'].setValue(this.data.row.sell);
       this.dialogForm.controls['category_id'].setValue(
@@ -111,9 +117,9 @@ export class ProductDialogComponent implements OnInit {
     var products = {
       products: this.importedData,
     };
+
     this.appService.importProducts(products).subscribe(
       (response) => {
-        console.log(response);
         this.progress = false;
         this.openSnackBar('Importing Data, please wait.', 'Got It!');
         if (response.data) {
@@ -128,6 +134,21 @@ export class ProductDialogComponent implements OnInit {
         this.openSnackBar(err.error.message, 'Got It!');
       }
     );
+  }
+
+  print(): void {
+    const options = {
+      filename: 'Products Barcode Print.pdf',
+      html2canvas: {},
+      jsPDF: {
+        unit: 'mm',
+        orientation: 'portrait',
+        format: 'A7',
+      },
+    };
+    const content = window.document.getElementById('barcode');
+    html2pdf().from(content).set(options).save();
+    this.dialogRef.close();
   }
 
   onNoClick(): void {

@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
  * ng serve --host 192.168.43.165
  */
 export class AppService {
-  public baseURI: String = 'http://192.168.43.165:8000/';
+  public baseURI: String = 'http://127.0.0.1:8000/';
   constructor(private http: HttpClient) {}
 
   getURI() {
@@ -22,6 +22,18 @@ export class AppService {
 
   public login(user: any): Observable<any> {
     return this.http.post<any>(this.baseURI + 'api/auth/login', user, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  public profile(): Observable<any> {
+    return this.http.get<any>(this.baseURI + 'api/profile', {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  public updateProfile(user: any): Observable<any> {
+    return this.http.put<any>(this.baseURI + 'api/profile/update', user, {
       headers: { 'Content-Type': 'application/json' },
     });
   }

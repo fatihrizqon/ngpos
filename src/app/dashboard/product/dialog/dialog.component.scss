@@ -7,3 +7,36 @@ form {
 .full-width {
   width: 100%;
 }
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+table {
+  width: 100%;
+}
+td,
+th {
+  vertical-align: middle !important;
+}
+#invoice * {
+  font-family: "Courier Prime", sans-serif;
+  width: 74mm !important;
+}
+.invoice-body {
+  text-align: left;
+  padding: 1px;
+  border: none;
+}
+.invoice-footer {
+  text-align: left;
+  padding: 1px;
+  border: none;
+}
+#invoice .list-group,
+.list-group-item {
+  padding: 0;
+  color: #000 !important;
+  border-color: #000;
+  border-radius: 0;
+}

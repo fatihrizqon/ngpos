@@ -23,6 +23,14 @@
         >
           <i class="bx bxs-file-import bx-sm" style="color: #aeea00"></i>
         </button>
+
+        <button
+          mat-icon-button
+          (click)="exportBarcodes()"
+          matTooltip="Print Barcodes"
+        >
+          <i class="bx bx-barcode bx-sm"></i>
+        </button>
         <button
           mat-icon-button
           (click)="create()"
@@ -41,6 +49,25 @@
       matSort
       (matSortChange)="announceSortChange($event)"
     >
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+          >
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(element) : null"
+            [checked]="selection.isSelected(element)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
       <!-- Position Column -->
       <ng-container matColumnDef="id">
         <th
@@ -183,24 +210,13 @@
       <ng-container matColumnDef="code">
         <th mat-header-cell *matHeaderCellDef class="text-center">Code</th>
         <td mat-cell *matCellDef="let element" class="text-center">
-          <div
-            class="align-items-center"
-            (click)="printQR(element.id)"
-            matTooltip="Click to Print QR Code"
-            matTooltipPosition="right"
-          >
-            <div id="qrcode">
-              <qrcode
-                [qrdata]="element.code"
-                [width]="64"
-                [errorCorrectionLevel]="'M'"
-              >
-              </qrcode>
-              <p class="fw-bold text-dark">
-                {{ element.code }}
-              </p>
-            </div>
-          </div>
+          <ngx-barcode
+            [bc-value]="element.code"
+            [bc-display-value]="true"
+            [bc-width]="2"
+            [bc-height]="60"
+            [bc-font-size]="14"
+          ></ngx-barcode>
         </td>
       </ng-container>
 
@@ -244,7 +260,7 @@
     <mat-paginator
       *ngIf="productsDataSource"
       #productsPaginator
-      [pageSizeOptions]="[10, 50, 50]"
+      [pageSizeOptions]="[10, 50, 100]"
       showFirstLastButtons
     >
     </mat-paginator>

@@ -36,6 +36,8 @@ import { CashflowDialogComponent } from './dashboard/cashflow/dialog/dialog.comp
 import { SalesDialogComponent } from './dashboard/sales/dialog/dialog.component';
 import { UserDialogComponent } from './dashboard/users/dialog/dialog.component';
 import { AuthInterceptorProvider } from './interceptors/auth.interceptor';
+import { ProfileComponent } from './profile/profile.component';
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 @NgModule({
   declarations: [
@@ -62,6 +64,7 @@ import { AuthInterceptorProvider } from './interceptors/auth.interceptor';
     CashflowComponent,
     LoginComponent,
     RegisterComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,
@@ -73,6 +76,7 @@ import { AuthInterceptorProvider } from './interceptors/auth.interceptor';
     QRCodeModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxBarcodeModule,
   ],
   providers: [AppService, AuthService, DatePipe, AuthInterceptorProvider],
   bootstrap: [AppComponent],

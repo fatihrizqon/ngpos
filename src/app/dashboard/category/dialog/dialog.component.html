@@ -44,7 +44,7 @@
       {{ data.action_no }}
     </button>
     <button
-      *ngIf="data.action !== 'import'"
+      *ngIf="data.action === 'create' || data.action === 'create'"
       mat-raised-button
       (click)="submit()"
       color="primary"

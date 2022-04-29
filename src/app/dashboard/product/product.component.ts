@@ -9,6 +9,8 @@ import { ProductDialogComponent } from './dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Product } from 'src/app/interfaces/Product';
 
 @Component({
   selector: 'app-product',
@@ -16,9 +18,11 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit, AfterViewInit {
+  product!: Product;
   products: any;
   categories: any;
   displayedProducts: string[] = [
+    'select',
     'id',
     'name',
     'category',
@@ -32,6 +36,8 @@ export class ProductComponent implements OnInit, AfterViewInit {
   ];
   productsDataSource: any;
   progress = false;
+  selection = new SelectionModel<Product>(true, []);
+  selections: any;
 
   constructor(
     private appService: AppService,
@@ -55,6 +61,62 @@ export class ProductComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getAllProducts();
     this.getCategories();
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    this.selections = this.selection.selected;
+
+    const numSelected = this.selection.selected.length;
+    const numRows = this.productsDataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.productsDataSource.data.forEach((element: any) =>
+          this.selection.select(element)
+        );
+  }
+
+  exportBarcodes() {
+    if (this.selection.selected.length === 0) {
+      this.selections = undefined;
+      return this.openSnackBar(
+        'Unable to Print unselected Barcode.',
+        'Got It!'
+      );
+    }
+
+    const dialogRef = this.dialog
+      .open(ProductDialogComponent, {
+        width: '550px',
+        data: {
+          title: 'Barcodes Printing',
+          datasets: {
+            products: this.selections,
+          },
+          action: 'print',
+          action_no: 'Close',
+          action_yes: 'Print',
+        },
+
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (response) => {
+          if (response !== false) {
+            this.openSnackBar('Selected Barcodes has been printed.', 'Got It!');
+          }
+        },
+        (err) => {
+          console.log(err.error.message);
+          this.openSnackBar(err.error.message, 'Got It!');
+        }
+      );
   }
 
   ngAfterViewInit() {
@@ -198,6 +260,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
         data: {
           title: 'Delete Product',
           message: 'Do you want to Delete this Product?',
+          action: 'confirmation',
           action_yes: 'Yes',
           action_no: 'No',
         },

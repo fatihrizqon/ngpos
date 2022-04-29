@@ -1,7 +1,10 @@
 <div>
   <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
-  <div mat-dialog-content>
-    <form [formGroup]="dialogForm" *ngIf="data.action !== 'import'">
+  <div mat-dialog-content *ngIf="!progress">
+    <form
+      [formGroup]="dialogForm"
+      *ngIf="data.action === 'update' || data.action === 'create'"
+    >
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Product Name</mat-label>
         <input matInput formControlName="name" />
@@ -12,6 +15,11 @@
         >
           This field is required.
         </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Product Code</mat-label>
+        <input matInput formControlName="code" />
       </mat-form-field>
 
       <mat-form-field
@@ -99,9 +107,24 @@
         />
       </form>
     </div>
+
+    <div class="col-12" id="barcode" #barcode *ngIf="data.action === 'print'">
+      <ul class="list-group" *ngFor="let product of products">
+        <li class="list-group-item text-center">
+          <ngx-barcode
+            [bc-value]="product.code"
+            [bc-display-value]="true"
+            [bc-width]="2"
+            [bc-height]="60"
+            [bc-font-size]="14"
+          ></ngx-barcode>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+
   <div mat-dialog-actions [align]="'end'" *ngIf="!progress">
     <button
       mat-raised-button
@@ -111,8 +134,9 @@
     >
       {{ data.action_no }}
     </button>
+
     <button
-      *ngIf="data.action !== 'import'"
+      *ngIf="data.action === 'create' || data.action === 'update'"
       mat-raised-button
       (click)="submit()"
       color="primary"
@@ -120,10 +144,20 @@
     >
       {{ data.action_yes }}
     </button>
+
     <button
       *ngIf="data.action === 'import'"
       mat-raised-button
       (click)="import()"
+      color="primary"
+    >
+      {{ data.action_yes }}
+    </button>
+
+    <button
+      *ngIf="data.action === 'print'"
+      mat-raised-button
+      (click)="print()"
       color="primary"
     >
       {{ data.action_yes }}

@@ -63,6 +63,7 @@ export class UserDialogComponent implements OnInit {
       },
       (err) => {
         console.log(err.error.message);
+        this.progress = false;
       }
     );
   }

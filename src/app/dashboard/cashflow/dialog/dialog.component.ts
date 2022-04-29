@@ -68,9 +68,10 @@ export class CashflowDialogComponent implements OnInit {
       this.appService.newCashflow(cashflow).subscribe(
         (response) => {
           this.dialogRef.close(response);
-          this.progress = false;
+          this.progress = true;
         },
         (err) => {
+          this.progress = false;
           console.log(err.error.message);
           this.openSnackBar(err.error.message, 'Got It!');
         }

@@ -1,18 +1,33 @@
 <div class="container">
-  <mat-toolbar color="primary">
-    <div class="spacer"></div>
-    <button mat-button color="accent" routerLink="/">
-      <i class="navigation bx bx-home bx-sm"></i>
-    </button>
-    <button mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
-      <i class="navigation bx bxs-store bx-sm"></i>
-    </button>
-    <button mat-button color="accent" routerLink="/dashboard">
-      <i class="navigation bx bxs-dashboard bx-sm"></i>
-    </button>
-    <div class="spacer"></div>
-    <button mat-button color="warn" (click)="logout()" matTooltip="Logout">
-      <i class="bx bx-log-out bx-sm"></i>
-    </button>
-  </mat-toolbar>
+  <div class="row">
+    <mat-toolbar color="primary">
+      <div class="spacer"></div>
+      <button mat-button color="accent" routerLink="/">
+        <i class="navigation bx bx-home bx-sm"></i>
+      </button>
+      <button mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
+        <i class="navigation bx bxs-store bx-sm"></i>
+      </button>
+      <button mat-button color="accent" routerLink="/dashboard">
+        <i class="navigation bx bxs-dashboard bx-sm"></i>
+      </button>
+      <div class="spacer"></div>
+
+      <button mat-icon-button [matMenuTriggerFor]="profile" color="accent">
+        <i class="bx bx-user-circle bx-sm"></i>
+      </button>
+      <mat-menu #profile="matMenu" xPosition="before">
+        <button mat-menu-item routerLink="/profile">Profile</button>
+
+        <button
+          mat-menu-item
+          (click)="logout()"
+          matTooltip="Logout"
+          color="warn"
+        >
+          Logout
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+  </div>
 </div>

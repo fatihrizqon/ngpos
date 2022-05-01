@@ -1,6 +1,11 @@
 <div>
   <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
-  <div mat-dialog-content class="mat-typography" align="center">
+  <div
+    mat-dialog-content
+    class="mat-typography"
+    align="center"
+    *ngIf="!progress"
+  >
     <div class="col-12" id="invoice" #invoice>
       <!-- Invoice -->
       <ul class="list-group">
@@ -93,7 +98,9 @@
       <!-- End of Invoice -->
     </div>
   </div>
+
   <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+
   <div mat-dialog-actions align="end" *ngIf="!progress">
     <button
       mat-raised-button

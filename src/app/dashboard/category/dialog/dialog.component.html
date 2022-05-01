@@ -1,6 +1,6 @@
 <div>
   <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
-  <div mat-dialog-content>
+  <div mat-dialog-content *ngIf="!progress">
     <form [formGroup]="dialogForm" *ngIf="data.action !== 'import'">
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Category Name</mat-label>
@@ -34,6 +34,7 @@
   </div>
 
   <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+
   <div mat-dialog-actions align="end" *ngIf="!progress">
     <button
       mat-raised-button

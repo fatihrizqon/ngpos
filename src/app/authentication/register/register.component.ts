@@ -62,8 +62,6 @@ export class RegisterComponent implements OnInit {
     } else {
       this.authService.register(user).subscribe(
         (response) => {
-          console.log(response);
-
           this.progress = false;
           this.registerForm.reset();
           this.openSnackBar(response.message, 'Got It!');

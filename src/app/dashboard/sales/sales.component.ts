@@ -231,6 +231,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
       workbook,
       'Transaction Reports ' + this.currentDate + '.xlsx'
     );
+    return this.openSnackBar(
+      'Exporting to Spreadsheet, please wait.',
+      'Got It!'
+    );
   }
 
   ordersReport() {
@@ -255,6 +259,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
     let buff = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
     XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
     XLSX.writeFile(workbook, 'Order Reports ' + this.currentDate + '.xlsx');
+    return this.openSnackBar(
+      'Exporting to Spreadsheet, please wait.',
+      'Got It!'
+    );
   }
 
   resetTransactionsFilter() {

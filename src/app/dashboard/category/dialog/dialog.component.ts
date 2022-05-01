@@ -104,7 +104,6 @@ export class CategoryDialogComponent implements OnInit {
     };
     this.appService.importCategories(categories).subscribe(
       (response) => {
-        console.log(response);
         this.progress = false;
         this.openSnackBar('Importing Data, please wait.', 'Got It!');
         if (response.data) {

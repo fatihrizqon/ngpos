@@ -247,6 +247,10 @@ export class CashflowComponent implements OnInit, AfterViewInit {
     let buff = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
     XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
     XLSX.writeFile(workbook, 'Cashflow Reports ' + this.currentDate + '.xlsx');
+    return this.openSnackBar(
+      'Exporting to Spreadsheet, please wait.',
+      'Got It!'
+    );
   }
 
   reset() {

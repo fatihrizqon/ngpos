@@ -7,14 +7,8 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
-
-/**
- * php artisan serve --host=192.168.43.165 --port=8000
- * ng serve --host 192.168.43.165
- */
 export class AppService {
-  // public baseURI: String = 'https://api-pointofsaleku.herokuapp.com/';
-  public baseURI: String = 'http://127.0.0.1:8000/';
+  public baseURI: String = 'https://api-pointofsaleku.herokuapp.com/';
   constructor(private http: HttpClient) {}
 
   getURI() {

@@ -1,34 +1,18 @@
 <app-navbar></app-navbar>
 
 <section class="container">
-  <div
-    class="row text-center animate__animated animate__slideInUp"
-    *ngIf="!spinner"
-    style="height: 100vh"
-  >
+  <div class="row text-center animate__animated animate__slideInUp" *ngIf="!spinner" style="height: 100vh">
     <!-- Order Layout -->
     <div class="col-xl-8 col-lg-6 col-sm-12">
       <!-- Order List(s) -->
-      <mat-card class="col-12 mt-3 mat-elevation-z1 p-3 table-responsive">
+      <mat-card class="order-card col-12 mt-3 mat-elevation-z1 p-3 table-responsive">
         <form (submit)="addItem()">
           <mat-form-field appearance="outline" class="search-form">
             <mat-label>Add a Product</mat-label>
-            <input
-              #keyword
-              type="text"
-              placeholder="Enter Keyword(s)"
-              aria-label="Input Product"
-              matInput
-              [formControl]="searchForm"
-              [matAutocomplete]="auto"
-              [autofocus]="true"
-            />
+            <input #keyword type="text" placeholder="Enter Keyword(s)" aria-label="Input Product" matInput
+              [formControl]="searchForm" [matAutocomplete]="auto" [autofocus]="true" />
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-              <mat-option
-                *ngFor="let option of filteredOptions | async"
-                [value]="option"
-                (click)="addItem()"
-              >
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (click)="addItem()">
                 {{ option }}
               </mat-option>
             </mat-autocomplete>
@@ -36,20 +20,11 @@
         </form>
 
         <!-- MatTable -->
-        <table
-          *ngIf="orderDataSource"
-          mat-table
-          [dataSource]="orderDataSource"
-          class="mt-3"
-        >
+        <table *ngIf="orderDataSource" mat-table [dataSource]="orderDataSource" class="mt-3">
           <!-- ID Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef class="text-start">No.</th>
-            <td
-              mat-cell
-              *matCellDef="let element; let i = index"
-              class="text-start"
-            >
+            <td mat-cell *matCellDef="let element; let i = index" class="text-start">
               {{ i + 1 }}
             </td>
           </ng-container>
@@ -79,24 +54,12 @@
             <th mat-header-cell *matHeaderCellDef class="text-center">
               Quantity
             </th>
-            <td
-              mat-cell
-              *matCellDef="let element; let i = index"
-              class="text-center"
-            >
-              <button
-                mat-icon-button
-                (click)="reduceQty(i)"
-                matTooltip="Reduce Quantity"
-              >
+            <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+              <button mat-icon-button (click)="reduceQty(i)" matTooltip="Reduce Quantity">
                 <i class="bx bx-minus-circle bx-sm" style="color: #ffee00"></i>
               </button>
               {{ element.quantity }}
-              <button
-                mat-icon-button
-                (click)="addQty(i)"
-                matTooltip="Add Quantity"
-              >
+              <button mat-icon-button (click)="addQty(i)" matTooltip="Add Quantity">
                 <i class="bx bx-plus-circle bx-sm" style="color: #0088ff"></i>
               </button>
             </td>
@@ -117,16 +80,8 @@
             <th mat-header-cell *matHeaderCellDef class="text-center">
               Options
             </th>
-            <td
-              mat-cell
-              *matCellDef="let element; let i = index"
-              class="text-center"
-            >
-              <button
-                mat-icon-button
-                (click)="removeItem(i)"
-                matTooltip="Remove Item"
-              >
+            <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+              <button mat-icon-button (click)="removeItem(i)" matTooltip="Remove Item">
                 <i class="bx bx-x-circle bx-sm" style="color: #ff0004"></i>
               </button>
             </td>
@@ -152,26 +107,19 @@
             </mat-expansion-panel-header>
 
             <mat-chip-list *ngFor="let order of savedOrders; index as i">
-              <mat-chip
-                class="m-1"
-                color="primary"
-                selected
-                (click)="getOrder(i)"
-                >{{ order }}
+              <mat-chip class="m-1" color="primary" selected (click)="getOrder(i)">{{ order }}
                 <button (click)="removeOrder(i)" matChipRemove>
-                  <i class="bx bx-trash"></i></button
-              ></mat-chip>
+                  <i class="bx bx-trash"></i></button>
+              </mat-chip>
             </mat-chip-list>
           </mat-expansion-panel>
           <!-- End of Saved Order(s) -->
 
           <!-- Invoice -->
           <mat-expansion-panel [expanded]="orderDataSource">
-            <mat-expansion-panel-header class="p-3"
-              ><mat-panel-title
-                >Invoice</mat-panel-title
-              ></mat-expansion-panel-header
-            >
+            <mat-expansion-panel-header class="p-3">
+              <mat-panel-title>Invoice</mat-panel-title>
+            </mat-expansion-panel-header>
 
             <div *ngIf="orderDataSource" align="center">
               <div class="col-12" id="invoice" #invoice>
@@ -284,21 +232,10 @@
               </div>
               <!-- Payment -->
               <div class="col-12">
-                <mat-form-field
-                  class="input-payment"
-                  appearance="outline"
-                  floatLabel="always"
-                >
+                <mat-form-field class="input-payment" appearance="outline" floatLabel="always">
                   <mat-label>Payment Amount</mat-label>
-                  <input
-                    #payment
-                    matInput
-                    type="number"
-                    placeholder="0"
-                    matInput
-                    [formControl]="paymentForm"
-                    [autofocus]="false"
-                  />
+                  <input #payment matInput type="number" placeholder="0" matInput [formControl]="paymentForm"
+                    [autofocus]="false" />
                   <span matPrefix>&nbsp;</span>
                   <span matSuffix></span>
                 </mat-form-field>
@@ -306,26 +243,13 @@
               <!-- End of Payment -->
               <!-- Actions -->
               <div class="col-12">
-                <button
-                  mat-icon-button
-                  matTooltip="Clear Order(s)"
-                  (click)="clearOrder()"
-                >
+                <button mat-icon-button matTooltip="Clear Order(s)" (click)="clearOrder()">
                   <i class="bx bxs-x-square bx-sm" style="color: #ff0004"></i>
                 </button>
-                <button
-                  mat-icon-button
-                  matTooltip="Save Order"
-                  *ngIf="!clicked"
-                  (click)="saveOrder()"
-                >
+                <button mat-icon-button matTooltip="Save Order" *ngIf="!clicked" (click)="saveOrder()">
                   <i class="bx bxs-save bx-sm" style="color: #00ff0d"></i>
                 </button>
-                <button
-                  mat-icon-button
-                  matTooltip="Check Out"
-                  (click)="checkOut()"
-                >
+                <button mat-icon-button matTooltip="Check Out" (click)="checkOut()">
                   <i class="bx bxs-wallet bx-sm"></i>
                 </button>
               </div>
@@ -341,13 +265,8 @@
 
   <div class="row align-items-center" *ngIf="spinner" style="height: 100vh">
     <div class="col-12">
-      <mat-spinner
-        color="primary"
-        [diameter]="50"
-        [strokeWidth]="3"
-        mode="indeterminate"
-        style="margin: 0 auto"
-      ></mat-spinner>
+      <mat-spinner color="primary" [diameter]="50" [strokeWidth]="3" mode="indeterminate" style="margin: 0 auto">
+      </mat-spinner>
     </div>
   </div>
 </section>

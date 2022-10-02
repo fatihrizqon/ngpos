@@ -1,34 +1,20 @@
 <mat-toolbar color="primary">
-  <button
-    mat-icon-button
-    (click)="drawer.toggle()"
-    matTooltip="Click to Show/Hide The Navigation"
-  >
+  <button mat-icon-button (click)="drawer.toggle()" matTooltip="Click to Show/Hide The Navigation">
     <i class="bx bx-menu bx-sm"></i>
   </button>
   <div class="spacer"></div>
-  <button mat-button color="accent" routerLink="/">
-    <i class="navigation bx bx-home bx-sm"></i>
-  </button>
-  <button mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
-    <i class="navigation bx bxs-store bx-sm"></i>
-  </button>
-  <button mat-button color="accent" routerLink="/dashboard">
-    <i class="navigation bx bxs-dashboard bx-sm"></i>
-  </button>
-  <button
-    mat-button
-    color="accent"
-    (click)="getProducts()"
-    [matMenuTriggerFor]="notification"
-  >
-    <i
-      matBadge="{{ outofstocks?.length }}"
-      matBadgePosition="after"
-      matBadgeColor="accent"
-      matBadgeSize="small"
-      class="bx bx-bell bx-sm"
-    ></i>
+  <a mat-button color="accent" routerLink="/">
+    Home
+  </a>
+  <a mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
+    Cashier
+  </a>
+  <a mat-button color="accent" routerLink="/dashboard">
+    Dashboard
+  </a>
+  <button mat-button color="accent" (click)="getProducts()" [matMenuTriggerFor]="notification">
+    <i matBadge="{{ outofstocks?.length }}" matBadgePosition="after" matBadgeColor="accent" matBadgeSize="small"
+      class="bx bx-bell bx-sm"></i>
   </button>
   <mat-menu #notification="matMenu">
     <div *ngFor="let product of outofstocks">
@@ -50,19 +36,9 @@
 </mat-toolbar>
 
 <mat-drawer-container class="mat-typography" autosize>
-  <mat-drawer
-    #drawer
-    mode="side"
-    disableClose="true"
-    opened="true"
-    color="primary"
-  >
-    <button
-      mat-icon-button
-      (click)="toggle($event)"
-      style="margin: 10px"
-      matTooltip="Click to Expand/Collapse The Navigation"
-    >
+  <mat-drawer #drawer mode="side" disableClose="true" opened="true" color="primary">
+    <button mat-icon-button (click)="toggle($event)" style="margin: 10px"
+      matTooltip="Click to Expand/Collapse The Navigation">
       <i class="bx bx-chevron-right bx-sm sidenav_icon"></i>
     </button>
 
@@ -100,11 +76,8 @@
         <span class="sidenav_link" *ngIf="isOpen">Users</span>
       </mat-list-item>
       <mat-list-item>
-        <mat-slide-toggle
-          color="accent"
-          (change)="changeMode($event)"
-          matTooltip="Turn On/Off the Dark Mode"
-        ></mat-slide-toggle>
+        <mat-slide-toggle color="accent" (change)="changeMode($event)" matTooltip="Turn On/Off the Dark Mode">
+        </mat-slide-toggle>
       </mat-list-item>
     </mat-nav-list>
   </mat-drawer>

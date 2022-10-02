@@ -2,15 +2,15 @@
   <div class="row">
     <mat-toolbar color="primary">
       <div class="spacer"></div>
-      <button mat-button color="accent" routerLink="/">
-        <i class="navigation bx bx-home bx-sm"></i>
-      </button>
-      <button mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
-        <i class="navigation bx bxs-store bx-sm"></i>
-      </button>
-      <button mat-button color="accent" routerLink="/dashboard">
-        <i class="navigation bx bxs-dashboard bx-sm"></i>
-      </button>
+      <a mat-button color="accent" routerLink="/">
+        Home
+      </a>
+      <a mat-button color="accent" class="ms-3 me-3" routerLink="/cashier">
+        Cashier
+      </a>
+      <a mat-button color="accent" routerLink="/dashboard">
+        Dashboard
+      </a>
       <div class="spacer"></div>
 
       <button mat-icon-button [matMenuTriggerFor]="profile" color="accent">
@@ -19,12 +19,7 @@
       <mat-menu #profile="matMenu" xPosition="before">
         <button mat-menu-item routerLink="/profile">Profile</button>
 
-        <button
-          mat-menu-item
-          (click)="logout()"
-          matTooltip="Logout"
-          color="warn"
-        >
+        <button mat-menu-item (click)="logout()" matTooltip="Logout" color="warn">
           Logout
         </button>
       </mat-menu>

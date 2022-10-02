@@ -44,7 +44,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.getProfile();
-
     this.profileForm = this.formBuilder.group({
       name: [this.user?.name, Validators.required],
       username: [this.user?.username, Validators.required],
@@ -60,7 +59,6 @@ export class ProfileComponent implements OnInit {
     this.appService.profile().subscribe(
       (response) => {
         this.user = response.data;
-
         this.profileForm.controls['name'].setValue(this.user?.name);
         this.profileForm.controls['username'].setValue(this.user?.username);
         this.profileForm.controls['gender'].setValue(this.user?.gender);
@@ -78,7 +76,6 @@ export class ProfileComponent implements OnInit {
   updateProfile() {
     this.progress = true;
     var user = this.profileForm.value;
-
     this.appService.updateProfile(user).subscribe(
       (response) => {
         this.openSnackBar(response.message, 'Got It!');

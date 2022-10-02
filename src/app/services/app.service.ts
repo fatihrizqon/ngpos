@@ -13,7 +13,8 @@ import { AuthService } from './auth.service';
  * ng serve --host 192.168.43.165
  */
 export class AppService {
-  public baseURI: String = 'https://api-pointofsaleku.herokuapp.com/';
+  // public baseURI: String = 'https://api-pointofsaleku.herokuapp.com/';
+  public baseURI: String = 'http://127.0.0.1:8000/';
   constructor(private http: HttpClient) {}
 
   getURI() {

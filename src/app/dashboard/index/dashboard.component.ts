@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -25,6 +25,7 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
   transactions: any;
   revenue: any;
   date: any;
+  currentDate: any;
 
   @ViewChild('saleschart') saleschart: any;
 
@@ -41,6 +42,13 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
         'Got It'
       );
     }
+
+    this.currentDate = formatDate(
+      new Date(),
+      'dd/MM/yyyy HH:mm:ss',
+      'en-US',
+      '+0700'
+    );
   }
 
   ngOnInit() {
@@ -55,13 +63,28 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
     this.appService.getTransactionsData().subscribe(
       (response) => {
         this.transactions = response.data;
-        this.revenue = this.transactions.map(
-          (transaction: any) => transaction.revenue
+
+        let chartData = Object.values(
+          this.transactions.reduce((acc, { id, revenue, created_at }) => {
+            const ds = created_at.substring(0, 10);
+            acc[ds] = acc[ds] || { id, revenue: 0, created_at: ds };
+            acc[ds] = {
+              id: acc[ds].id,
+              revenue: acc[ds].revenue + revenue,
+              created_at: ds,
+            };
+            return acc;
+          }, {})
         );
 
-        this.date = this.transactions.map((transaction: any) =>
-          this.datePipe.transform(transaction.created_at, 'dd/MM/yy')
+        chartData.sort(
+          (a: any, b: any) =>
+            Date.parse(a.created_at) - Date.parse(b.created_at)
         );
+
+        chartData = chartData.slice(chartData.length - 14, chartData.length);
+        this.revenue = chartData.map((transaction: any) => transaction.revenue);
+        this.date = chartData.map((transaction: any) => transaction.created_at);
 
         this.canvas = this.saleschart.nativeElement;
         this.sctx = this.canvas.getContext('2d');

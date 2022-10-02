@@ -1,81 +1,44 @@
 <section class="animate__animated animate__slideInRight">
-  <mat-card
-    class="mat-elevation-z1 mt-3 mb-3 table-responsive"
-    *ngIf="!progress"
-  >
+  <mat-card class="mat-elevation-z1 mt-3 mb-3 table-responsive" *ngIf="!progress">
     <h4 class="mt-3 mb-3 fs-5 text-center">Products</h4>
     <div class="row align-items-center m-1" align="center">
       <div class="col-12" align="end">
         <mat-form-field appearance="outline">
           <mat-label>Filter</mat-label>
-          <input
-            matInput
-            (keyup)="applyFilter($event)"
-            placeholder="Input"
-            #input
-          />
+          <input matInput (keyup)="applyFilter($event)" placeholder="Input" #input />
         </mat-form-field>
 
-        <button
-          mat-icon-button
-          (click)="importProducts()"
-          matTooltip="Import Products"
-        >
+        <button mat-icon-button (click)="importProducts()" matTooltip="Import Products">
           <i class="bx bxs-file-import bx-sm" style="color: #aeea00"></i>
         </button>
 
-        <button
-          mat-icon-button
-          (click)="exportBarcodes()"
-          matTooltip="Print Barcodes"
-        >
+        <button mat-icon-button (click)="exportBarcodes()" matTooltip="Print Barcodes">
           <i class="bx bx-barcode bx-sm"></i>
         </button>
-        <button
-          mat-icon-button
-          (click)="create()"
-          matTooltip="Add a New Product"
-        >
+        <button mat-icon-button (click)="create()" matTooltip="Add a New Product">
           <i class="bx bx-plus bx-sm" style="color: #0088ff"></i>
         </button>
       </div>
     </div>
 
-    <table
-      *ngIf="productsDataSource"
-      #productsSort="matSort"
-      mat-table
-      [dataSource]="productsDataSource"
-      matSort
-      (matSortChange)="announceSortChange($event)"
-    >
+    <table *ngIf="productsDataSource" #productsSort="matSort" mat-table [dataSource]="productsDataSource" matSort
+      (matSortChange)="announceSortChange($event)">
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox
-            (change)="$event ? masterToggle() : null"
-            [checked]="selection.hasValue() && isAllSelected()"
-            [indeterminate]="selection.hasValue() && !isAllSelected()"
-          >
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="$event ? selection.toggle(element) : null"
-            [checked]="selection.isSelected(element)"
-          >
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null"
+            [checked]="selection.isSelected(element)">
           </mat-checkbox>
         </td>
       </ng-container>
 
       <!-- Position Column -->
       <ng-container matColumnDef="id">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by ID"
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ID">
           No.
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
@@ -85,12 +48,7 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Name"
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name">
           Name
         </th>
         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
@@ -98,12 +56,7 @@
 
       <!-- Category Column -->
       <ng-container matColumnDef="category">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Category"
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category">
           Category
         </th>
         <td mat-cell *matCellDef="let element">{{ element.category }}</td>
@@ -111,60 +64,30 @@
 
       <!-- Purchase Price Column -->
       <ng-container matColumnDef="purchase">
-        <th
-          id="purchase"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Purchase"
-          class="text-center"
-          style="color: #be1212"
-        >
+        <th id="purchase" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Purchase"
+          class="text-center" style="color: #be1212">
           Purchase Price
         </th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-          class="fw-bold"
-          style="color: #be1212"
-        >
+        <td mat-cell *matCellDef="let element" class="fw-bold" style="color: #be1212">
           {{ element.purchase | currency: "Rp":"symbol":"0.0" }}
         </td>
       </ng-container>
 
       <!-- Sell Price Column -->
       <ng-container matColumnDef="sell">
-        <th
-          id="sell"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Purchase"
-          class="text-center"
-          style="color: #0ab33f"
-        >
+        <th id="sell" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Purchase"
+          class="text-center" style="color: #0ab33f">
           Sell Price
         </th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-          class="fw-bold"
-          style="color: #0ab33f"
-        >
+        <td mat-cell *matCellDef="let element" class="fw-bold" style="color: #0ab33f">
           {{ element.sell | currency: "Rp":"symbol":"0.0" }}
         </td>
       </ng-container>
 
       <!-- Stocks Column -->
       <ng-container matColumnDef="stocks">
-        <th
-          id="stocks"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Stocks"
-          class="text-center"
-        >
+        <th id="stocks" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Stocks"
+          class="text-center">
           Stocks
         </th>
         <td mat-cell *matCellDef="let element">
@@ -174,14 +97,8 @@
 
       <!-- Supplier Column -->
       <ng-container matColumnDef="supplier">
-        <th
-          id="supplier"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Supplier"
-          class="text-center"
-        >
+        <th id="supplier" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Supplier"
+          class="text-center">
           Supplier
         </th>
         <td mat-cell *matCellDef="let element">
@@ -191,14 +108,8 @@
 
       <!-- Date Column -->
       <ng-container matColumnDef="created_at">
-        <th
-          id="created_at"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Date"
-          class="text-center"
-        >
+        <th id="created_at" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Date"
+          class="text-center">
           Date
         </th>
         <td mat-cell *matCellDef="let element">
@@ -210,13 +121,8 @@
       <ng-container matColumnDef="code">
         <th mat-header-cell *matHeaderCellDef class="text-center">Code</th>
         <td mat-cell *matCellDef="let element" class="text-center">
-          <ngx-barcode
-            [bc-value]="element.code"
-            [bc-display-value]="true"
-            [bc-width]="2"
-            [bc-height]="60"
-            [bc-font-size]="14"
-          ></ngx-barcode>
+          <ngx-barcode [bc-value]="element.code" [bc-display-value]="true" [bc-width]="2" [bc-height]="60"
+            [bc-font-size]="14"></ngx-barcode>
         </td>
       </ng-container>
 
@@ -225,18 +131,10 @@
         <th mat-header-cell *matHeaderCellDef class="text-center">Option</th>
         <td mat-cell *matCellDef="let element" class="text-center">
           {{ element.option }}
-          <button
-            mat-icon-button
-            (click)="update(element)"
-            matTooltip="Update Selected Product"
-          >
+          <button mat-icon-button (click)="update(element)" matTooltip="Update Selected Product">
             <i class="bx bx-edit bx-sm" style="color: #00faff"></i>
           </button>
-          <button
-            mat-icon-button
-            (click)="delete(element.id)"
-            matTooltip="Delete Selected Product"
-          >
+          <button mat-icon-button (click)="delete(element.id)" matTooltip="Delete Selected Product">
             <i class="bx bx-trash bx-sm" style="color: #ff0004"></i>
           </button>
         </td>
@@ -248,33 +146,18 @@
 
     <div class="row align-items-center" *ngIf="!productsDataSource">
       <div class="col">
-        <mat-spinner
-          color="primary"
-          [diameter]="50"
-          [strokeWidth]="3"
-          mode="indeterminate"
-          style="margin: 0 auto"
-        ></mat-spinner>
+        <mat-spinner color="primary" [diameter]="50" [strokeWidth]="3" mode="indeterminate" style="margin: 0 auto">
+        </mat-spinner>
       </div>
     </div>
-    <mat-paginator
-      *ngIf="productsDataSource"
-      #productsPaginator
-      [pageSizeOptions]="[10, 50, 100]"
-      showFirstLastButtons
-    >
+    <mat-paginator *ngIf="productsDataSource" #productsPaginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons>
     </mat-paginator>
   </mat-card>
 
   <div class="row align-items-center" *ngIf="progress" style="height: 100vh">
     <div class="col-12">
-      <mat-spinner
-        color="primary"
-        [diameter]="50"
-        [strokeWidth]="3"
-        mode="indeterminate"
-        style="margin: 0 auto"
-      ></mat-spinner>
+      <mat-spinner color="primary" [diameter]="50" [strokeWidth]="3" mode="indeterminate" style="margin: 0 auto">
+      </mat-spinner>
     </div>
   </div>
 </section>

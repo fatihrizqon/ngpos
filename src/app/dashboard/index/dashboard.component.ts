@@ -96,9 +96,9 @@ export class DashboardIndexComponent implements OnInit, AfterViewInit {
               {
                 data: this.revenue,
                 label: 'Sales',
-                backgroundColor: '#03A9F4',
+                backgroundColor: '#FFA000',
                 tension: 0.25,
-                borderColor: '#F44336',
+                borderColor: '#FFA000',
                 borderWidth: 1.5,
               },
             ],

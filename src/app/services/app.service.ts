@@ -8,7 +8,9 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class AppService {
-  public baseURI: String = 'https://api-pointofsaleku.herokuapp.com/';
+  // public baseURI: String = 'https://api-pointofsaleku.herokuapp.com/';
+  public baseURI: String =
+    'https://api-pointofsaleku-cvoga.ondigitalocean.app/';
   constructor(private http: HttpClient) {}
 
   getURI() {
